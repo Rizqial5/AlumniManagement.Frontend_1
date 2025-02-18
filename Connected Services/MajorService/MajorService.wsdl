@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="MajorService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:56362/Services/MajorService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/MajorService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/MajorService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IMajorService_GetAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAll" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_GetAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_GetMajor_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMajor" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_GetMajor_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMajorResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_GetMajorIdByName_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMajorIdByName" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_GetMajorIdByName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMajorIdByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_GetMajorIdByFacultyId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMajorIdByFacultyId" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_GetMajorIdByFacultyId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMajorIdByFacultyIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_InsertMajor_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertMajor" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_InsertMajor_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertMajorResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_UpdateMajor_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMajor" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_UpdateMajor_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMajorResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_DeleteMajor_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteMajor" />
+  </wsdl:message>
+  <wsdl:message name="IMajorService_DeleteMajor_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteMajorResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IMajorService">
+    <wsdl:operation name="GetAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMajorService/GetAll" message="tns:IMajorService_GetAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMajorService/GetAllResponse" message="tns:IMajorService_GetAll_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMajor">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMajorService/GetMajor" message="tns:IMajorService_GetMajor_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMajorService/GetMajorResponse" message="tns:IMajorService_GetMajor_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMajorIdByName">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMajorService/GetMajorIdByName" message="tns:IMajorService_GetMajorIdByName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMajorService/GetMajorIdByNameResponse" message="tns:IMajorService_GetMajorIdByName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMajorIdByFacultyId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMajorService/GetMajorIdByFacultyId" message="tns:IMajorService_GetMajorIdByFacultyId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMajorService/GetMajorIdByFacultyIdResponse" message="tns:IMajorService_GetMajorIdByFacultyId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertMajor">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMajorService/InsertMajor" message="tns:IMajorService_InsertMajor_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMajorService/InsertMajorResponse" message="tns:IMajorService_InsertMajor_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMajor">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMajorService/UpdateMajor" message="tns:IMajorService_UpdateMajor_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMajorService/UpdateMajorResponse" message="tns:IMajorService_UpdateMajor_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMajor">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMajorService/DeleteMajor" message="tns:IMajorService_DeleteMajor_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMajorService/DeleteMajorResponse" message="tns:IMajorService_DeleteMajor_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IMajorService" type="tns:IMajorService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAll">
+      <soap:operation soapAction="http://tempuri.org/IMajorService/GetAll" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMajor">
+      <soap:operation soapAction="http://tempuri.org/IMajorService/GetMajor" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMajorIdByName">
+      <soap:operation soapAction="http://tempuri.org/IMajorService/GetMajorIdByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMajorIdByFacultyId">
+      <soap:operation soapAction="http://tempuri.org/IMajorService/GetMajorIdByFacultyId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertMajor">
+      <soap:operation soapAction="http://tempuri.org/IMajorService/InsertMajor" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMajor">
+      <soap:operation soapAction="http://tempuri.org/IMajorService/UpdateMajor" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMajor">
+      <soap:operation soapAction="http://tempuri.org/IMajorService/DeleteMajor" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MajorService">
+    <wsdl:port name="BasicHttpBinding_IMajorService" binding="tns:BasicHttpBinding_IMajorService">
+      <soap:address location="http://localhost:56362/Services/MajorService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

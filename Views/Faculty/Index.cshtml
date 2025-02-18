@@ -1,0 +1,305 @@
+﻿@model IEnumerable<AlumniManagement.Frontend.Models.FacultyModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
+    <style>
+        .dataTables_wrapper {
+            width: 900px;
+        }
+
+            .dataTables_wrapper .dataTables_paginate {
+                float: none;
+                text-align: center;
+            }
+
+            .dataTables_wrapper .dataTables_info {
+                float: left;
+                padding-top: 0.755em;
+            }
+
+            .dataTables_wrapper .bottom {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    </style>
+}
+
+<h2>Faculty</h2>
+
+<button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Add New</button>
+
+<button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
+
+<table class="table" id="facultyData" style="width:100%">
+    <thead>
+        <tr>
+            <th><input type="checkbox" id="selectAll" /></th>
+            <th>Actions</th>
+            <th>No. </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacultyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </th>
+        </tr>
+    </thead>
+</table>
+
+
+<div id="modalContainer"></div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#facultyData').DataTable({
+                "ajax": {
+                    "url": "/Faculty/GetRooms",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.FacultyID + '" />'
+
+}
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                           
+
+                            return '<div class="btn-group">' +
+                                '<a class="btn btn-primary" data-id="' + row.FacultyID + '" id="editButton" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
+                                'Edit</a>' +
+                                '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.FacultyID + '">' +
+                                'Delete</button>' +
+                                '</div>'
+
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row, meta) {
+                            return meta.row + 1;  // Display the row number (meta.row is zero-indexed)
+                        }
+                    },
+                    { "data": "FacultyName" },
+                    { "data": "Description" },
+                    {
+                        "data": "ModifiedDate",
+                        "render": function (data, type, row) {
+                            return moment(data).format('DD-MMM-YYYY HH:mm:ss');
+                        }
+                    },
+                ],
+/*                "order": [[0, "desc"]],*/
+                "dom": '<"top"f>rt<"bottom"lpi><"clear">', // search on the top right, show entries, paging, showing on the bottom
+                "pagingType": "full_numbers",
+                "scrollY": "400px",
+                "scrollX": true,
+                "scrollCollapse": true,
+                "fixedHeader": true,
+                //"pagingType": "simple_numbers",
+                "pageLength": 10,
+                "lengthMenu": [10, 25, 50, 100],
+                "scrollY": "400px",
+                "scrollX": true,
+                "scrollCollapse": true,
+                "fixedHeader": true,
+                "language": {
+                    "paginate": {
+                        "previous": "Previous",
+                        "next": "Next",
+                        "first": "<<",
+                        "last": ">>"
+                    }
+                }
+            });
+
+            $('#facultyData_filter input').unbind();
+
+            // Bind a new event handler
+            $('#facultyData_filter input').on('keyup', function (e) {
+                var value = $(this).val();
+                if (value.length >= 3 || value.length === 0) {
+                    table.search(value).draw();
+                }
+            });
+
+            $('#selectAll').on('click', function () {
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked)
+            })
+
+
+
+        });
+
+
+
+        ////Use this for datatables, becase the buttons are created dynamically
+        $(document).on('click', '#deleteButton', function () {
+            const itemId = $(this).data('id'); // Retrieve the ID of the item to delete
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this item!",
+                icon: "warning",
+                showCancelButton: true, // Enable the cancel button
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX call to delete the item
+                        $.ajax({
+                            url: '/Faculty/Delete', // URL of your Delete method
+                            type: 'POST', // Use POST for data modification
+                            data: { id: itemId }, // Pass the ID as data
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        $("#facultyData").DataTable().ajax.reload(); // Reload the page or update UI
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                                //}).then(() => {
+                                //    // Optional: Reload the page or update the UI
+                                //    location.reload();
+                                //});
+                            },
+                            error: function (error) {
+                                Swal.fire("Error!", "Unable to delete the item " + response.message + " . Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss == Swal.DismissReason.cancel) {
+                        Swal.fire("Your item is safe!");
+                    }
+                });
+
+
+        });
+
+
+
+   /*     Delete selected rows*/
+        $('#deleteSelected').on('click', function () {
+            var selectedIds = [];
+            $('.selectCheckbox:checked').each(function () {
+                selectedIds.push($(this).data('id'));
+            });
+
+            if (selectedIds.length > 0) {
+                Swal.fire({
+                    title: "Are you sure? you will not be able to recover these items!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete them!",
+                    cancelButtonText: "No, keep them"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX call to delete the selected items
+                        $.ajax({
+                            url: '/Faculty/DeleteSelected/',
+                            type: 'POST',
+                            data: { ids: selectedIds },
+                            traditional: true,
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        $('#facultyData').DataTable().ajax.reload(); // Reload the DataTable
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                            },
+                            error: function (error) {
+                                Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire("Cancelled", "Your items are safe :)", "error");
+                    }
+                });
+            } else {
+                Swal.fire("No items selected", "Please select items to delete.", "info");
+            }
+        });
+
+         //mengatur partial views yang ada pada create
+         $(document).on('click', '#createButton', function () {
+
+             $.ajax({
+                 url: '@Url.Action("Create", "Faculty")',
+                 type: 'GET',
+                 success: function(data) {
+                     $('#modalContainer').html(data);
+                     var myModal = new bootstrap.Modal(document.getElementById('createModal'));
+
+                     //inisialisasi
+                     reinitializeValidation();
+
+                     myModal.show();
+                     myModal.modal('show');
+                 },
+                 error: function() {
+                     alert("An error occurred while loading the modal.");
+                 }
+             });
+         });
+
+
+        // mengatur partial views yang ada di edit
+        $(document).on('click', '#editButton', function () {
+            var personId = $(this).data('id'); // Get the ProductCategoryID from the button's data-id attribute
+
+            // Make an AJAX request to get the data for the selected ProductCategory
+            $.ajax({
+                url: '/Faculty/Edit/' + personId, // URL to fetch data for the specific category
+                type: 'GET',
+                success: function (data) {
+
+                    // Show the Edit Modal
+                    $('#modalContainer').html(data);
+
+                    //inisialisasi
+
+                    reinitializeValidation();
+
+
+
+                    $('#editModal').modal('show');
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    alert('An error occurred while fetching data.');
+                }
+            });
+        });
+
+
+    </script>
+
+}

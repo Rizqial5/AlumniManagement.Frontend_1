@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="JobHistorySerice" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:56362/Services/JobHistorySerice.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/JobHistorySerice.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/JobHistorySerice.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IJobHistorySerice_GetAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAll" />
+  </wsdl:message>
+  <wsdl:message name="IJobHistorySerice_GetAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="IJobHistorySerice_GetJob_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetJob" />
+  </wsdl:message>
+  <wsdl:message name="IJobHistorySerice_GetJob_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetJobResponse" />
+  </wsdl:message>
+  <wsdl:message name="IJobHistorySerice_InsertJob_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertJob" />
+  </wsdl:message>
+  <wsdl:message name="IJobHistorySerice_InsertJob_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertJobResponse" />
+  </wsdl:message>
+  <wsdl:message name="IJobHistorySerice_UpdateJob_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateJob" />
+  </wsdl:message>
+  <wsdl:message name="IJobHistorySerice_UpdateJob_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateJobResponse" />
+  </wsdl:message>
+  <wsdl:message name="IJobHistorySerice_DeleteJob_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteJob" />
+  </wsdl:message>
+  <wsdl:message name="IJobHistorySerice_DeleteJob_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteJobResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IJobHistorySerice">
+    <wsdl:operation name="GetAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IJobHistorySerice/GetAll" message="tns:IJobHistorySerice_GetAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IJobHistorySerice/GetAllResponse" message="tns:IJobHistorySerice_GetAll_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetJob">
+      <wsdl:input wsaw:Action="http://tempuri.org/IJobHistorySerice/GetJob" message="tns:IJobHistorySerice_GetJob_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IJobHistorySerice/GetJobResponse" message="tns:IJobHistorySerice_GetJob_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertJob">
+      <wsdl:input wsaw:Action="http://tempuri.org/IJobHistorySerice/InsertJob" message="tns:IJobHistorySerice_InsertJob_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IJobHistorySerice/InsertJobResponse" message="tns:IJobHistorySerice_InsertJob_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateJob">
+      <wsdl:input wsaw:Action="http://tempuri.org/IJobHistorySerice/UpdateJob" message="tns:IJobHistorySerice_UpdateJob_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IJobHistorySerice/UpdateJobResponse" message="tns:IJobHistorySerice_UpdateJob_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteJob">
+      <wsdl:input wsaw:Action="http://tempuri.org/IJobHistorySerice/DeleteJob" message="tns:IJobHistorySerice_DeleteJob_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IJobHistorySerice/DeleteJobResponse" message="tns:IJobHistorySerice_DeleteJob_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IJobHistorySerice" type="tns:IJobHistorySerice">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAll">
+      <soap:operation soapAction="http://tempuri.org/IJobHistorySerice/GetAll" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetJob">
+      <soap:operation soapAction="http://tempuri.org/IJobHistorySerice/GetJob" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertJob">
+      <soap:operation soapAction="http://tempuri.org/IJobHistorySerice/InsertJob" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateJob">
+      <soap:operation soapAction="http://tempuri.org/IJobHistorySerice/UpdateJob" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteJob">
+      <soap:operation soapAction="http://tempuri.org/IJobHistorySerice/DeleteJob" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="JobHistorySerice">
+    <wsdl:port name="BasicHttpBinding_IJobHistorySerice" binding="tns:BasicHttpBinding_IJobHistorySerice">
+      <soap:address location="http://localhost:56362/Services/JobHistorySerice.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
