@@ -64,6 +64,22 @@ namespace AlumniManagement.Frontend.Controllers
             return json;
         }
 
+        public JsonResult GetShowImages(int alumniId)
+        {
+            var alumnImages = _imageRepository.GetAllImage(alumniId);
+
+            foreach (var item in alumnImages)
+            {
+                item.ShowImagePath = @Url.Content(item.ImagePath.Replace("~", "") + '/' + item.FileName);
+            }
+
+            var json = Json(alumnImages.Select(m=> m.ShowImagePath) , JsonRequestBehavior.AllowGet);
+
+            json.MaxJsonLength = int.MaxValue;
+
+            return json;
+        }
+
         // GET: AlumniImage/Details/5
         public ActionResult Upload(int alumniId)
         {
@@ -75,6 +91,19 @@ namespace AlumniManagement.Frontend.Controllers
             ViewBag.AlumniId = alumniId;
 
             return PartialView("_UploadPartial");
+        }
+
+
+        public ActionResult ShowGallery(int alumniId)
+        {
+            var alumnImages = _imageRepository.GetAllImage(alumniId);
+
+            foreach (var item in alumnImages)
+            {
+                item.ShowImagePath = @Url.Content(item.ImagePath.Replace("~", "") + '/' + item.FileName);
+            }
+
+            return PartialView("_GalleryPartial", alumnImages);
         }
 
 
@@ -201,6 +230,15 @@ namespace AlumniManagement.Frontend.Controllers
 
                 foreach (var item in selectedImages)
                 {
+                    var image = _imageRepository.GetImageById(item, alumniId);
+
+                    var filePath = Path.Combine(Server.MapPath(alumniImagesPath), image.FileName);
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+
                     await _imageRepository.DeleteImageByIdAsync(item, alumniId);
                 }
 

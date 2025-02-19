@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AlumniManagement.Frontend.Models.AlumniImageModel>
+﻿@model AlumniManagement.Frontend.Models.AlumniImageModel
 
 @{
     ViewBag.Title = "Index";
@@ -29,6 +29,11 @@
                 justify-content: space-between;
                 align-items: center;
             }
+
+        .carousel-item img {
+            max-height: 500px;
+            object-fit: contain;
+        }
     </style>
 }
 
@@ -103,7 +108,7 @@
                         "render": function (data, type, row) {
                             @*var image = @Url.Content(row.ImagePath.Replace("~", "") + '/' + row.FileName)*@
 
-                            return '<div><img src ="' + row.ShowImagePath + '" alt="Alumni Image" style="max-width:40%"/></div>';
+                            return '<div><img class="img-thumbnail" src ="' + row.ShowImagePath + '" alt="Alumni Image" style="max-width:40%"/></div>';
                         }
                     },
                     {
@@ -250,6 +255,77 @@
                  }
              });
          });
+
+         //mengatur partial views yang ada pada create
+        $(document).on('click', '#showButton', function () {
+
+            var currentImageIndex = 0;
+            var images = [];
+
+            $.ajax({
+                url: '@Url.Action("ShowGallery", "AlumniImage", new {alumniId= ViewBag.AlumniId })',
+                type: 'GET',
+                success: function(data, model) {
+                    $('#modalContainer').html(data);
+                    var myModal = new bootstrap.Modal(document.getElementById('showImageModal'));
+
+                    console.log(data);
+
+                    myModal.show();
+
+
+
+                    $(document).on('click', '#prevImage', function () {
+                        if (currentImageIndex > 0) {
+                            currentImageIndex--;
+                            $('#modalImage').attr('src', images[currentImageIndex].src);
+                        }
+                    });
+
+                    $(document).on('click', '#nextImage', function () {
+                        if (currentImageIndex < images.length - 1) {
+                            currentImageIndex++;
+                            $('#modalImage').attr('src', images[currentImageIndex].src);
+                        }
+                    });
+
+                },
+                error: function() {
+                    alert("An error occurred while loading the modal.");
+                }
+            });
+
+             $.ajax({
+                 url: '@Url.Action("GetShowImages", "AlumniImage", new {alumniId= ViewBag.AlumniId })',
+                 type: 'GET',
+                 datatype: "json",
+                 success: function(data) {
+                     console.log(data);
+
+                     var i = 0;
+
+                     data.forEach(function (image) {
+                         images.push({
+                             id: i,
+                             src: data[i]
+                         });
+                         i++;
+                     });
+
+                     currentImageIndex = 0
+                     $('#modalImage').attr('src', images[currentImageIndex].src);
+
+
+                 },
+                 error: function() {
+                     alert("An error occurred while loading the modal.");
+                 }
+             });
+
+
+
+         });
+
 
 
     </script>
