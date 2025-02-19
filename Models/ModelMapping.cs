@@ -1,4 +1,5 @@
 ﻿
+using AlumniManagement.Frontend.AlumniImageService;
 using AlumniManagement.Frontend.AlumniService;
 using AlumniManagement.Frontend.FacultyService;
 using AlumniManagement.Frontend.JobHistoryService;
@@ -37,6 +38,7 @@ namespace AlumniManagement.Frontend
             CreateMap<JobModel, JobDTO>().ReverseMap();
             CreateMap<AlumniModel, AlumniDTO>().ReverseMap();
             CreateMap<FacultyModel, FacultyDTO>().ReverseMap();
+            CreateMap<AlumniImageModel, ImageDTO>().ReverseMap();
 
         }
     }
