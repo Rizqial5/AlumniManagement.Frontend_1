@@ -128,6 +128,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Connected Services\AlumniImageService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\AlumniService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -174,6 +179,16 @@
     <Compile Include="Repositories\MajorRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Connected Services\AlumniImageService\AlumniImageService.disco" />
+    <Content Include="Connected Services\AlumniImageService\AlumniManagement.Frontend.AlumniImageService.ImageDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\AlumniImageService\configuration91.svcinfo" />
+    <None Include="Connected Services\AlumniImageService\configuration.svcinfo" />
+    <None Include="Connected Services\AlumniImageService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Connected Services\AlumniService\AlumniManagement.Frontend.AlumniService.AlumniDTO.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -183,6 +198,16 @@
     <Content Include="Connected Services\AlumniService\AlumniManagement.Frontend.AlumniService.StateDTO.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <None Include="Connected Services\AlumniImageService\AlumniImageService.wsdl" />
+    <None Include="Connected Services\AlumniImageService\AlumniImageService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AlumniImageService\AlumniImageService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AlumniImageService\AlumniImageService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\AlumniService\AlumniService.disco" />
     <None Include="Connected Services\AlumniService\AlumniService4.xsd">
       <SubType>Designer</SubType>
@@ -373,6 +398,7 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\AlumniImageService\" />
     <WCFMetadataStorage Include="Connected Services\AlumniService\" />
     <WCFMetadataStorage Include="Connected Services\FacultyService\" />
     <WCFMetadataStorage Include="Connected Services\JobHistoryService\" />

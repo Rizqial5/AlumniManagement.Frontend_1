@@ -43,6 +43,7 @@
 <table class="table" id="majorData" style="width:100%">
     <thead>
         <tr>
+            <th><input type="checkbox" id="selectAll" /></th>
             <th>Action</th>
             <th>No</th>
             <th>
@@ -81,6 +82,12 @@
                     "datatype": "json"
                 },
                 "columns": [
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.FacultyID + '" />'
+                        }
+                    },
                     {
                         "data": null,
                         "render": function (data, type, row) {
@@ -243,6 +250,49 @@
                     alert('An error occurred while fetching data.');
                 }
             });
+        });
+
+        $('#deleteSelected').on('click', function () {
+            var selectedIds = [];
+            $('.selectCheckbox:checked').each(function () {
+                selectedIds.push($(this).data('id'));
+            });
+
+            if (selectedIds.length > 0) {
+                Swal.fire({
+                    title: "Are you sure? you will not be able to recover these items!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete them!",
+                    cancelButtonText: "No, keep them"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX call to delete the selected items
+                        $.ajax({
+                            url: '/Major/DeleteSelected/',
+                            type: 'POST',
+                            data: { ids: selectedIds },
+                            traditional: true,
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        $('#facultyData').DataTable().ajax.reload(); // Reload the DataTable
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                            },
+                            error: function (error) {
+                                Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire("Cancelled", "Your items are safe :)", "error");
+                    }
+                });
+            } else {
+                Swal.fire("No items selected", "Please select items to delete.", "info");
+            }
         });
 
     </script>
