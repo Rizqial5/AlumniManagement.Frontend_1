@@ -1,0 +1,27 @@
+﻿
+@model AlumniManagement.Frontend.Models.AlumniImageModel 
+
+<div id="createModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Create Alumni Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("UploadImages", "AlumniImage", FormMethod.Post, new { enctype = "multipart/form-data", alumniId = ViewBag.AlumniId }))
+                {
+                    <div class="border border-secondary p-3 shadow-sm mt-2" style="width: 100%; max-width: 400px;">
+
+                        <div class="d-flex align-items-center">
+                            <input type="hidden" name="alumniId" value="@ViewBag.AlumniId" />
+                            <input type="file" class="form-control me-2" name="files" multiple accept=".jpeg, .png" required style="width: 300px;" />
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

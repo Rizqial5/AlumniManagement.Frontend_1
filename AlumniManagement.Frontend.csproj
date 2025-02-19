@@ -154,6 +154,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AlumniController.cs" />
+    <Compile Include="Controllers\AlumniImageController.cs" />
     <Compile Include="Controllers\FacultyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
@@ -366,9 +367,12 @@
     <Content Include="Views\Faculty\_EditPartial.cshtml" />
     <Content Include="Views\Major\_CreatePartial.cshtml" />
     <Content Include="Views\Major\_EditPartial.cshtml" />
+    <Content Include="Views\AlumniImage\Index.cshtml" />
+    <Content Include="Views\AlumniImage\_UploadPartial.cshtml" />
+    <Content Include="Views\AlumniImage\_GalleryPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\AlumniImages\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
