@@ -166,6 +166,7 @@
     <Compile Include="Interfaces\IFacultyRepository.cs" />
     <Compile Include="Interfaces\IJobRepository.cs" />
     <Compile Include="Interfaces\IMajorRepository.cs" />
+    <Compile Include="Models\AlumniImageModel.cs" />
     <Compile Include="Models\AlumniModel.cs" />
     <Compile Include="Models\FacultyModel.cs" />
     <Compile Include="Models\JobModel.cs" />
