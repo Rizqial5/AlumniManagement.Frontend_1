@@ -212,6 +212,9 @@
     <None Include="Connected Services\AlumniImageService\AlumniImageService2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Connected Services\AlumniService\AlumniManagement.Frontend.AlumniService.HobbyDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Connected Services\AlumniService\AlumniService.disco" />
     <None Include="Connected Services\AlumniService\AlumniService4.xsd">
       <SubType>Designer</SubType>

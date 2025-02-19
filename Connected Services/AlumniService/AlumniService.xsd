@@ -14,6 +14,32 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetAllHobbies">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllHobbiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetAllHobbiesResult" nillable="true" type="q2:ArrayOfHobbyDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllHobbiesByAlumniId">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="alumniId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllHobbiesByAlumniIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetAllHobbiesByAlumniIdResult" nillable="true" type="q3:ArrayOfHobbyDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetAlumni">
     <xs:complexType>
       <xs:sequence>
@@ -24,14 +50,14 @@
   <xs:element name="GetAlumniResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetAlumniResult" nillable="true" type="q2:AlumniDTO" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetAlumniResult" nillable="true" type="q4:AlumniDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="InsertAlumni">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumni" nillable="true" type="q3:AlumniDTO" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumni" nillable="true" type="q5:AlumniDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -40,10 +66,23 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="InsertAlumniWithHobbies">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumni" nillable="true" type="q6:AlumniDTO" />
+        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="newHobbies" nillable="true" type="q7:ArrayOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertAlumniWithHobbiesResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="UpdateAlumni">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumni" nillable="true" type="q4:AlumniDTO" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumni" nillable="true" type="q8:AlumniDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -100,7 +139,7 @@
   <xs:element name="GetAllStatesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetAllStatesResult" nillable="true" type="q5:ArrayOfStateDTO" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetAllStatesResult" nillable="true" type="q9:ArrayOfStateDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -112,7 +151,7 @@
   <xs:element name="GetAllDistrictsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetAllDistrictsResult" nillable="true" type="q6:ArrayOfDistrictDTO" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetAllDistrictsResult" nillable="true" type="q10:ArrayOfDistrictDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -126,7 +165,7 @@
   <xs:element name="GetDistrictByStateIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetDistrictByStateIdResult" nillable="true" type="q7:ArrayOfDistrictDTO" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetDistrictByStateIdResult" nillable="true" type="q11:ArrayOfDistrictDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -138,7 +177,7 @@
   <xs:element name="GetStatesDistrictNameResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetStatesDistrictNameResult" nillable="true" type="q8:ArrayOfstring" />
+        <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetStatesDistrictNameResult" nillable="true" type="q12:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -150,14 +189,14 @@
   <xs:element name="GetMajorFacultiesNameResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetMajorFacultiesNameResult" nillable="true" type="q9:ArrayOfstring" />
+        <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetMajorFacultiesNameResult" nillable="true" type="q13:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ImportFromExcel">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumniDTO" nillable="true" type="q10:AlumniDTO" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumniDTO" nillable="true" type="q14:AlumniDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

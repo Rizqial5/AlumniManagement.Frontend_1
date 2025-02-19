@@ -65,6 +65,15 @@ namespace AlumniManagement.Frontend.AlumniService {
         private System.Nullable<int> GraduationYearField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private AlumniManagement.Frontend.AlumniService.HobbyDTO[] HobbiesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Web.Mvc.SelectListItem[] HobbiesDDlField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HobbiesListNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LastNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -287,6 +296,45 @@ namespace AlumniManagement.Frontend.AlumniService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public AlumniManagement.Frontend.AlumniService.HobbyDTO[] Hobbies {
+            get {
+                return this.HobbiesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HobbiesField, value) != true)) {
+                    this.HobbiesField = value;
+                    this.RaisePropertyChanged("Hobbies");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Web.Mvc.SelectListItem[] HobbiesDDl {
+            get {
+                return this.HobbiesDDlField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HobbiesDDlField, value) != true)) {
+                    this.HobbiesDDlField = value;
+                    this.RaisePropertyChanged("HobbiesDDl");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string HobbiesListName {
+            get {
+                return this.HobbiesListNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HobbiesListNameField, value) != true)) {
+                    this.HobbiesListNameField = value;
+                    this.RaisePropertyChanged("HobbiesListName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string LastName {
             get {
                 return this.LastNameField;
@@ -412,6 +460,67 @@ namespace AlumniManagement.Frontend.AlumniService {
                 if ((object.ReferenceEquals(this.StateNameField, value) != true)) {
                     this.StateNameField = value;
                     this.RaisePropertyChanged("StateName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="HobbyDTO", Namespace="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities")]
+    [System.SerializableAttribute()]
+    public partial class HobbyDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int HobbyIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int HobbyID {
+            get {
+                return this.HobbyIDField;
+            }
+            set {
+                if ((this.HobbyIDField.Equals(value) != true)) {
+                    this.HobbyIDField = value;
+                    this.RaisePropertyChanged("HobbyID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
                 }
             }
         }
@@ -574,6 +683,18 @@ namespace AlumniManagement.Frontend.AlumniService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/GetAll", ReplyAction="http://tempuri.org/IAlumniService/GetAllResponse")]
         System.Threading.Tasks.Task<AlumniManagement.Frontend.AlumniService.AlumniDTO[]> GetAllAsync();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/GetAllHobbies", ReplyAction="http://tempuri.org/IAlumniService/GetAllHobbiesResponse")]
+        AlumniManagement.Frontend.AlumniService.HobbyDTO[] GetAllHobbies();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/GetAllHobbies", ReplyAction="http://tempuri.org/IAlumniService/GetAllHobbiesResponse")]
+        System.Threading.Tasks.Task<AlumniManagement.Frontend.AlumniService.HobbyDTO[]> GetAllHobbiesAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/GetAllHobbiesByAlumniId", ReplyAction="http://tempuri.org/IAlumniService/GetAllHobbiesByAlumniIdResponse")]
+        AlumniManagement.Frontend.AlumniService.HobbyDTO[] GetAllHobbiesByAlumniId(int alumniId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/GetAllHobbiesByAlumniId", ReplyAction="http://tempuri.org/IAlumniService/GetAllHobbiesByAlumniIdResponse")]
+        System.Threading.Tasks.Task<AlumniManagement.Frontend.AlumniService.HobbyDTO[]> GetAllHobbiesByAlumniIdAsync(int alumniId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/GetAlumni", ReplyAction="http://tempuri.org/IAlumniService/GetAlumniResponse")]
         AlumniManagement.Frontend.AlumniService.AlumniDTO GetAlumni(int alumniId);
         
@@ -585,6 +706,12 @@ namespace AlumniManagement.Frontend.AlumniService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/InsertAlumni", ReplyAction="http://tempuri.org/IAlumniService/InsertAlumniResponse")]
         System.Threading.Tasks.Task InsertAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/InsertAlumniWithHobbies", ReplyAction="http://tempuri.org/IAlumniService/InsertAlumniWithHobbiesResponse")]
+        void InsertAlumniWithHobbies(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni, int[] newHobbies);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/InsertAlumniWithHobbies", ReplyAction="http://tempuri.org/IAlumniService/InsertAlumniWithHobbiesResponse")]
+        System.Threading.Tasks.Task InsertAlumniWithHobbiesAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni, int[] newHobbies);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpdateAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpdateAlumniResponse")]
         void UpdateAlumni(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni);
@@ -682,6 +809,22 @@ namespace AlumniManagement.Frontend.AlumniService {
             return base.Channel.GetAllAsync();
         }
         
+        public AlumniManagement.Frontend.AlumniService.HobbyDTO[] GetAllHobbies() {
+            return base.Channel.GetAllHobbies();
+        }
+        
+        public System.Threading.Tasks.Task<AlumniManagement.Frontend.AlumniService.HobbyDTO[]> GetAllHobbiesAsync() {
+            return base.Channel.GetAllHobbiesAsync();
+        }
+        
+        public AlumniManagement.Frontend.AlumniService.HobbyDTO[] GetAllHobbiesByAlumniId(int alumniId) {
+            return base.Channel.GetAllHobbiesByAlumniId(alumniId);
+        }
+        
+        public System.Threading.Tasks.Task<AlumniManagement.Frontend.AlumniService.HobbyDTO[]> GetAllHobbiesByAlumniIdAsync(int alumniId) {
+            return base.Channel.GetAllHobbiesByAlumniIdAsync(alumniId);
+        }
+        
         public AlumniManagement.Frontend.AlumniService.AlumniDTO GetAlumni(int alumniId) {
             return base.Channel.GetAlumni(alumniId);
         }
@@ -696,6 +839,14 @@ namespace AlumniManagement.Frontend.AlumniService {
         
         public System.Threading.Tasks.Task InsertAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni) {
             return base.Channel.InsertAlumniAsync(alumni);
+        }
+        
+        public void InsertAlumniWithHobbies(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni, int[] newHobbies) {
+            base.Channel.InsertAlumniWithHobbies(alumni, newHobbies);
+        }
+        
+        public System.Threading.Tasks.Task InsertAlumniWithHobbiesAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni, int[] newHobbies) {
+            return base.Channel.InsertAlumniWithHobbiesAsync(alumni, newHobbies);
         }
         
         public void UpdateAlumni(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni) {

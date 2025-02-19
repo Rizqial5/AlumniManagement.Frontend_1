@@ -15,6 +15,18 @@
   <wsdl:message name="IAlumniService_GetAll_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetAllResponse" />
   </wsdl:message>
+  <wsdl:message name="IAlumniService_GetAllHobbies_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllHobbies" />
+  </wsdl:message>
+  <wsdl:message name="IAlumniService_GetAllHobbies_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllHobbiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAlumniService_GetAllHobbiesByAlumniId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllHobbiesByAlumniId" />
+  </wsdl:message>
+  <wsdl:message name="IAlumniService_GetAllHobbiesByAlumniId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllHobbiesByAlumniIdResponse" />
+  </wsdl:message>
   <wsdl:message name="IAlumniService_GetAlumni_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAlumni" />
   </wsdl:message>
@@ -26,6 +38,12 @@
   </wsdl:message>
   <wsdl:message name="IAlumniService_InsertAlumni_OutputMessage">
     <wsdl:part name="parameters" element="tns:InsertAlumniResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAlumniService_InsertAlumniWithHobbies_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertAlumniWithHobbies" />
+  </wsdl:message>
+  <wsdl:message name="IAlumniService_InsertAlumniWithHobbies_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertAlumniWithHobbiesResponse" />
   </wsdl:message>
   <wsdl:message name="IAlumniService_UpdateAlumni_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateAlumni" />
@@ -92,6 +110,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IAlumniService/GetAll" message="tns:IAlumniService_GetAll_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAlumniService/GetAllResponse" message="tns:IAlumniService_GetAll_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetAllHobbies">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAlumniService/GetAllHobbies" message="tns:IAlumniService_GetAllHobbies_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAlumniService/GetAllHobbiesResponse" message="tns:IAlumniService_GetAllHobbies_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllHobbiesByAlumniId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAlumniService/GetAllHobbiesByAlumniId" message="tns:IAlumniService_GetAllHobbiesByAlumniId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAlumniService/GetAllHobbiesByAlumniIdResponse" message="tns:IAlumniService_GetAllHobbiesByAlumniId_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetAlumni">
       <wsdl:input wsaw:Action="http://tempuri.org/IAlumniService/GetAlumni" message="tns:IAlumniService_GetAlumni_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAlumniService/GetAlumniResponse" message="tns:IAlumniService_GetAlumni_OutputMessage" />
@@ -99,6 +125,10 @@
     <wsdl:operation name="InsertAlumni">
       <wsdl:input wsaw:Action="http://tempuri.org/IAlumniService/InsertAlumni" message="tns:IAlumniService_InsertAlumni_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAlumniService/InsertAlumniResponse" message="tns:IAlumniService_InsertAlumni_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertAlumniWithHobbies">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAlumniService/InsertAlumniWithHobbies" message="tns:IAlumniService_InsertAlumniWithHobbies_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAlumniService/InsertAlumniWithHobbiesResponse" message="tns:IAlumniService_InsertAlumniWithHobbies_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdateAlumni">
       <wsdl:input wsaw:Action="http://tempuri.org/IAlumniService/UpdateAlumni" message="tns:IAlumniService_UpdateAlumni_InputMessage" />
@@ -152,6 +182,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetAllHobbies">
+      <soap:operation soapAction="http://tempuri.org/IAlumniService/GetAllHobbies" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllHobbiesByAlumniId">
+      <soap:operation soapAction="http://tempuri.org/IAlumniService/GetAllHobbiesByAlumniId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetAlumni">
       <soap:operation soapAction="http://tempuri.org/IAlumniService/GetAlumni" style="document" />
       <wsdl:input>
@@ -163,6 +211,15 @@
     </wsdl:operation>
     <wsdl:operation name="InsertAlumni">
       <soap:operation soapAction="http://tempuri.org/IAlumniService/InsertAlumni" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertAlumniWithHobbies">
+      <soap:operation soapAction="http://tempuri.org/IAlumniService/InsertAlumniWithHobbies" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

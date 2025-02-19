@@ -23,9 +23,12 @@
       <xs:element minOccurs="0" name="FullAddress" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FullName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="GraduationYear" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Hobbies" nillable="true" type="tns:ArrayOfHobbyDTO" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/System.Web.Mvc" minOccurs="0" name="HobbiesDDl" nillable="true" type="q2:ArrayOfSelectListItem" />
+      <xs:element minOccurs="0" name="HobbiesListName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LinkedInProfile" nillable="true" type="xs:string" />
-      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/System.Web.Mvc" minOccurs="0" name="MajorDDl" nillable="true" type="q2:ArrayOfSelectListItem" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/System.Web.Mvc" minOccurs="0" name="MajorDDl" nillable="true" type="q3:ArrayOfSelectListItem" />
       <xs:element minOccurs="0" name="MajorID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="MajorName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
@@ -36,6 +39,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="AlumniDTO" nillable="true" type="tns:AlumniDTO" />
+  <xs:complexType name="ArrayOfHobbyDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="HobbyDTO" nillable="true" type="tns:HobbyDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfHobbyDTO" nillable="true" type="tns:ArrayOfHobbyDTO" />
+  <xs:complexType name="HobbyDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HobbyID" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="HobbyDTO" nillable="true" type="tns:HobbyDTO" />
   <xs:complexType name="ArrayOfStateDTO">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="StateDTO" nillable="true" type="tns:StateDTO" />
