@@ -20,7 +20,7 @@ namespace AlumniManagement.Frontend.Interfaces
         
         void InsertAlumni(AlumniModel alumni);
 
-        void InsertAlumniWitHobbies(AlumniModel alumni, List<int> newHobbies);
+        void InsertAlumniWitHobbies(AlumniModel alumni);
 
         
         void UpdateAlumni(AlumniModel alumni);

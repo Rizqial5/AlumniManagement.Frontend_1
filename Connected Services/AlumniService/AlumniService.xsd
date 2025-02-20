@@ -70,7 +70,6 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumni" nillable="true" type="q6:AlumniDTO" />
-        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="newHobbies" nillable="true" type="q7:ArrayOfint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -82,11 +81,23 @@
   <xs:element name="UpdateAlumni">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumni" nillable="true" type="q8:AlumniDTO" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumni" nillable="true" type="q7:AlumniDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UpdateAlumniResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateAlumniWithHobbies">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumni" nillable="true" type="q8:AlumniDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateAlumniWithHobbiesResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

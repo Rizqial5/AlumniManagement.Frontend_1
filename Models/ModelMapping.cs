@@ -39,6 +39,7 @@ namespace AlumniManagement.Frontend
             CreateMap<AlumniModel, AlumniDTO>().ReverseMap();
             CreateMap<FacultyModel, FacultyDTO>().ReverseMap();
             CreateMap<AlumniImageModel, ImageDTO>().ReverseMap();
+            CreateMap<HobbyModel, HobbyDTO>().ReverseMap();
 
         }
     }

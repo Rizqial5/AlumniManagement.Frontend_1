@@ -708,16 +708,22 @@ namespace AlumniManagement.Frontend.AlumniService {
         System.Threading.Tasks.Task InsertAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/InsertAlumniWithHobbies", ReplyAction="http://tempuri.org/IAlumniService/InsertAlumniWithHobbiesResponse")]
-        void InsertAlumniWithHobbies(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni, int[] newHobbies);
+        void InsertAlumniWithHobbies(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/InsertAlumniWithHobbies", ReplyAction="http://tempuri.org/IAlumniService/InsertAlumniWithHobbiesResponse")]
-        System.Threading.Tasks.Task InsertAlumniWithHobbiesAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni, int[] newHobbies);
+        System.Threading.Tasks.Task InsertAlumniWithHobbiesAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpdateAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpdateAlumniResponse")]
         void UpdateAlumni(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpdateAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpdateAlumniResponse")]
         System.Threading.Tasks.Task UpdateAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpdateAlumniWithHobbies", ReplyAction="http://tempuri.org/IAlumniService/UpdateAlumniWithHobbiesResponse")]
+        void UpdateAlumniWithHobbies(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpdateAlumniWithHobbies", ReplyAction="http://tempuri.org/IAlumniService/UpdateAlumniWithHobbiesResponse")]
+        System.Threading.Tasks.Task UpdateAlumniWithHobbiesAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/DeleteAlumni", ReplyAction="http://tempuri.org/IAlumniService/DeleteAlumniResponse")]
         void DeleteAlumni(int alumniId);
@@ -841,12 +847,12 @@ namespace AlumniManagement.Frontend.AlumniService {
             return base.Channel.InsertAlumniAsync(alumni);
         }
         
-        public void InsertAlumniWithHobbies(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni, int[] newHobbies) {
-            base.Channel.InsertAlumniWithHobbies(alumni, newHobbies);
+        public void InsertAlumniWithHobbies(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni) {
+            base.Channel.InsertAlumniWithHobbies(alumni);
         }
         
-        public System.Threading.Tasks.Task InsertAlumniWithHobbiesAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni, int[] newHobbies) {
-            return base.Channel.InsertAlumniWithHobbiesAsync(alumni, newHobbies);
+        public System.Threading.Tasks.Task InsertAlumniWithHobbiesAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni) {
+            return base.Channel.InsertAlumniWithHobbiesAsync(alumni);
         }
         
         public void UpdateAlumni(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni) {
@@ -855,6 +861,14 @@ namespace AlumniManagement.Frontend.AlumniService {
         
         public System.Threading.Tasks.Task UpdateAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni) {
             return base.Channel.UpdateAlumniAsync(alumni);
+        }
+        
+        public void UpdateAlumniWithHobbies(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni) {
+            base.Channel.UpdateAlumniWithHobbies(alumni);
+        }
+        
+        public System.Threading.Tasks.Task UpdateAlumniWithHobbiesAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumni) {
+            return base.Channel.UpdateAlumniWithHobbiesAsync(alumni);
         }
         
         public void DeleteAlumni(int alumniId) {

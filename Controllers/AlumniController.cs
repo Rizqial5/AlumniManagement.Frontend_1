@@ -148,7 +148,16 @@ namespace AlumniManagement.Frontend.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    _alumniRepository.InsertAlumni(alumniModel);
+                    //Check if there any hobbies
+
+                    if(alumniModel.Hobbies.Count() >0)
+                    {
+                        _alumniRepository.InsertAlumniWitHobbies(alumniModel);
+                    }
+                    else
+                    {
+                        _alumniRepository.InsertAlumni(alumniModel);
+                    }
 
                     TempData["SuccessMessage"] = "Alumni created succesfully";
                 }

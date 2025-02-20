@@ -1,4 +1,5 @@
-﻿using AutoMapper.Configuration.Annotations;
+﻿using AlumniManagement.Frontend.AlumniService;
+using AutoMapper.Configuration.Annotations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -99,17 +100,24 @@ namespace AlumniManagement.Frontend.Models
         
         public IEnumerable<SelectListItem> MajorDDl { get; set; }
 
-        [Ignore]
+
+        public string HobbiesListName { get; set; }
+
+        public IEnumerable<HobbyDTO> Hobbies { get; set; }
+
+
         public string ShowDateOfBirth { get; set; }
 
-    //    [Ignore]
-    // Catatan Opsi Lain
-    //    public string DateOfBirthDisplay
-    //    {
-    //        get
-    //        {
-    //            return (DateOfBirth.Value.ToString("yyyy-MM-dd") != "0001-01-01") ? DateOfBirth.Value.ToString("yyyy-MM-dd") : "N/A";
-    //        }
-    //    }
+        public IEnumerable<SelectListItem> HobbiesDDl { get; set; }
+
+        //    [Ignore]
+        // Catatan Opsi Lain
+        //    public string DateOfBirthDisplay
+        //    {
+        //        get
+        //        {
+        //            return (DateOfBirth.Value.ToString("yyyy-MM-dd") != "0001-01-01") ? DateOfBirth.Value.ToString("yyyy-MM-dd") : "N/A";
+        //        }
+        //    }
     }
 }

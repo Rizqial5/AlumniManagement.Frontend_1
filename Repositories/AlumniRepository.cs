@@ -111,11 +111,11 @@ namespace AlumniManagement.Frontend.Repositories
             throw new NotImplementedException();
         }
 
-        public void InsertAlumniWitHobbies(AlumniModel alumni, List<int> newHobbies)
+        public void InsertAlumniWitHobbies(AlumniModel alumni)
         {
             var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
 
-            _alumniServiceClient.InsertAlumniWithHobbies(result, newHobbies.ToArray());
+            _alumniServiceClient.InsertAlumniWithHobbies(result);
         }
     }
 }

@@ -221,6 +221,29 @@
                      //inisialisasi
                      reinitializeValidation();
 
+                     $(function () {
+
+                         var today = new Date();
+                         today.setDate(today.getDate() + 1); // Add one day
+                         var todayString = today.toISOString().split('T')[0];
+
+                         $("#StartDate").attr("max", todayString).on("change", function () {
+                             var startDate = $(this).val();
+                             $("#EndDate").attr("min", startDate).attr("max", todayString);
+                             if ($("#EndDate").val() < startDate || $("#EndDate").val() > todayString) {
+                                 $("#EndDate").val(startDate);
+                             }
+                         });
+
+                         $("#EndDate").attr("max", todayString).on("change", function () {
+                             var endDate = $(this).val();
+                             var startDate = $("#StartDate").val();
+                             if (endDate < startDate || endDate > todayString) {
+                                 $(this).val(startDate);
+                             }
+                         });
+                     });
+
                      myModal.show();
                      myModal.modal('show');
                  },

@@ -171,6 +171,7 @@
     <Compile Include="Models\AlumniImageModel.cs" />
     <Compile Include="Models\AlumniModel.cs" />
     <Compile Include="Models\FacultyModel.cs" />
+    <Compile Include="Models\HobbyModel.cs" />
     <Compile Include="Models\JobModel.cs" />
     <Compile Include="Models\MajorModel.cs" />
     <Compile Include="Models\ModelMapping.cs" />
