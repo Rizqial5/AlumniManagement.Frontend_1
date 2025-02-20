@@ -20,6 +20,8 @@ namespace AlumniManagement.Frontend.Interfaces
         
         void InsertAlumni(AlumniModel alumni);
 
+        void InsertAlumniWitHobbies(AlumniModel alumni, List<int> newHobbies);
+
         
         void UpdateAlumni(AlumniModel alumni);
 
@@ -42,7 +44,6 @@ namespace AlumniManagement.Frontend.Interfaces
         IEnumerable<string> GetMajorFacultiesName();
         IEnumerable<DistrictDTO> GetDistrictByStateId(int stateId);
 
-        [OperationContract]
         void ImportFromExcel(AlumniModel alumniDTO);
     }
 }

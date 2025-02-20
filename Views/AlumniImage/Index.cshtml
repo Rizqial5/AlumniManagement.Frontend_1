@@ -47,11 +47,7 @@
     <thead>
         <tr>
             <th><input type="checkbox" id="selectAll" /></th>
-            <th>Actions</th>
-            <th>No.</th>
-            <th>
-                @Html.DisplayNameFor(model => model.FileName)
-            </th>
+            <th>Action</th>
             <th>Preview Image</th>
             <th>
                 @Html.DisplayNameFor(model => model.UploadDate)
@@ -98,17 +94,10 @@
                     },
                     {
                         "data": null,
-                        "render": function (data, type, row, meta) {
-                            return meta.row + 1;  // Display the row number (meta.row is zero-indexed)
-                        }
-                    },
-                    { "data": "FileName" },
-                    {
-                        "data": null,
                         "render": function (data, type, row) {
                             @*var image = @Url.Content(row.ImagePath.Replace("~", "") + '/' + row.FileName)*@
 
-                            return '<div><img class="img-thumbnail" src ="' + row.ShowImagePath + '" alt="Alumni Image" style="max-width:40%"/></div>';
+                            return '<div><img class="img-thumbnail" src ="' + row.ShowImagePath + '" alt="Alumni Image" style="max-width:60%"/></div>';
                         }
                     },
                     {
@@ -269,11 +258,7 @@
                     $('#modalContainer').html(data);
                     var myModal = new bootstrap.Modal(document.getElementById('showImageModal'));
 
-                    console.log(data);
-
                     myModal.show();
-
-
 
                     $(document).on('click', '#prevImage', function () {
                         if (currentImageIndex > 0) {
