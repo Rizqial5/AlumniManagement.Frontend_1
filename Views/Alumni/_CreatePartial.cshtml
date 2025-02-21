@@ -96,6 +96,14 @@
                                 </div>
 
                                 <div class="form-group">
+                                    @Html.LabelFor(model => model.HobbiesListName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                            @Html.ListBoxFor(model => model.Hobbies,(MultiSelectList)ViewBag.HobbiesDdl, new { @id = "ddlHobby", @class = "form-control", @multiple = "multiple" })
+                                            @Html.ValidationMessageFor(model => model.Hobbies, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     @Html.LabelFor(model => model.GraduationYear, htmlAttributes: new { @class = "control-label col-md-2" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.GraduationYear, new { htmlAttributes = new { @class = "form-control" } })

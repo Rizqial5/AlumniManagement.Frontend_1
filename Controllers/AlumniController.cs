@@ -84,8 +84,25 @@ namespace AlumniManagement.Frontend.Controllers
                 item.ShowDateOfBirth = DateConverter(item.DateOfBirth);
             }
 
-            return Json(new { data = alumniesData}, JsonRequestBehavior.AllowGet);
+            return Json(new { data = alumniesData }, JsonRequestBehavior.AllowGet);
         }
+
+
+        //multi select selected
+        //public JsonResult GetAlumni(int id)
+        //{
+        //    var existingData = _alumniRepository.GetAlumni(id);
+
+        //    existingData.HobbiesDDl = _alumniRepository.GetAllHobbies()
+        //       .Select(h => new SelectListItem
+        //       {
+        //           Value = h.HobbyID.ToString(),
+        //           Text = h.Name,
+        //           Selected = existingData.Hobbies != null && existingData.Hobbies.Contains(h.HobbyID)
+        //       }).ToList();
+
+        //    return Json(existingData, JsonRequestBehavior.AllowGet);
+        //}
 
         public string DateConverter(DateTime? dateTime)
         {
@@ -132,6 +149,7 @@ namespace AlumniManagement.Frontend.Controllers
 
             alumniModel.DistrictDDL = new List<SelectListItem>();
             alumniModel.MajorDDl = new List<SelectListItem>();
+            //alumniModel.HobbiesDDl = new MultiSelectList()
 
             StateAndFacultyDdl();
 
@@ -150,7 +168,7 @@ namespace AlumniManagement.Frontend.Controllers
 
                     //Check if there any hobbies
 
-                    if(alumniModel.Hobbies.Count() >0)
+                    if(alumniModel.Hobbies!= null)
                     {
                         _alumniRepository.InsertAlumniWitHobbies(alumniModel);
                     }
@@ -194,6 +212,40 @@ namespace AlumniManagement.Frontend.Controllers
             var populateForm = RepopulateEditForm(existingData);
 
 
+
+            //var selectedHobbiesDDl = new List<HobbyDTO>();
+            //var listSelectedItem = new List<SelectListItem>();
+
+
+
+            //foreach (var item in existingData.Hobbies)
+            //{
+            //    foreach (var hobby in _alumniRepository.GetAllHobbies())
+            //    {
+            //        if(item == hobby.HobbyID)
+            //        {
+            //            selectedHobbiesDDl.Add(hobby);
+            //        }
+ 
+            //    }
+            //}
+
+
+            ////var multiSelectList = new MultiSelectList(hobbies, "HobbyID", "Name", selectedHobbiesDDl);
+
+
+            ////ViewBag.AllHobbies = listSelectedItem;
+            //var selectedListHobbies = new MultiSelectList(_alumniRepository.GetAllHobbies(), "HobbyID", "Name", selectedHobbiesDDl);
+
+            //foreach (var item in selectedListHobbies)
+            //{
+            //    if(selectedHobbiesDDl.Select(h => h.HobbyID).ToString().Contains(item.Value))
+            //    {
+            //        item.Selected = true;
+            //    }
+            //}
+
+
             return PartialView("_EditPartial",populateForm);
         }
 
@@ -218,9 +270,14 @@ namespace AlumniManagement.Frontend.Controllers
 
                 }).ToList();
 
-            
+            alumniModel.HobbiesDDl = _alumniRepository.GetAllHobbies()
+              .Select(h => new SelectListItem
+              {
+                  Value = h.HobbyID.ToString(),
+                  Text = h.Name,
+                  Selected = alumniModel.Hobbies != null && alumniModel.Hobbies.Contains(h.HobbyID)
+              });
 
-            StateAndFacultyDdl();
 
             return alumniModel;
         }
@@ -246,7 +303,16 @@ namespace AlumniManagement.Frontend.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    _alumniRepository.UpdateAlumni(alumniModel);
+
+                    if (alumniModel.Hobbies != null)
+                    {
+                        _alumniRepository.UpdateAlumniWithHobbies(alumniModel);
+                    }
+                    else
+                    {
+                        _alumniRepository.UpdateAlumni(alumniModel);
+                    }
+                    
 
                     TempData["SuccessMessage"] = "Alumni updated succesfully";
                 }
@@ -351,9 +417,11 @@ namespace AlumniManagement.Frontend.Controllers
         {
             var facultyDdl = _facultyRepository.GetAll();
             var statesDdl = _alumniRepository.GetAllStates();
+            var hobbiesDdl = _alumniRepository.GetAllHobbies();
 
             ViewBag.FacultyDdl = new SelectList(facultyDdl, "FacultyID", "FacultyName");
             ViewBag.StatesDdl = new SelectList(statesDdl, "StateID", "StateName");
+            ViewBag.HobbiesDdl = new MultiSelectList(hobbiesDdl, "HobbyID", "Name");
         }
 
         public JsonResult ShowMajorList(int facultyId)

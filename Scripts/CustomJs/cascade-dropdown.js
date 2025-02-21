@@ -12,7 +12,7 @@ function updateDistrictDropdown(url) {
     });
 }
 
-// 🟠 Fungsi untuk memperbarui Major Dropdown berdasarkan Faculty
+/* 🟠 Fungsi untuk memperbarui Major Dropdown berdasarkan Faculty*/
 function updateMajorDropdown(url) {
     $('#FacultyDropdown').change(function () {
         var facultyId = $(this).val();
@@ -25,3 +25,4 @@ function updateMajorDropdown(url) {
         });
     });
 }
+

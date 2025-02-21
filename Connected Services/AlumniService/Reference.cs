@@ -65,7 +65,7 @@ namespace AlumniManagement.Frontend.AlumniService {
         private System.Nullable<int> GraduationYearField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private AlumniManagement.Frontend.AlumniService.HobbyDTO[] HobbiesField;
+        private int[] HobbiesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Web.Mvc.SelectListItem[] HobbiesDDlField;
@@ -296,7 +296,7 @@ namespace AlumniManagement.Frontend.AlumniService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public AlumniManagement.Frontend.AlumniService.HobbyDTO[] Hobbies {
+        public int[] Hobbies {
             get {
                 return this.HobbiesField;
             }

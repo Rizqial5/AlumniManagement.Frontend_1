@@ -327,6 +327,7 @@
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\CustomJs\cascade-dropdown.js" />
     <Content Include="Scripts\CustomJs\FormInitialization.js" />
+    <Content Include="Scripts\CustomJs\select2Initialize.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
     <Content Include="Scripts\jquery-3.7.0.slim.js" />

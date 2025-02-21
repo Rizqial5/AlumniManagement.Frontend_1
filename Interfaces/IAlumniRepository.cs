@@ -25,7 +25,8 @@ namespace AlumniManagement.Frontend.Interfaces
         
         void UpdateAlumni(AlumniModel alumni);
 
-        
+        void UpdateAlumniWithHobbies(AlumniModel alumni);
+
         void DeleteAlumni(int alumniId);
 
         
@@ -38,6 +39,7 @@ namespace AlumniManagement.Frontend.Interfaces
         IEnumerable<StateDTO> GetAllStates();
 
         IEnumerable<DistrictDTO> GetAllDistricts();
+        IEnumerable<HobbyDTO> GetAllHobbies();
 
         IEnumerable<string> GetStatesDistrictName();
 

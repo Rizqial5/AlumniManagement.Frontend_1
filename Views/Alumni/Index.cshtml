@@ -7,6 +7,7 @@
 
 @section Styles {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <style>
@@ -69,6 +70,9 @@
                 @Html.DisplayNameFor(model => model.FullAddress)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.HobbiesListName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.DateOfBirth)
             </th>
             <th>
@@ -100,7 +104,11 @@
 
 
 @section scripts {
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     @Scripts.Render("~/bundles/custom")
     @Scripts.Render("~/bundles/jqueryval")
 
@@ -146,6 +154,7 @@
                     { "data": "Email" },
                     { "data": "MobileNumber" },
                     { "data": "FullAddress" },
+                    { "data": "HobbiesListName" },
                     {
                         "data": "ShowDateOfBirth"
                         //"render": function (data, type, row) {
@@ -260,6 +269,12 @@
                     //inisialisasi
                     updateDistrictDropdown('/Alumni/ShowDistrictList');
                     updateMajorDropdown('/Alumni/ShowMajorList');
+
+                    //inisialisasi select 2
+                    initializeSelect2('#ddlHobby', 'Select hobbies', '#createModal');
+                    initializeSelect2('#FacultyDropdown', 'Select faculty', '#createModal');
+                    initializeSelect2('#DistrictDropdown', 'Select district', '#createModal');
+
                     reinitializeValidation();
 
                     myModal.show();
@@ -284,21 +299,45 @@
 
                     // Show the Edit Modal
                     $('#modalContainer').html(data);
-
+                    
                     //inisialisasi
                     updateDistrictDropdown('/Alumni/ShowDistrictList');
                     updateMajorDropdown('/Alumni/ShowMajorList');
                     reinitializeValidation();
 
+                    // Isi dropdown hobbies
+                    var selectedHobbies = $('#ddlHobby').data('selected');
+                    if (selectedHobbies) {
+                        $('#ddlHobby').val(selectedHobbies);
+                    }
 
+                    // Inisialisasi select2 setelah dropdown diisi
+           
+                    // Trigger change untuk memberitahu select2 bahwa data telah berubah
+                   
 
+                   
                     $('#editModal').modal('show');
+
+                    //$('#ddlHobby').select2({
+                    //    placeholder: 'Select Hobbies',
+                    //    allowClear: true,
+                    //    dropdownParent: $('#editModal')
+                    //});
+
+                    initializeSelect2('#ddlHobby', 'Select Hobbies', '#editModal');
+
+                    initializeSelect2('#FacultyDropdown', 'Select faculty', '#editModal');
+                    initializeSelect2('#DistrictDropdown', 'Select district', '#editModal');
+
+
                 },
                 error: function (xhr) {
                     console.error(xhr.responseText);
                     alert('An error occurred while fetching data.');
                 }
             });
+            
         });
 
 

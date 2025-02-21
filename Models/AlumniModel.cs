@@ -99,16 +99,19 @@ namespace AlumniManagement.Frontend.Models
         public IEnumerable<SelectListItem> DistrictDDL { get; set; }
         
         public IEnumerable<SelectListItem> MajorDDl { get; set; }
+        public IEnumerable<SelectListItem> HobbiesDDl { get; set; }
 
 
+        [DisplayName("Hobbies")]
         public string HobbiesListName { get; set; }
 
-        public IEnumerable<HobbyDTO> Hobbies { get; set; }
+        public IEnumerable<int> Hobbies { get; set; }
 
 
         public string ShowDateOfBirth { get; set; }
 
-        public IEnumerable<SelectListItem> HobbiesDDl { get; set; }
+        //[Ignore]
+        //public MultiSelectList HobbiesDDl { get; set; }
 
         //    [Ignore]
         // Catatan Opsi Lain

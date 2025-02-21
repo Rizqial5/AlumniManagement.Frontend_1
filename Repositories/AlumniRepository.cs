@@ -91,6 +91,12 @@ namespace AlumniManagement.Frontend.Repositories
 
             return data;
         }
+        public IEnumerable<HobbyDTO> GetAllHobbies()
+        {
+            var data = _alumniServiceClient.GetAllHobbies().ToList();
+
+            return data;
+        }
 
         public IEnumerable<string> GetStatesDistrictName()
         {
@@ -116,6 +122,13 @@ namespace AlumniManagement.Frontend.Repositories
             var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
 
             _alumniServiceClient.InsertAlumniWithHobbies(result);
+        }
+
+        public void UpdateAlumniWithHobbies(AlumniModel alumni)
+        {
+            var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
+
+            _alumniServiceClient.UpdateAlumniWithHobbies(result);
         }
     }
 }
