@@ -47,5 +47,7 @@ namespace AlumniManagement.Frontend.Interfaces
         IEnumerable<DistrictDTO> GetDistrictByStateId(int stateId);
 
         void ImportFromExcel(AlumniModel alumniDTO);
+
+        void UpsertAlumni(AlumniModel alumni);
     }
 }

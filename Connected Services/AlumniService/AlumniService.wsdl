@@ -111,6 +111,12 @@
   <wsdl:message name="IAlumniService_ImportFromExcel_OutputMessage">
     <wsdl:part name="parameters" element="tns:ImportFromExcelResponse" />
   </wsdl:message>
+  <wsdl:message name="IAlumniService_UpsertAlumni_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpsertAlumni" />
+  </wsdl:message>
+  <wsdl:message name="IAlumniService_UpsertAlumni_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpsertAlumniResponse" />
+  </wsdl:message>
   <wsdl:portType name="IAlumniService">
     <wsdl:operation name="GetAll">
       <wsdl:input wsaw:Action="http://tempuri.org/IAlumniService/GetAll" message="tns:IAlumniService_GetAll_InputMessage" />
@@ -179,6 +185,10 @@
     <wsdl:operation name="ImportFromExcel">
       <wsdl:input wsaw:Action="http://tempuri.org/IAlumniService/ImportFromExcel" message="tns:IAlumniService_ImportFromExcel_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAlumniService/ImportFromExcelResponse" message="tns:IAlumniService_ImportFromExcel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpsertAlumni">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAlumniService/UpsertAlumni" message="tns:IAlumniService_UpsertAlumni_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAlumniService/UpsertAlumniResponse" message="tns:IAlumniService_UpsertAlumni_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IAlumniService" type="tns:IAlumniService">
@@ -329,6 +339,15 @@
     </wsdl:operation>
     <wsdl:operation name="ImportFromExcel">
       <soap:operation soapAction="http://tempuri.org/IAlumniService/ImportFromExcel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpsertAlumni">
+      <soap:operation soapAction="http://tempuri.org/IAlumniService/UpsertAlumni" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

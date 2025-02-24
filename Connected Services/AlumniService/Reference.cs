@@ -98,6 +98,12 @@ namespace AlumniManagement.Frontend.AlumniService {
         private System.DateTime ModifiedDateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PhotoNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PhotoPathField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int StateIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -434,6 +440,32 @@ namespace AlumniManagement.Frontend.AlumniService {
                 if ((this.ModifiedDateField.Equals(value) != true)) {
                     this.ModifiedDateField = value;
                     this.RaisePropertyChanged("ModifiedDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PhotoName {
+            get {
+                return this.PhotoNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PhotoNameField, value) != true)) {
+                    this.PhotoNameField = value;
+                    this.RaisePropertyChanged("PhotoName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PhotoPath {
+            get {
+                return this.PhotoPathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PhotoPathField, value) != true)) {
+                    this.PhotoPathField = value;
+                    this.RaisePropertyChanged("PhotoPath");
                 }
             }
         }
@@ -778,6 +810,12 @@ namespace AlumniManagement.Frontend.AlumniService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/ImportFromExcel", ReplyAction="http://tempuri.org/IAlumniService/ImportFromExcelResponse")]
         System.Threading.Tasks.Task ImportFromExcelAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumniDTO);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpsertAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpsertAlumniResponse")]
+        void UpsertAlumni(AlumniManagement.Frontend.AlumniService.AlumniDTO alumniDTO);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpsertAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpsertAlumniResponse")]
+        System.Threading.Tasks.Task UpsertAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumniDTO);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -941,6 +979,14 @@ namespace AlumniManagement.Frontend.AlumniService {
         
         public System.Threading.Tasks.Task ImportFromExcelAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumniDTO) {
             return base.Channel.ImportFromExcelAsync(alumniDTO);
+        }
+        
+        public void UpsertAlumni(AlumniManagement.Frontend.AlumniService.AlumniDTO alumniDTO) {
+            base.Channel.UpsertAlumni(alumniDTO);
+        }
+        
+        public System.Threading.Tasks.Task UpsertAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumniDTO) {
+            return base.Channel.UpsertAlumniAsync(alumniDTO);
         }
     }
 }

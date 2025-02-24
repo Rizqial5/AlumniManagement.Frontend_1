@@ -1,5 +1,6 @@
 ﻿using AlumniManagement.Frontend.JobHistoryService;
 using AlumniManagement.Frontend.Models;
+using AlumniManagement.Frontend.PostingJobService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace AlumniManagement.Frontend.Interfaces
         void UpdateJob(JobModel JobModel, int alumniId);
 
         void DeleteJob(int jobId, int alumniId);
+
     }
 }

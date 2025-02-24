@@ -73,6 +73,10 @@ namespace AlumniManagement.Frontend.Models
         [DisplayName("Last Update")]
         public System.DateTime ModifiedDate { get; set; }
 
+        public string PhotoPath { get; set; }
+
+        public string PhotoName { get; set; }
+
         // tambahan
         [DisplayName("Address")]
         public string FullAddress { get; set; }
@@ -104,7 +108,8 @@ namespace AlumniManagement.Frontend.Models
 
         [DisplayName("Hobbies")]
         public string HobbiesListName { get; set; }
-
+        [Ignore]
+        public string ShowImagePath { get; set; }
         public IEnumerable<int> Hobbies { get; set; }
 
 

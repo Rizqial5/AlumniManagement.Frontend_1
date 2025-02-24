@@ -12,7 +12,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm())
+                @using (Html.BeginForm("UpsertAlumni", "Alumni", FormMethod.Post, new { id = "editForm", enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
 
@@ -101,8 +101,8 @@
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.HobbiesListName, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-8">
-                                        @Html.ListBoxFor(model => model.Hobbies, new MultiSelectList(Model.HobbiesDDl,"Value","Text"),  new { @id = "ddlHobby", @class = "form-control", @multiple = "multiple" } )
-     
+                                        @Html.ListBoxFor(model => model.Hobbies, new MultiSelectList(Model.HobbiesDDl, "Value", "Text"), new { @id = "ddlHobby", @class = "form-control", @multiple = "multiple" })
+
                                         @Html.ValidationMessageFor(model => model.Hobbies, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -157,6 +157,35 @@
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.LinkedInProfile, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.LinkedInProfile, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.PhotoPath, "Upload Photo", htmlAttributes: new { @class = "control-label col-md-8" })
+                                        <div class="col-md-10">
+                                            <input type="file" id="photoUpload" name="photoUpload" class="form-control" accept=".jpeg,.jpg,.png" />
+                                            <small class="text-muted">Only .jpeg, .jpg, .png files allowed. Max size: 3MB.</small>
+                                            @Html.ValidationMessageFor(model => model.PhotoPath, "", new { @class = "text-danger" })
+                                            @if (ViewBag.SourceImage != null && !string.IsNullOrEmpty(ViewBag.SourceImage.ToString()))
+                                            {
+                                                <div class="mt-2">
+                                                    <span id="previewName" class="text-success">Current file: <strong>@ViewBag.NameFile</strong></span>
+                                                    <button type="button" id="removePhotoBtn" class="btn btn-sm btn-danger ms-2">Remove</button>
+                                                </div>
+                                                <input type="hidden" id="existingPhoto" name="existingPhoto" value="@ViewBag.PhotoName" />
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        @if (ViewBag.SourceImage != null && !string.IsNullOrEmpty(ViewBag.SourceImage.ToString()))
+                                        {
+                                            <img id="photoPreview" src="@ViewBag.SourceImage" alt="Photo Preview" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" />
+                                        }
+                                        else
+                                        {
+                                            <img id="photoPreview" src="#" alt="Photo Preview" class="img-thumbnail d-none" style="max-width: 200px; max-height: 200px;" />
+                                        }
                                     </div>
                                 </div>
                             </div>

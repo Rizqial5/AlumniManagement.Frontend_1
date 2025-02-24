@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <style>
         .dataTables_wrapper {
-            width: 900px;
+            width: 100%; /* Lebarkan tabel */
         }
 
             .dataTables_wrapper .dataTables_paginate {
@@ -57,6 +57,7 @@
         <tr>
             <th>Actions</th>
             <th>No</th>
+            <th>Photo </th>
             <th>
                 @Html.DisplayNameFor(model => model.FullName)
             </th>
@@ -100,7 +101,21 @@
 
 <div id="modalContainer"></div>
 
-
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid" alt="Alumni Image">
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section scripts {
@@ -150,6 +165,18 @@
                             return meta.row + 1;  // Display the row number (meta.row is zero-indexed)
                         }
                     },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                          
+                            if (!row.ShowImagePath) {
+                                return ""; // Jika ShowImagePath tidak ada, return kosong
+                            }
+                            return '<div><img class="img-thumbnail preview-image" src="' + row.ShowImagePath +
+                                '" alt="Alumni Image" style="max-width: 120px; cursor: pointer;" ' +
+                                'data-src="' + row.ShowImagePath + '" data-name="' + row.FullName + '"/></div>';
+                        }
+                    },
                     { "data": "FullName" },
                     { "data": "Email" },
                     { "data": "MobileNumber" },
@@ -173,8 +200,9 @@
                         }
                     },
                 ],
-/*                "order": [[0, "desc"]],*/
-                "dom": '<"top"f>rt<"bottom"lpi><"clear">', // search on the top right, show entries, paging, showing on the bottom
+                /*                "order": [[0, "desc"]],*/
+                "dom": '<"top"f>rt<"bottom"lpi><"clear">',
+                "autoWidth": false,// search on the top right, show entries, paging, showing on the bottom
                 "pagingType": "full_numbers",
                 "scrollY": "400px",
                 "scrollX": true,
@@ -255,6 +283,17 @@
             });
         });
 
+        $(document).ready(function () {
+            // Event listener untuk klik gambar
+            $('#alumniData').on('click', '.preview-image', function () {
+                var imageUrl = $(this).data('src'); // Ambil URL gambar dari atribut data-src
+                var fullName = $(this).data('name'); // Ambil nama alumni dari atribut data-name
+                $('#modalImage').attr('src', imageUrl); // Set gambar di modal
+                $('#imageModalLabel').text(fullName); // Set nama alumni sebagai judul modal
+                $('#imageModal').modal('show'); // Tampilkan modal
+            });
+        });
+
 
         //mengatur partial views yang ada pada create
         $(document).on('click', '#createButton', function () {
@@ -277,8 +316,35 @@
 
                     reinitializeValidation();
 
+                    $(document).on('change', '#photoUpload', function (event) {
+                        var file = event.target.files[0];
+                        if (file) {
+                            var fileSize = file.size / 1024 / 1024; // Convert to MB
+                            var fileType = file.type;
+                            var validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+
+                            if (!validExtensions.includes(fileType)) {
+                                alert("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                                $(this).val(""); // Reset file input
+                                return;
+                            }
+
+                            if (fileSize > 3) {
+                                alert("File size exceeds 3MB. Please select a smaller file.");
+                                $(this).val(""); // Reset file input
+                                return;
+                            }
+
+                            // Preview Image
+                            var reader = new FileReader();
+                            reader.onload = function () {
+                                $('#photoPreview').attr('src', reader.result).removeClass('d-none');
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+
                     myModal.show();
-                    myModal.modal('show');
                 },
                 error: function() {
                     alert("An error occurred while loading the modal.");
@@ -310,26 +376,40 @@
                     if (selectedHobbies) {
                         $('#ddlHobby').val(selectedHobbies);
                     }
-
-                    // Inisialisasi select2 setelah dropdown diisi
-           
-                    // Trigger change untuk memberitahu select2 bahwa data telah berubah
                    
-
-                   
-                    $('#editModal').modal('show');
-
-                    //$('#ddlHobby').select2({
-                    //    placeholder: 'Select Hobbies',
-                    //    allowClear: true,
-                    //    dropdownParent: $('#editModal')
-                    //});
 
                     initializeSelect2('#ddlHobby', 'Select Hobbies', '#editModal');
-
                     initializeSelect2('#FacultyDropdown', 'Select faculty', '#editModal');
                     initializeSelect2('#DistrictDropdown', 'Select district', '#editModal');
 
+                    // **Handling preview foto yang sudah ada**
+                    var existingPhotoUrl = $('#photoPreview').data('src'); // URL foto dari ViewBag.SourceImage
+                    if (existingPhotoUrl) {
+                        $('#photoPreview').attr('src', existingPhotoUrl).removeClass('d-none');
+                    }
+
+                    // **Event listener untuk preview gambar saat file di-upload**
+                    $('#photoUpload').on('change', function (event) {
+                        var file = event.target.files[0];
+                        if (file) {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                $('#photoPreview').attr('src', e.target.result).removeClass('d-none');
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+
+                    // **Event listener untuk tombol hapus foto**
+                    $('#removePhotoBtn').on('click', function () {
+                        $('#photoPreview').attr('src', '#').addClass('d-none');
+                        $('#previewName').text('No file selected').removeClass('text-success').addClass('text-muted'); // Kosongkan teks nama file
+                        $('#photoUpload').val(''); // Kosongkan input file
+                        $('#existingPhoto').val(''); // Hapus nama file di input hidden
+                        $(this).addClass('d-none'); // Sembunyikan tombol remove
+                    });
+
+                    $('#editModal').modal('show');
 
                 },
                 error: function (xhr) {

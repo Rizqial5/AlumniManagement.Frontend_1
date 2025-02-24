@@ -216,4 +216,16 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="UpsertAlumni">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="alumniDTO" nillable="true" type="q15:AlumniDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpsertAlumniResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

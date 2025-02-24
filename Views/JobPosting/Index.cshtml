@@ -1,0 +1,346 @@
+﻿@model IEnumerable<AlumniManagement.Frontend.Models.JobPostingModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
+    <style>
+        .dataTables_wrapper {
+            width: 100%; /* Lebarkan tabel */
+        }
+
+            .dataTables_wrapper .dataTables_paginate {
+                float: none;
+                text-align: center;
+            }
+
+            .dataTables_wrapper .dataTables_info {
+                float: left;
+                padding-top: 0.755em;
+            }
+
+            .dataTables_wrapper .bottom {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    </style>
+}
+
+
+<h2>Job Posting</h2>
+
+<button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Add New</button>
+
+<table class="table" id="postingData" style="width:100%">
+    <thead>
+        <tr>
+
+            <th>Actions</th>
+            <th>No</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                Job Description
+            </th>
+            <th>
+                Candidates
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Remaks
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </th>
+        </tr>
+    </thead>
+
+</table>
+
+<div id="modalContainer"></div>
+
+
+@section scripts {
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#postingData').DataTable({
+                "ajax": {
+                    "url": "/JobPosting/GetJobPostings",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                             var jobLink = '@Url.Action("Index", "Job", new { id = "PLACEHOLDER"})'.replace("PLACEHOLDER", row.JobId);
+                            return '<div class="btn-group">' +
+                                '<a class="btn btn-primary" id="editButton" data-id="' + row.JobID + '" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
+                                'Edit</a>' +
+                                '<a class="btn btn-primary" id="applyButton" data-id="' + row.JobID + '"  style="margin-right: 5px; white-space: nowrap;">' +
+                                'Apply to Job</a>' +
+                                '<a href="/Candidate/Index?jobId=' + row.JobID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
+                                'Candidates</a>' +
+                                '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.JobID + '">' +
+                                'Delete</button>' +
+                                '</div>'
+
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row, meta) {
+                            return meta.row + 1;  // Display the row number (meta.row is zero-indexed)
+                        }
+                    },
+                    { "data": "Title" },
+                    { "data": "JobDescription" },
+                    { "data": "TotalCandidates" },
+                    { "data": "ActiveDetails" },
+                    { "data": "ClosedDetails" },
+                    {
+                        "data": "ModifiedDate",
+                        "render": function (data, type, row) {
+                            return moment(data).format('DD-MMM-YYYY HH:mm:ss');
+                        }
+                    },
+                ],
+                /*                "order": [[0, "desc"]],*/
+                "dom": '<"top"f>rt<"bottom"lpi><"clear">',
+                "autoWidth": false,// search on the top right, show entries, paging, showing on the bottom
+                "pagingType": "full_numbers",
+                "scrollY": "400px",
+                "scrollX": true,
+                "scrollCollapse": true,
+                "fixedHeader": true,
+                //"pagingType": "simple_numbers",
+                "pageLength": 10,
+                "lengthMenu": [10, 25, 50, 100],
+                "scrollY": "400px",
+                "scrollX": true,
+                "scrollCollapse": true,
+                "fixedHeader": true,
+                "language": {
+                    "paginate": {
+                        "previous": "Previous",
+                        "next": "Next",
+                        "first": "<<",
+                        "last": ">>"
+                    }
+                }
+            });
+        });
+
+        ////Use this for datatables, becase the buttons are created dynamically
+        $(document).on('click', '#deleteButton', function () {
+            const itemId = $(this).data('id'); // Retrieve the ID of the item to delete
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this item!",
+                icon: "warning",
+                showCancelButton: true, // Enable the cancel button
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX call to delete the item
+                        $.ajax({
+                            url: '/JobPosting/Delete', // URL of your Delete method
+                            type: 'POST', // Use POST for data modification
+                            data: { id: itemId }, // Pass the ID as data
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        $("#postingData").DataTable().ajax.reload(); // Reload the page or update UI
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                                //.then(() => {
+                                //    // Optional: Reload the page or update the UI
+                                //    location.reload();
+                                //});
+                            },
+                            error: function (error) {
+                                Swal.fire("Error!", "Unable to delete the item " + response.message + " . Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss == Swal.DismissReason.cancel) {
+                        Swal.fire("Your item is safe!");
+                    }
+                });
+        });
+
+        $(document).ready(function () {
+            var table = $('#postingData').DataTable();
+
+            // Unbind the default search event
+            $('#postingData_filter input').unbind();
+
+            // Bind a new event handler
+            $('#postingData_filter input').on('keyup', function (e) {
+                var value = $(this).val();
+                if (value.length >= 3 || value.length === 0) {
+                    table.search(value).draw();
+                }
+            });
+        });
+
+
+
+        //mengatur partial views yang ada pada create
+        $(document).on('click', '#createButton', function () {
+
+            $.ajax({
+                url: '@Url.Action("Create", "JobPosting")',
+                type: 'GET',
+                success: function(data) {
+                    $('#modalContainer').html(data);
+                    var myModal = new bootstrap.Modal(document.getElementById('createModal'));
+
+
+
+                    //inisialisasi select 2
+                    initializeSelect2('#ddlSkills', 'Select Skills', '#createModal');
+
+
+                    reinitializeValidation();
+
+
+
+                    myModal.show();
+                },
+                error: function() {
+                    alert("An error occurred while loading the modal.");
+                }
+            });
+        });
+
+        $(document).on('click', '#applyButton', function () {
+
+            var personId = $(this).data('id')
+
+
+            $.ajax({
+                url: '/JobPosting/ApplyJob/' + personId,
+                type: 'GET',
+                success: function(data) {
+                    $('#modalContainer').html(data);
+                    var myModal = new bootstrap.Modal(document.getElementById('applyModal'));
+
+
+
+                    //inisialisasi select 2
+                    initializeSelect2('#ddlAlumni', 'Select Alumni', '#applyModal');
+
+                    reinitializeValidation();
+
+                    var ddlAlumni = document.getElementById("ddlAlumni");
+                    var alumniIdHidden = document.getElementById("alumniId");
+
+                    if (ddlAlumni && alumniIdHidden) {
+                        ddlAlumni.addEventListener("change", function () {
+                            alumniIdHidden.value = this.value;
+
+                            // Update semua hidden input yang ada dalam jobAttachments
+                            document.querySelectorAll("input[name^='jobAttachments'][name$='.AlumniID']").forEach(function (input) {
+                                input.value = ddlAlumni.value;
+                            });
+                        });
+                    }
+
+
+                    myModal.show();
+                },
+                error: function() {
+                    alert("An error occurred while loading the modal.");
+                }
+            });
+        });
+
+
+        // mengatur partial views yang ada di edit
+        $(document).on('click', '#editButton', function () {
+            var personId = $(this).data('id'); // Get the ProductCategoryID from the button's data-id attribute
+
+            // Make an AJAX request to get the data for the selected ProductCategory
+            $.ajax({
+                url: '/JobPosting/Edit/' + personId, // URL to fetch data for the specific category
+                type: 'GET',
+                success: function (data) {
+
+                    // Show the Edit Modal
+                    $('#modalContainer').html(data);
+
+                    //inisialisasi
+
+                    reinitializeValidation();
+
+                    // Isi dropdown hobbies
+                    var selectedHobbies = $('#ddlSkills').data('selected');
+                    if (selectedHobbies) {
+                        $('#ddlSkills').val(selectedHobbies);
+                    }
+
+                    // Inisialisasi select2 setelah dropdown diisi
+
+                    // Trigger change untuk memberitahu select2 bahwa data telah berubah
+
+
+
+                    $('#editModal').modal('show');
+
+                    //$('#ddlHobby').select2({
+                    //    placeholder: 'Select Hobbies',
+                    //    allowClear: true,
+                    //    dropdownParent: $('#editModal')
+                    //});
+
+                    initializeSelect2('#ddlSkills', 'Select Skills', '#editModal');
+
+
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    alert('An error occurred while fetching data.');
+                }
+            });
+
+
+        });
+
+
+
+
+
+    </script>
+    <script>
+
+    </script>
+
+}

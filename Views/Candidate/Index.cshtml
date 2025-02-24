@@ -1,0 +1,157 @@
+﻿@model IEnumerable<AlumniManagement.Frontend.Models.ShowCandidateModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
+    <style>
+        .dataTables_wrapper {
+            width: 100%; /* Lebarkan tabel */
+        }
+
+            .dataTables_wrapper .dataTables_paginate {
+                float: none;
+                text-align: center;
+            }
+
+            .dataTables_wrapper .dataTables_info {
+                float: left;
+                padding-top: 0.755em;
+            }
+
+            .dataTables_wrapper .bottom {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    </style>
+}
+
+<h2>Candidates</h2>
+<h5>@ViewBag.JobTitle</h5>
+<h5>@ViewBag.JobDesc</h5>
+<p>Min.Experience: @ViewBag.Exp years </p>
+<p>Skiils: @ViewBag.Skills</p>
+
+
+<table class="table" id="candidateData">
+    <thead>
+        <tr>
+            <th>No. </th>
+            <th>
+                Full Name
+            </th>
+            <th>
+                Attachments
+            </th>
+            <th>
+                Apply Date
+            </th>
+        </tr>
+    </thead>
+</table>
+
+
+@section scripts {
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#candidateData').DataTable({
+                "ajax": {
+                    "url": "@Url.Action("GetCandidates","Candidate", new {jobId = ViewBag.JobId })",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": null,
+                        "render": function (data, type, row, meta) {
+                            return meta.row + 1;  // Display the row number (meta.row is zero-indexed)
+                        }
+                    },
+                    { "data": "FullName" },
+                    {
+                        "data": "ListUrls",
+                        "render": function (data, type, row) {
+                            if (Array.isArray(data) && data.length > 0) {
+                                return data.map(url => `<a href="${url}" target="_blank">${url}</a>`).join("<br>");
+                            }
+                            return "No attachments";
+                        }
+                    },
+                    {
+                        "data": "ModifiedDate",
+                        "render": function (data, type, row) {
+                            return moment(data).format('DD-MMM-YYYY HH:mm:ss');
+                        }
+                    },
+                ],
+                /*                "order": [[0, "desc"]],*/
+                "dom": '<"top"f>rt<"bottom"lpi><"clear">',
+                "autoWidth": false,// search on the top right, show entries, paging, showing on the bottom
+                "pagingType": "full_numbers",
+                "scrollY": "400px",
+                "scrollX": true,
+                "scrollCollapse": true,
+                "fixedHeader": true,
+                //"pagingType": "simple_numbers",
+                "pageLength": 10,
+                "lengthMenu": [10, 25, 50, 100],
+                "scrollY": "400px",
+                "scrollX": true,
+                "scrollCollapse": true,
+                "fixedHeader": true,
+                "language": {
+                    "paginate": {
+                        "previous": "Previous",
+                        "next": "Next",
+                        "first": "<<",
+                        "last": ">>"
+                    }
+                }
+            });
+        });
+
+        ////Use this for datatables, becase the buttons are created dynamically
+
+
+        $(document).ready(function () {
+            var table = $('#candidateData').DataTable();
+
+            // Unbind the default search event
+            $('#candidateData_filter input').unbind();
+
+            // Bind a new event handler
+            $('#candidateData_filter input').on('keyup', function (e) {
+                var value = $(this).val();
+                if (value.length >= 3 || value.length === 0) {
+                    table.search(value).draw();
+                }
+            });
+        });
+
+
+    </script>
+    <script>
+
+    </script>
+
+}

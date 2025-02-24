@@ -35,6 +35,8 @@
       <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MobileNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ModifiedDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PhotoName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PhotoPath" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="StateID" type="xs:int" />
       <xs:element minOccurs="0" name="StateName" nillable="true" type="xs:string" />
     </xs:sequence>

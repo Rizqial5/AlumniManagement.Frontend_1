@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="0d87d29a-2bc7-42e3-af16-dbe7cf2822f1" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:56362/Services/PostingJobService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="PostingJobService.wsdl" MetadataType="Wsdl" ID="dff7dca9-7103-4b2b-82d0-c49816460c8f" SourceId="1" SourceUrl="http://localhost:56362/Services/PostingJobService.svc?wsdl" />
+    <MetadataFile FileName="PostingJobService.disco" MetadataType="Disco" ID="01661368-e8eb-4a96-b40c-b9fc0fb73ed2" SourceId="1" SourceUrl="http://localhost:56362/Services/PostingJobService.svc?disco" />
+    <MetadataFile FileName="PostingJobService.xsd" MetadataType="Schema" ID="4e92385d-2db1-4567-8aa6-9ceca51ee702" SourceId="1" SourceUrl="http://localhost:56362/Services/PostingJobService.svc?xsd=xsd3" />
+    <MetadataFile FileName="PostingJobService1.xsd" MetadataType="Schema" ID="5490f944-e1f9-4fe7-b5e5-ac94d237e717" SourceId="1" SourceUrl="http://localhost:56362/Services/PostingJobService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PostingJobService2.xsd" MetadataType="Schema" ID="82f9fc4b-0e88-459b-8b3d-ce6edc7f8cc1" SourceId="1" SourceUrl="http://localhost:56362/Services/PostingJobService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PostingJobService3.xsd" MetadataType="Schema" ID="4a08a5b5-e698-44c8-b4ed-08eb2d57497c" SourceId="1" SourceUrl="http://localhost:56362/Services/PostingJobService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

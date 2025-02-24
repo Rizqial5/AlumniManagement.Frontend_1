@@ -130,5 +130,12 @@ namespace AlumniManagement.Frontend.Repositories
 
             _alumniServiceClient.UpdateAlumniWithHobbies(result);
         }
+
+        public void UpsertAlumni(AlumniModel alumni)
+        {
+            var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
+
+            _alumniServiceClient.UpsertAlumni(result);
+        }
     }
 }

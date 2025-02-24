@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:56362/Services/PostingJobService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://localhost:56362/Services/PostingJobService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="ArrayOfJobPostingDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="JobPostingDTO" nillable="true" type="tns:JobPostingDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfJobPostingDTO" nillable="true" type="tns:ArrayOfJobPostingDTO" />
+  <xs:complexType name="JobPostingDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActiveDetails" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ClosedDetails" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Company" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EmploymentTypeID" type="xs:unsignedByte" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsClosed" type="xs:boolean" />
+      <xs:element minOccurs="0" name="JobDescription" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JobID" type="ser:guid" />
+      <xs:element minOccurs="0" name="MinimumExperience" type="xs:unsignedByte" />
+      <xs:element minOccurs="0" name="ModifiedDate" type="xs:dateTime" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SelectedAttachmentTypes" nillable="true" type="q1:ArrayOfint" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SelectedSkills" nillable="true" type="q2:ArrayOfint" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TotalCandidates" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="JobPostingDTO" nillable="true" type="tns:JobPostingDTO" />
+  <xs:complexType name="ArrayOfEmploymentTypeDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="EmploymentTypeDTO" nillable="true" type="tns:EmploymentTypeDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEmploymentTypeDTO" nillable="true" type="tns:ArrayOfEmploymentTypeDTO" />
+  <xs:complexType name="EmploymentTypeDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="EmploymentTypeID" type="xs:unsignedByte" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="EmploymentTypeDTO" nillable="true" type="tns:EmploymentTypeDTO" />
+  <xs:complexType name="ArrayOfJobCandidateDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="JobCandidateDTO" nillable="true" type="tns:JobCandidateDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfJobCandidateDTO" nillable="true" type="tns:ArrayOfJobCandidateDTO" />
+  <xs:complexType name="JobCandidateDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AlumniId" type="xs:int" />
+      <xs:element minOccurs="0" name="ApplyDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="FullName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JobAttachments" nillable="true" type="tns:ArrayOfJobAttachmentDTO" />
+      <xs:element minOccurs="0" name="JobID" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="JobCandidateDTO" nillable="true" type="tns:JobCandidateDTO" />
+  <xs:complexType name="ArrayOfJobAttachmentDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="JobAttachmentDTO" nillable="true" type="tns:JobAttachmentDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfJobAttachmentDTO" nillable="true" type="tns:ArrayOfJobAttachmentDTO" />
+  <xs:complexType name="JobAttachmentDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AlumniID" type="xs:int" />
+      <xs:element minOccurs="0" name="AttachmentID" type="xs:int" />
+      <xs:element minOccurs="0" name="AttachmentTypeID" type="xs:unsignedByte" />
+      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FilePath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JobID" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="JobAttachmentDTO" nillable="true" type="tns:JobAttachmentDTO" />
+  <xs:complexType name="ArrayOfSkillDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SkillDTO" nillable="true" type="tns:SkillDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSkillDTO" nillable="true" type="tns:ArrayOfSkillDTO" />
+  <xs:complexType name="SkillDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ModifiedDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SkillID" type="xs:unsignedByte" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SkillDTO" nillable="true" type="tns:SkillDTO" />
+  <xs:complexType name="ArrayOfAttachmentTypeDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AttachmentTypeDTO" nillable="true" type="tns:AttachmentTypeDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAttachmentTypeDTO" nillable="true" type="tns:ArrayOfAttachmentTypeDTO" />
+  <xs:complexType name="AttachmentTypeDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AttachmentTypeID" type="xs:unsignedByte" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AttachmentTypeDTO" nillable="true" type="tns:AttachmentTypeDTO" />
+</xs:schema>

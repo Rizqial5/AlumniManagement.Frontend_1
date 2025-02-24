@@ -3,6 +3,7 @@ using AlumniManagement.Frontend.AlumniImageService;
 using AlumniManagement.Frontend.AlumniService;
 using AlumniManagement.Frontend.FacultyService;
 using AlumniManagement.Frontend.JobHistoryService;
+using AlumniManagement.Frontend.PostingJobService;
 using AlumniManagement.Frontend.MajorService;
 using AlumniManagement.Frontend.Models;
 using AutoMapper;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AlumniDTO = AlumniManagement.Frontend.AlumniService.AlumniDTO;
 
 namespace AlumniManagement.Frontend
 {
@@ -40,6 +42,12 @@ namespace AlumniManagement.Frontend
             CreateMap<FacultyModel, FacultyDTO>().ReverseMap();
             CreateMap<AlumniImageModel, ImageDTO>().ReverseMap();
             CreateMap<HobbyModel, HobbyDTO>().ReverseMap();
+            CreateMap<JobPostingModel, JobPostingDTO>().ReverseMap();
+            CreateMap<AttachmentTypeModel, AttachmentTypeDTO>().ReverseMap();
+            CreateMap<SkillModel, SkillDTO>().ReverseMap();
+            CreateMap<EmploymentTypeModel, EmploymentTypeDTO>().ReverseMap();
+            CreateMap<JobAttachmentModel, JobAttachmentDTO>().ReverseMap();
+            CreateMap<ShowCandidateModel, JobCandidateDTO>().ReverseMap();
 
         }
     }

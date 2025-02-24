@@ -6,6 +6,8 @@ using AlumniManagement.Web.Repositories;
 using Aspose.Cells;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -20,6 +22,10 @@ namespace AlumniManagement.Frontend.Controllers
         private IMajorRepository _majorRepository;
         private IExcelRepository _excelRepository;
         private IJobRepository _jobRepository;
+
+        private string photoPath = ConfigurationManager.AppSettings["PhotoPath"];
+        private string fileTypes = ConfigurationManager.AppSettings["FileTypes"];
+        private int fileSizeLimit = Convert.ToInt32(ConfigurationManager.AppSettings["PhotoSizeLimit"]);
 
         public AlumniController() : this(new AlumniRepository(), new FacultyRepository(),
             new MajorRepository(), new ExcelRepository(), new JobRepository()) { }
@@ -82,6 +88,11 @@ namespace AlumniManagement.Frontend.Controllers
             foreach (var item in alumniesData)
             {
                 item.ShowDateOfBirth = DateConverter(item.DateOfBirth);
+                if(item.PhotoPath != null)
+                {
+                    item.ShowImagePath = @Url.Content(item.PhotoPath.Replace("~", "") + '/' + item.PhotoName);
+                }
+                
             }
 
             return Json(new { data = alumniesData }, JsonRequestBehavior.AllowGet);
@@ -158,7 +169,7 @@ namespace AlumniManagement.Frontend.Controllers
 
         // POST: Alumni/Create
         [HttpPost]
-        public ActionResult Create(AlumniModel alumniModel)
+        public ActionResult Create(AlumniModel alumniModel, HttpPostedFileBase photoUpload)
         {
             try
             {
@@ -166,9 +177,14 @@ namespace AlumniManagement.Frontend.Controllers
                 if (ModelState.IsValid)
                 {
 
+                    if (photoUpload != null && photoUpload.ContentLength > 0)
+                    {
+                        UploadBehaviour(alumniModel, photoUpload);
+                    }
+
                     //Check if there any hobbies
 
-                    if(alumniModel.Hobbies!= null)
+                    if (alumniModel.Hobbies!= null)
                     {
                         _alumniRepository.InsertAlumniWitHobbies(alumniModel);
                     }
@@ -194,6 +210,44 @@ namespace AlumniManagement.Frontend.Controllers
             }
         }
 
+        private void UploadBehaviour(AlumniModel alumniModel, HttpPostedFileBase photoUpload)
+        {
+            // Validasi tipe file
+            string[] allowedExtensions = { ".jpeg", ".jpg", ".png" };
+            string fileExtension = Path.GetExtension(photoUpload.FileName).ToLower();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                ModelState.AddModelError("", "Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                PopulateData(alumniModel);
+            }
+
+            // Validasi ukuran file (3MB)
+            if (photoUpload.ContentLength > fileSizeLimit)
+            {
+                ModelState.AddModelError("", "File size exceeds 3MB. Please select a smaller file.");
+                StateAndFacultyDdl();
+                RepopulateCascadeDdl(alumniModel);
+                PopulateData(alumniModel);
+            }
+
+            // Simpan file ke server
+            string fileName = Guid.NewGuid().ToString() + fileExtension;
+            string filePath = Path.Combine(Server.MapPath(photoPath), fileName);
+            photoUpload.SaveAs(filePath);
+
+            // Simpan path ke model
+            alumniModel.PhotoPath = photoPath;
+            alumniModel.PhotoName = fileName;
+        }
+
+        private ActionResult PopulateData(AlumniModel alumniModel)
+        {
+            StateAndFacultyDdl();
+            RepopulateCascadeDdl(alumniModel);
+            return View("Index",alumniModel);
+        }
+
         // GET: Alumni/Edit/5
         public ActionResult Edit(int id)
         {
@@ -211,40 +265,8 @@ namespace AlumniManagement.Frontend.Controllers
 
             var populateForm = RepopulateEditForm(existingData);
 
-
-
-            //var selectedHobbiesDDl = new List<HobbyDTO>();
-            //var listSelectedItem = new List<SelectListItem>();
-
-
-
-            //foreach (var item in existingData.Hobbies)
-            //{
-            //    foreach (var hobby in _alumniRepository.GetAllHobbies())
-            //    {
-            //        if(item == hobby.HobbyID)
-            //        {
-            //            selectedHobbiesDDl.Add(hobby);
-            //        }
- 
-            //    }
-            //}
-
-
-            ////var multiSelectList = new MultiSelectList(hobbies, "HobbyID", "Name", selectedHobbiesDDl);
-
-
-            ////ViewBag.AllHobbies = listSelectedItem;
-            //var selectedListHobbies = new MultiSelectList(_alumniRepository.GetAllHobbies(), "HobbyID", "Name", selectedHobbiesDDl);
-
-            //foreach (var item in selectedListHobbies)
-            //{
-            //    if(selectedHobbiesDDl.Select(h => h.HobbyID).ToString().Contains(item.Value))
-            //    {
-            //        item.Selected = true;
-            //    }
-            //}
-
+            ViewBag.SourceImage = @Url.Content(populateForm.PhotoPath.Replace("~", "") + '/' + populateForm.PhotoName);
+            ViewBag.NameFile = populateForm.PhotoName;
 
             return PartialView("_EditPartial",populateForm);
         }
@@ -343,7 +365,7 @@ namespace AlumniManagement.Frontend.Controllers
                 // TODO: Add delete logic here
 
                 var existingData = _alumniRepository.GetAlumni(id);
-                var jobData = _jobRepository.GetAll(id);
+             
 
                 if (existingData == null)
                 {
@@ -352,16 +374,20 @@ namespace AlumniManagement.Frontend.Controllers
                     return RedirectToAction("Index");
                 }
 
-                //if(jobData.Count() >= 1)
-                //{
-                //    TempData["ErrorMessage"] = "Job history still exists cannot delete alumni, delete job history first";
+                if(existingData.PhotoName != null)
+                {
+                    var filePath = Path.Combine(Server.MapPath(photoPath), existingData.PhotoName);
 
-                //    return Json(new
-                //    {
-                //        success = false,
-                //        message = "Job history still exists cannot delete alumni, delete job history first"
-                //    });
-                //}
+                    if (filePath != null)
+                    {
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                    }
+                }
+
+                
 
                 _alumniRepository.DeleteAlumni(id);
 
@@ -374,7 +400,8 @@ namespace AlumniManagement.Frontend.Controllers
             {
                 return Json(new
                 {
-                    error = true
+                    error = true,
+                    message = ex.Message
                 });
             }
         }
@@ -409,6 +436,32 @@ namespace AlumniManagement.Frontend.Controllers
             {
                 TempData["ErrorMessage"] = ex.Message;
                 ModelState.AddModelError("", "Unable to import due to " + ex.Message);
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UpsertAlumni(AlumniModel alumni, HttpPostedFileBase photoUpload)
+        {
+            try
+            {
+                if(ModelState.IsValid)
+                {
+
+                    UploadBehaviour(alumni, photoUpload);
+
+                    _alumniRepository.UpsertAlumni(alumni);
+                }
+
+                TempData["SuccessMessage"] = "Alumni updated Succesfully";
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+
+                TempData["SuccessMessage"] = "Alumni updated Failed " + ex.Message;
+
                 return RedirectToAction("Index");
             }
         }
@@ -469,5 +522,6 @@ namespace AlumniManagement.Frontend.Controllers
 
                 }).ToList();
         }
+
     }
 }

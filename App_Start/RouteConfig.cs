@@ -16,7 +16,15 @@ namespace AlumniManagement.Frontend
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "JobPosting", action = "Index", id = UrlParameter.Optional }
+            );
+
+
+            routes.MapRoute(
+                name: "EditJobPosting",
+                url: "JobPosting/Edit/{guid}",
+                defaults: new { controller = "JobPosting", action = "Edit" },
+                constraints: new { guid = @"^(\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}?)$" }
             );
         }
     }

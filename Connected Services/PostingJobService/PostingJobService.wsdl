@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="PostingJobService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:56362/Services/PostingJobService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/PostingJobService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/PostingJobService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/PostingJobService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IPostingJobService_GetJobPostings_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetJobPostings" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetJobPostings_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetJobPostingsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetEmploymentTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetEmploymentTypes" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetEmploymentTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetEmploymentTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetAllCandidateBYJObId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllCandidateBYJObId" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetAllCandidateBYJObId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllCandidateBYJObIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetSkills_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSkills" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetSkills_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSkillsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetSkillsByJobId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSkillsByJobId" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetSkillsByJobId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSkillsByJobIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetAttachmentTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAttachmentTypes" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetAttachmentTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAttachmentTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetJobPosting_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetJobPosting" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_GetJobPosting_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetJobPostingResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_InsertJobPosting_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertJobPosting" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_InsertJobPosting_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertJobPostingResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_InsertApplyJob_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertApplyJob" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_InsertApplyJob_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertApplyJobResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_UpdateJobPosting_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateJobPosting" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_UpdateJobPosting_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateJobPostingResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_DeletingJobPosting_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeletingJobPosting" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_DeletingJobPosting_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeletingJobPostingResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_UpsertJobPosting_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpsertJobPosting" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_UpsertJobPosting_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpsertJobPostingResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IPostingJobService">
+    <wsdl:operation name="GetJobPostings">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/GetJobPostings" message="tns:IPostingJobService_GetJobPostings_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/GetJobPostingsResponse" message="tns:IPostingJobService_GetJobPostings_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmploymentTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/GetEmploymentTypes" message="tns:IPostingJobService_GetEmploymentTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/GetEmploymentTypesResponse" message="tns:IPostingJobService_GetEmploymentTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllCandidateBYJObId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/GetAllCandidateBYJObId" message="tns:IPostingJobService_GetAllCandidateBYJObId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/GetAllCandidateBYJObIdResponse" message="tns:IPostingJobService_GetAllCandidateBYJObId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSkills">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/GetSkills" message="tns:IPostingJobService_GetSkills_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/GetSkillsResponse" message="tns:IPostingJobService_GetSkills_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSkillsByJobId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/GetSkillsByJobId" message="tns:IPostingJobService_GetSkillsByJobId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/GetSkillsByJobIdResponse" message="tns:IPostingJobService_GetSkillsByJobId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAttachmentTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/GetAttachmentTypes" message="tns:IPostingJobService_GetAttachmentTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/GetAttachmentTypesResponse" message="tns:IPostingJobService_GetAttachmentTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetJobPosting">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/GetJobPosting" message="tns:IPostingJobService_GetJobPosting_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/GetJobPostingResponse" message="tns:IPostingJobService_GetJobPosting_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertJobPosting">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/InsertJobPosting" message="tns:IPostingJobService_InsertJobPosting_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/InsertJobPostingResponse" message="tns:IPostingJobService_InsertJobPosting_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertApplyJob">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/InsertApplyJob" message="tns:IPostingJobService_InsertApplyJob_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/InsertApplyJobResponse" message="tns:IPostingJobService_InsertApplyJob_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateJobPosting">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/UpdateJobPosting" message="tns:IPostingJobService_UpdateJobPosting_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/UpdateJobPostingResponse" message="tns:IPostingJobService_UpdateJobPosting_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletingJobPosting">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/DeletingJobPosting" message="tns:IPostingJobService_DeletingJobPosting_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/DeletingJobPostingResponse" message="tns:IPostingJobService_DeletingJobPosting_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpsertJobPosting">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/UpsertJobPosting" message="tns:IPostingJobService_UpsertJobPosting_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/UpsertJobPostingResponse" message="tns:IPostingJobService_UpsertJobPosting_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IPostingJobService" type="tns:IPostingJobService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetJobPostings">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/GetJobPostings" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmploymentTypes">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/GetEmploymentTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllCandidateBYJObId">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/GetAllCandidateBYJObId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSkills">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/GetSkills" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSkillsByJobId">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/GetSkillsByJobId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAttachmentTypes">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/GetAttachmentTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetJobPosting">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/GetJobPosting" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertJobPosting">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/InsertJobPosting" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertApplyJob">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/InsertApplyJob" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateJobPosting">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/UpdateJobPosting" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletingJobPosting">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/DeletingJobPosting" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpsertJobPosting">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/UpsertJobPosting" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PostingJobService">
+    <wsdl:port name="BasicHttpBinding_IPostingJobService" binding="tns:BasicHttpBinding_IPostingJobService">
+      <soap:address location="http://localhost:56362/Services/PostingJobService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
