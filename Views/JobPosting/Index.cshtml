@@ -96,17 +96,29 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                             var jobLink = '@Url.Action("Index", "Job", new { id = "PLACEHOLDER"})'.replace("PLACEHOLDER", row.JobId);
-                            return '<div class="btn-group">' +
-                                '<a class="btn btn-primary" id="editButton" data-id="' + row.JobID + '" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
-                                'Edit</a>' +
-                                '<a class="btn btn-primary" id="applyButton" data-id="' + row.JobID + '"  style="margin-right: 5px; white-space: nowrap;">' +
-                                'Apply to Job</a>' +
-                                '<a href="/Candidate/Index?jobId=' + row.JobID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
-                                'Candidates</a>' +
-                                '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.JobID + '">' +
-                                'Delete</button>' +
-                                '</div>'
+
+                            if (row.IsClosed) {
+                                var newStyle = "display:none;"
+                            }
+
+                            var jobLink = '@Url.Action("Index", "Job", new { id = "PLACEHOLDER"})'.replace("PLACEHOLDER", row.JobID);
+
+                            var editButton = '<a class="btn btn-primary" id="editButton" data-id="' + row.JobID + '" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;' + newStyle + '">Edit</a>';
+
+                            var applyButton = '<a class="btn btn-primary" id="applyButton" data-id="' + row.JobID + '" style="margin-right: 5px; white-space: nowrap;' + newStyle + '">Apply to Job</a>';
+
+                            var candidatesButton = '<a href="/Candidate/Index?jobId=' + row.JobID + '" class="btn btn-primary" style="margin-right: 5px;">Candidates</a>';
+
+                            var deleteButton = '<button id="deleteButton" class="btn btn-danger deleteButton" style="margin-right: 5px;' + newStyle + '"  data-id="' + row.JobID + '">Delete</button>';
+
+                            //// Jika IsClosed == true, disable Apply dan Delete button
+                            //if (row.IsClosed) {
+                            //    applyButton = '<a class="btn btn-secondary disabled" style="margin-right: 5px; white-space: nowrap;">Closed</a>';
+                            //    editButton = '<a class="btn btn-secondary disabled" style="margin-right: 5px; white-space: nowrap;">Edit</a>';
+                            //    deleteButton =
+                            //}
+
+                            return '<div class="btn-group">' + editButton + applyButton + candidatesButton + deleteButton + '</div>';
 
                         }
                     },
@@ -231,7 +243,17 @@
 
                     reinitializeValidation();
 
+                    updateSwitchLabel("#isActiveSwitch", "#isActiveLabel", "Active", "Inactive");
+                    updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
 
+                    // Event listener untuk perubahan switch
+                    $("#isActiveSwitch").change(function () {
+                        updateSwitchLabel("#isActiveSwitch", "#isActiveLabel", "Active", "Inactive");
+                    });
+
+                    $("#isClosedSwitch").change(function () {
+                        updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
+                    });
 
                     myModal.show();
                 },
@@ -240,6 +262,8 @@
                 }
             });
         });
+
+
 
         $(document).on('click', '#applyButton', function () {
 
@@ -275,6 +299,8 @@
                     }
 
 
+
+
                     myModal.show();
                 },
                 error: function() {
@@ -307,9 +333,17 @@
                         $('#ddlSkills').val(selectedHobbies);
                     }
 
-                    // Inisialisasi select2 setelah dropdown diisi
+                    updateSwitchLabel("#isActiveSwitch", "#isActiveLabel", "Active", "Inactive");
+                    updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
 
-                    // Trigger change untuk memberitahu select2 bahwa data telah berubah
+                    // Event listener untuk perubahan switch
+                    $("#isActiveSwitch").change(function () {
+                        updateSwitchLabel("#isActiveSwitch", "#isActiveLabel", "Active", "Inactive");
+                    });
+
+                    $("#isClosedSwitch").change(function () {
+                        updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
+                    });
 
 
 
@@ -334,7 +368,10 @@
 
         });
 
-
+        function updateSwitchLabel(switchId, labelId, trueText, falseText) {
+            var isChecked = $(switchId).is(':checked');
+            $(labelId).text(isChecked ? trueText : falseText);
+        }
 
 
 

@@ -101,6 +101,14 @@ namespace AlumniManagement.Frontend.Controllers
 
         public ActionResult ApplyJob(Guid id)
         {
+            var job = _jobPostingRepository.GetJobPosting(id);
+
+            if(job.IsClosed)
+            {
+                TempData["ErrorMessage"] = "Job is Already Closed";
+                return RedirectToAction("Index");
+            }
+
 
             var listAlumnisId  = _jobPostingRepository.GetAllCandidateBYJObId(id).Select(c=> c.AlumniID).ToList();
 
@@ -126,6 +134,15 @@ namespace AlumniManagement.Frontend.Controllers
             ViewBag.AlumniDDL = new SelectList(alumnisDdl, "AlumniID", "FullName");
             ViewBag.AvailableTypes = availableTypes;
             ViewBag.JobId = id;
+
+            var listSkills = _jobPostingRepository.GetSkillsbyId(id);
+
+
+
+            ViewBag.JobTitle = _jobPostingRepository.GetJobPosting(id).Title;
+            ViewBag.JobDesc = _jobPostingRepository.GetJobPosting(id).JobDescription;
+            ViewBag.Exp = _jobPostingRepository.GetJobPosting(id).MinimumExperience;
+            ViewBag.Skills = String.Join(",", listSkills.Select(s => s.Name));
 
             var newAttahcmentModel = new JobAttachmentModel();
 
@@ -171,19 +188,21 @@ namespace AlumniManagement.Frontend.Controllers
                             attachment.JobID = jobAttachments[i].JobID;
 
                             _jobPostingRepository.InsertApplyJob(attachment);
+                            
                         }
                     }
 
 
 
-                    TempData["SuccessMessage"] = "Files uploaded successfully";
+                    TempData["SuccessMessage"] = "Job Applied Successfully!";
+                    TempData.Keep("SuccessMessage"); // Menjaga nilai TempData 
+                    return RedirectToAction("Index");
                 }
                 else
                 {
                     TempData["ErrorMessage"] = "Model validation failed.";
+                    return RedirectToAction("Index");
                 }
-
-                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {

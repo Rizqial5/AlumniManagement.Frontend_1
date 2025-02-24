@@ -54,12 +54,10 @@ namespace AlumniManagement.Frontend.Models
 
         [DisplayName("Attachment")]
         [Required(ErrorMessage = "Attachment type required")]
-        [Range(0,127)]
         public List<int> SelectedAttachmentTypes { get; set; }
 
         [DisplayName("Skill")]
         [Required(ErrorMessage = "Skill is required")]
-        [Range(0, 127)]
         public List<int> SelectedSkills { get; set; }
 
 

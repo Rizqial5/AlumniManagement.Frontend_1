@@ -10,7 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("Create", "JobPosting", FormMethod.Post, new { id = "createForm" }))
+                @using (Html.BeginForm("UpsertJobPosting", "JobPosting", FormMethod.Post, new { id = "createForm" }))
                 {
                     @Html.AntiForgeryToken()
 
@@ -93,7 +93,9 @@
                         <div class="col-md-10">
                             <div class="form-check form-switch">
                                 @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-check-input", id = "isActiveSwitch" })
-                                <label class="form-check-label" for="isActiveSwitch">Active / Inactive</label>
+                                <label class="form-check-label" for="isActiveSwitch">
+                                    <span id="isActiveLabel">@(Model.IsActive ? "Active" : "Inactive")</span>
+                                </label>
                             </div>
                             @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
                         </div>
@@ -104,7 +106,9 @@
                         <div class="col-md-10">
                             <div class="form-check form-switch">
                                 @Html.CheckBox("IsClosed", Model.IsClosed  , new { @class = "form-check-input", id = "isClosedSwitch" })
-                                <label class="form-check-label" for="isClosedSwitch">Active / Inactive</label>
+                                <label class="form-check-label" for="isClosedSwitch">
+                                    <span id="isClosedLabel">@(Model.IsClosed ? "Closed" : "Open")</span>
+                                </label>
                             </div>
                             @Html.ValidationMessageFor(model => model.IsClosed, "", new { @class = "text-danger" })
                         </div>
