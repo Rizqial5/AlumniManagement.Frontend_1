@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <style>
         .dataTables_wrapper {
-            width: 900px;
+            width: 100%;
         }
 
             .dataTables_wrapper .dataTables_paginate {
@@ -39,9 +39,20 @@
 
 <h2>List Images for @ViewBag.FullName</h2>
 
-<button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Upload Images</button>
-<button class="btn btn-primary" id="showButton" data-toggle="modal" data-target="#showImageModal">Gallery View</button>
-<button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
+
+<div >
+    <a class="btn btn-danger" href="@Url.Action("Index","Alumni")">Back to Alumni</a>
+    <button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
+</div>
+
+<div class="mt-2">
+
+    <button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Upload Images</button>
+    <button class="btn btn-primary" id="showButton" data-toggle="modal" data-target="#showImageModal">Gallery View</button>
+</div>
+
+
+
 
 <table class="table" id="imageData" style="width:100%">
     <thead>
@@ -311,9 +322,6 @@
 
         });
 
-
-
-        $(document).on('click', '#showButton', function () {
 
     </script>
 

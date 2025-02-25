@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
@@ -31,7 +31,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.MiddleName, "", new { @class = "text-danger" })
@@ -39,7 +39,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
@@ -47,7 +47,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
@@ -55,7 +55,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.MobileNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.MobileNumber, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.MobileNumber, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.MobileNumber, "", new { @class = "text-danger" })
@@ -63,17 +63,15 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-6">
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.StateID, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.StateID, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.DropDownListFor(model => model.StateID, (SelectList)ViewBag.StatesDdl, "Select State",
                             new { @class = "form-control", @id = "StateDropdown" })
@@ -82,16 +80,18 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.DistrictID, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.DistrictID, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.DropDownListFor(model => model.DistrictID, Model.DistrictDDL, "Select District",
                                        new { @class = "form-control", @id = "DistrictDropdown" })
                                         @Html.ValidationMessageFor(model => model.DistrictID, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
+                            </div>
 
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.DateOfBirth, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.DateOfBirth, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.DateOfBirth, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
                                         @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
@@ -108,7 +108,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.GraduationYear, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.GraduationYear, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.GraduationYear, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.GraduationYear, "", new { @class = "text-danger" })
@@ -116,7 +116,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.Degree, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.Degree, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.DropDownListFor(
                                             model => model.Degree,
@@ -135,7 +135,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.FacultyID, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.FacultyID, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.DropDownListFor(model => model.FacultyID, (SelectList)ViewBag.FacultyDdl, "Select Faculty",
                             new { @class = "form-control", @id = "FacultyDropdown" })
@@ -144,7 +144,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.MajorID, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.MajorID, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.DropDownListFor(model => model.MajorID, Model.MajorDDl, "Select Major",
                             new { @class = "form-control", @id = "MajorDropdown" })
@@ -153,24 +153,23 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.LinkedInProfile, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => model.LinkedInProfile, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => model.LinkedInProfile, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.LinkedInProfile, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.PhotoPath, "Upload Photo", htmlAttributes: new { @class = "control-label col-md-8" })
-                                        <div class="col-md-10">
-                                            <input type="file" id="photoUpload" name="photoUpload" class="form-control" accept=".jpeg,.jpg,.png" />
+                                        @Html.LabelFor(model => model.PhotoPath, "Upload Photo", htmlAttributes: new { @class = "control-label col-md-8", style = "width: 900px;" })
+                                        <div class="col-md-12" >
+                                            <input type="file" id="photoUpload" name="photoUpload" class="form-control" style="width:100%" accept=".jpeg,.jpg,.png" />
                                             <small class="text-muted">Only .jpeg, .jpg, .png files allowed. Max size: 3MB.</small>
                                             @Html.ValidationMessageFor(model => model.PhotoPath, "", new { @class = "text-danger" })
                                             @if (ViewBag.SourceImage != null && !string.IsNullOrEmpty(ViewBag.SourceImage.ToString()))
                                             {
                                                 <div class="mt-2">
-                                                    <span id="previewName" class="text-success">Current file: <strong>@ViewBag.NameFile</strong></span>
                                                     <button type="button" id="removePhotoBtn" class="btn btn-sm btn-danger ms-2">Remove</button>
                                                 </div>
                                                 <input type="hidden" id="existingPhoto" name="existingPhoto" value="@ViewBag.PhotoName" />
