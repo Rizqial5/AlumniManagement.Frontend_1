@@ -7,6 +7,7 @@ using Aspose.Cells;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace AlumniManagement.Frontend.Repositories
@@ -266,16 +267,36 @@ namespace AlumniManagement.Frontend.Repositories
             mobileVal.ShowError = true;
             mobileVal.AlertStyle = ValidationAlertType.Stop;
             mobileVal.ErrorTitle = "Invalid input";
-            mobileVal.ErrorMessage = "The text length max is 3 characters.";
+            mobileVal.ErrorMessage = "The text length max is 15 characters.";
+
+            Validation customMobileVal = workSheet.Validations[workSheet.Validations.Add(mobileArea)];
+            customMobileVal.Type = ValidationType.Custom;
+            customMobileVal.Formula1 = $"=LEFT(F1,2)=\"08\""; // Menggunakan kolom F
+            customMobileVal.ShowError = true;
+            customMobileVal.AlertStyle = ValidationAlertType.Stop;
+            customMobileVal.ErrorTitle = "Invalid phone number";
+            customMobileVal.ErrorMessage = "The phone number must start with '08'.";
+
+            mobileVal.ShowInput = true;
+            mobileVal.InputTitle = "Enter Phone Number";
+            mobileVal.InputMessage = "Enter a valid Number using Indonesian Number Code. Example: 08xxxxxxx";
 
             int dOBI = 8;
             CellArea dateArea = CellArea.CreateCellArea(1, dOBI, 1000, dOBI);
             Validation dateVal = workSheet.Validations[workSheet.Validations.Add(dateArea)];
             dateVal.Type = ValidationType.Date;
+            dateVal.Operator = OperatorType.Between;
+            dateVal.Formula1 = "1900-01-01";
+            dateVal.Formula2 = "2099-12-31";
             dateVal.ShowError = true;
             dateVal.AlertStyle = ValidationAlertType.Stop;
             dateVal.ErrorTitle = "Invalid input";
-            dateVal.ErrorMessage = "Must be date in format dd-MM-yyyy";
+            dateVal.ErrorMessage = "Please enter a valid date in the format YYYY-MM-DD (e.g., 1995-06-15).";
+
+            dateVal.ShowInput = true;
+            dateVal.InputTitle = "Enter Date of Birth";
+            dateVal.InputMessage = "Enter a valid date (YYYY-MM-DD). Example: 1995-06-15";
+
 
             return workBook;
         }
@@ -295,7 +316,7 @@ namespace AlumniManagement.Frontend.Repositories
                 string MiddleName = (worksheet.Cells[i, 2].StringValue ?? "") ;
                 string LastName = worksheet.Cells[i, 3].StringValue;
                 string Email = worksheet.Cells[i, 4].StringValue;
-                string MobileNumber = worksheet.Cells[i, 5].StringValue;
+                string MobileNumber = ConvertMobileNumber(worksheet,i);
                 string Address = worksheet.Cells[i, 6].StringValue;
                 string StateDistrict = worksheet.Cells[i, 7].StringValue;
                 DateTime DateOfBirth = ConvertDOB(worksheet,i);
@@ -367,6 +388,25 @@ namespace AlumniManagement.Frontend.Repositories
             else
             {
                 return DateTime.MinValue;
+            }
+        }
+
+        private string ConvertMobileNumber(Worksheet worksheet, int i)
+        {
+            string pattern = @"^08\d{8,13}$"; // Nomor HP harus dimulai dengan 08 dan hanya angka (10-15 digit)
+
+            if (worksheet.Cells[i, 5].Value != null)
+            {
+                if (!Regex.IsMatch(worksheet.Cells[i, 5].StringValue, pattern))
+                {
+                    throw new Exception("Invalid phone number! using only Indonesian Number (08xxxxxxx) and contain only numbers (10-15 digits).");
+                }
+
+                return worksheet.Cells[i, 5].StringValue;
+            }
+            else
+            {
+                return "";
             }
         }
     }

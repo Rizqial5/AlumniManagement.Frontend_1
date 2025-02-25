@@ -72,9 +72,6 @@
                 @Html.DisplayNameFor(model => model.FullAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HobbiesListName)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.DateOfBirth)
             </th>
             <th>
@@ -185,7 +182,6 @@
                     { "data": "Email" },
                     { "data": "MobileNumber" },
                     { "data": "FullAddress" },
-                    { "data": "HobbiesListName" },
                     {
                         "data": "ShowDateOfBirth"
                         //"render": function (data, type, row) {
@@ -219,7 +215,9 @@
                 "scrollX": true,
                 "scrollCollapse": true,
                 "fixedHeader": true,
-           
+                "fixedColumns": {
+                    "leftColumns": 4
+                },
                 "language": {
                     "paginate": {
                         "previous": "Previous",

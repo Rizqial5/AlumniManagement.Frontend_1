@@ -7,6 +7,33 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("Styles", required: false)
+    <style>
+        /* Floating Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        /* Fixed Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white; /* Warna footer putih */
+            color: black;
+            text-align: left;
+            padding: 10px 0;
+
+        }
+
+        /* Tambahan padding agar konten tidak tertutup */
+        .body-content {
+            padding-top: 70px; /* Sesuaikan dengan tinggi navbar */
+            padding-bottom: 50px; /* Sesuaikan dengan tinggi footer */
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
@@ -29,8 +56,8 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <footer class="footer" >
+            <p>&copy; @DateTime.Now.Year - Bagus Rizqi</p>
         </footer>
     </div>
 
