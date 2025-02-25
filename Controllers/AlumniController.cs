@@ -213,6 +213,11 @@ namespace AlumniManagement.Frontend.Controllers
         private void UploadBehaviour(AlumniModel alumniModel, HttpPostedFileBase photoUpload)
         {
             // Validasi tipe file
+            if(photoUpload == null)
+            {
+                return;
+            }
+
             string[] allowedExtensions = { ".jpeg", ".jpg", ".png" };
             string fileExtension = Path.GetExtension(photoUpload.FileName).ToLower();
 

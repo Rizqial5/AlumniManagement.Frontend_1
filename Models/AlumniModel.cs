@@ -48,8 +48,8 @@ namespace AlumniManagement.Frontend.Models
 
         [DataType(DataType.Date)]
         [DisplayName("Date of Birth")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public System.Nullable<System.DateTime> DateOfBirth { get; set; } = DateTime.Now;
+        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
+        public System.Nullable<System.DateTime> DateOfBirth { get; set; }
 
         [DisplayName("Graduation Year")]
         [Range(1960,2025)]

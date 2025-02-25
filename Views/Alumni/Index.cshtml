@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
     <style>
@@ -31,6 +32,7 @@
                 justify-content: space-between;
                 align-items: center;
             }
+
         th {
             white-space: nowrap;
         }
@@ -70,6 +72,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.MobileNumber)
+            </th>
+            <th>
+                Hobbies
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FullAddress)
@@ -119,6 +124,7 @@
 </div>
 
 
+
 @section scripts {
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -133,6 +139,7 @@
     <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
     <script src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -184,12 +191,13 @@
                     { "data": "FullName" },
                     { "data": "Email" },
                     { "data": "MobileNumber" },
+                    { "data": "HobbiesListName" },
                     { "data": "FullAddress" },
                     {
-                        "data": "ShowDateOfBirth"
-                        //"render": function (data, type, row) {
-                        //    return moment(data).format('DD-MMM-YYYY');
-                        //}
+                        "data": "ShowDateOfBirth",
+                        "render": function (data, type, row) {
+                            return moment(data).format('DD-MMM-yyyy');
+                        }
                     },
                     { "data": "GraduationYear" },
                     { "data": "Degree" },
@@ -322,6 +330,13 @@
 
                     reinitializeValidation();
 
+                    $('#DateOfBirth').datepicker({
+                        format: "dd-M-yyyy",
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+
                     $(document).on('change', '#photoUpload', function (event) {
                         var file = event.target.files[0];
                         if (file) {
@@ -388,6 +403,8 @@
                     initializeSelect2('#FacultyDropdown', 'Select faculty', '#editModal');
                     initializeSelect2('#DistrictDropdown', 'Select district', '#editModal');
 
+
+
                     // **Handling preview foto yang sudah ada**
                     var existingPhotoUrl = $('#photoPreview').data('src'); // URL foto dari ViewBag.SourceImage
                     if (existingPhotoUrl) {
@@ -416,6 +433,15 @@
                     });
 
                     $('#editModal').modal('show');
+
+                    $('#editModal').on('shown.bs.modal', function () {
+                        // Inisialisasi Datepicker setelah modal ditampilkan
+                        $('#DateOfBirth').datepicker({
+                            format: "dd-M-yyyy",
+                            autoclose: true,
+                            todayHighlight: true
+                        });
+                    });
 
                 },
                 error: function (xhr) {
