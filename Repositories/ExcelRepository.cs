@@ -286,6 +286,8 @@ namespace AlumniManagement.Frontend.Repositories
             var workbook = new Workbook(file.InputStream);
             var worksheet = workbook.Worksheets[0];
 
+            var listAlumnis = new List<AlumniDTO>();
+
             for(int i = 1; i <= worksheet.Cells.MaxDataRow; i++)
             {
                 int AlumniID = ConvertJob(worksheet,i);
@@ -334,8 +336,14 @@ namespace AlumniManagement.Frontend.Repositories
 
                 var result = Mapping.Mapper.Map<AlumniDTO>(alumniData);
 
-                _alumniServiceClient.ImportFromExcel(result);
+                listAlumnis.Add(result);
+                //_alumniServiceClient.ImportFromExcel(result);
+
             }
+
+
+            _alumniServiceClient.UpsertMultipleAlumni(listAlumnis.ToArray());
+            //manggil upsert with list
         }
 
         private int ConvertJob(Worksheet worksheet, int i)

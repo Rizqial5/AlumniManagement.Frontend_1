@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
     <style>
         .dataTables_wrapper {
             width: 100%; /* Lebarkan tabel */
@@ -130,6 +131,7 @@
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script>
@@ -149,12 +151,14 @@
                             return '<div class="btn-group">' +
                                 '<a class="btn btn-primary" id="editButton" data-id="' + row.AlumniID + '" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
                                 'Edit</a>' +
-                                '<a href="/Job/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
-                                'Jobs</a>' +
-                                '<a href="/AlumniImage/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
-                                'Images</a>' +
                                 '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.AlumniID + '">' +
                                 'Delete</button>' +
+                                '</div>' +
+                                '<div class="btn-group mt-3">' +
+                                    '<a href="/Job/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
+                                    'Jobs</a>' +
+                                    '<a href="/AlumniImage/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
+                                    'Images</a>' +
                                 '</div>'
 
                         }
@@ -168,7 +172,7 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                          
+
                             if (!row.ShowImagePath) {
                                 return ""; // Jika ShowImagePath tidak ada, return kosong
                             }
@@ -215,6 +219,7 @@
                 "scrollX": true,
                 "scrollCollapse": true,
                 "fixedHeader": true,
+           
                 "language": {
                     "paginate": {
                         "previous": "Previous",
@@ -365,7 +370,7 @@
 
                     // Show the Edit Modal
                     $('#modalContainer').html(data);
-                    
+
                     //inisialisasi
                     updateDistrictDropdown('/Alumni/ShowDistrictList');
                     updateMajorDropdown('/Alumni/ShowMajorList');
@@ -376,7 +381,7 @@
                     if (selectedHobbies) {
                         $('#ddlHobby').val(selectedHobbies);
                     }
-                   
+
 
                     initializeSelect2('#ddlHobby', 'Select Hobbies', '#editModal');
                     initializeSelect2('#FacultyDropdown', 'Select faculty', '#editModal');
@@ -417,7 +422,7 @@
                     alert('An error occurred while fetching data.');
                 }
             });
-            
+
         });
 
 

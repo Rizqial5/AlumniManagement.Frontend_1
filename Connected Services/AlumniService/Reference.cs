@@ -816,6 +816,12 @@ namespace AlumniManagement.Frontend.AlumniService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpsertAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpsertAlumniResponse")]
         System.Threading.Tasks.Task UpsertAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumniDTO);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpsertMultipleAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpsertMultipleAlumniResponse")]
+        void UpsertMultipleAlumni(AlumniManagement.Frontend.AlumniService.AlumniDTO[] alumniDTO);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAlumniService/UpsertMultipleAlumni", ReplyAction="http://tempuri.org/IAlumniService/UpsertMultipleAlumniResponse")]
+        System.Threading.Tasks.Task UpsertMultipleAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO[] alumniDTO);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -987,6 +993,14 @@ namespace AlumniManagement.Frontend.AlumniService {
         
         public System.Threading.Tasks.Task UpsertAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO alumniDTO) {
             return base.Channel.UpsertAlumniAsync(alumniDTO);
+        }
+        
+        public void UpsertMultipleAlumni(AlumniManagement.Frontend.AlumniService.AlumniDTO[] alumniDTO) {
+            base.Channel.UpsertMultipleAlumni(alumniDTO);
+        }
+        
+        public System.Threading.Tasks.Task UpsertMultipleAlumniAsync(AlumniManagement.Frontend.AlumniService.AlumniDTO[] alumniDTO) {
+            return base.Channel.UpsertMultipleAlumniAsync(alumniDTO);
         }
     }
 }

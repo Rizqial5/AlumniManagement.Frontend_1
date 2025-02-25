@@ -265,8 +265,17 @@ namespace AlumniManagement.Frontend.Controllers
 
             var populateForm = RepopulateEditForm(existingData);
 
-            ViewBag.SourceImage = @Url.Content(populateForm.PhotoPath.Replace("~", "") + '/' + populateForm.PhotoName);
-            ViewBag.NameFile = populateForm.PhotoName;
+            ViewBag.SourceImage = "";
+            ViewBag.NameFile = "";
+
+            if (existingData.PhotoPath!= null)
+            {
+                ViewBag.SourceImage = @Url.Content(populateForm.PhotoPath.Replace("~", "") + '/' + populateForm.PhotoName);
+                ViewBag.NameFile = populateForm.PhotoName;
+            }
+
+           
+
 
             return PartialView("_EditPartial",populateForm);
         }

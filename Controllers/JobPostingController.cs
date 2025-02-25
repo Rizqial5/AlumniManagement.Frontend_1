@@ -159,6 +159,15 @@ namespace AlumniManagement.Frontend.Controllers
             {
                 if (ModelState.IsValid)
                 {
+
+                    var checkClosed = _jobPostingRepository.GetJobPosting(jobAttachments[0].JobID).IsClosed;
+
+                    if(checkClosed)
+                    {
+                        TempData["ErrorMessage"] = "Error: job is closed";
+                        return RedirectToAction("Index");
+                    }
+
                     var listJobAttachments = new List<JobAttachmentModel>();
 
                     for (int i = 0; i < fileUpload.Length; i++)

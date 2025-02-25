@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
     <style>
         .dataTables_wrapper {
             width: 100%; /* Lebarkan tabel */
@@ -35,10 +36,11 @@
 
 <h2>Candidates</h2>
 <h5>@ViewBag.JobTitle</h5>
-<h5>@ViewBag.JobDesc</h5>
+<p>@ViewBag.JobDesc</p>
 <p>Min.Experience: @ViewBag.Exp years </p>
 <p>Skiils: @ViewBag.Skills</p>
 
+<a class="btn btn-danger" href="@Url.Action("Index", "JobPosting")"> Back to Job Posting</a>
 
 <table class="table" id="candidateData">
     <thead>
@@ -70,6 +72,7 @@
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script>

@@ -3,131 +3,151 @@
 
 <div id="createModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="width:100%">
             <div class="modal-header">
                 <h5 class="modal-title" id="createModalLabel">Add Job Posting</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="width: auto">
                 @using (Html.BeginForm("UpsertJobPosting", "JobPosting", FormMethod.Post, new { id = "createForm" }))
                 {
                     @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                <div class="form-horizontal">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.EmploymentTypeID, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownListFor(model => model.EmploymentTypeID, (SelectList)ViewBag.EmploymentTypeDDL, "Select Type",
-                new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.EmploymentTypeID, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.MinimumExperience, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.MinimumExperience, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.MinimumExperience, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.JobDescription, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.TextAreaFor(model => model.JobDescription, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.JobDescription, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.SelectedSkills, htmlAttributes: new { @class = "control-label col-md-4" })
-                        <div class="col-md-8">
-                            @Html.ListBoxFor(model => model.SelectedSkills, (MultiSelectList)ViewBag.SkillDDL, new { @id = "ddlSkills", @class = "form-control", @multiple = "multiple" })
-                            @Html.ValidationMessageFor(model => model.SelectedSkills, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.Label("SelectedAttachmentTypes", "Attachment Types", new { @class = "control-label col-md-4" })
-                        <div class="col-md-8">
-                            @if (ViewBag.AttachmentDDL != null)
-                            {
-                                foreach (var item in ViewBag.AttachmentDDL)
-                                {
-                                    <div class="form-check">
-                                        <input type="checkbox" name="SelectedAttachmentTypes" value="@item.AttachmentTypeID" class="form-check-input" id="attachment_@item.AttachmentTypeID" />
-                                        <label class="form-check-label" for="attachment_@item.AttachmentTypeID">@item.Name</label>
+                        <!-- Title & Company (Satu Baris) -->
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-12"  })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%;" } })
+                                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
                                     </div>
-                                }
-                            }
-                            else
-                            {
-                                <p class="text-muted">No attachment types available.</p>
-                            }
-                            @Html.ValidationMessage("SelectedAttachmentTypes", "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <div class="form-check form-switch">
-                                @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-check-input", id = "isActiveSwitch" })
-                                <label class="form-check-label" for="isActiveSwitch">
-                                    <span id="isActiveLabel">@(Model.IsActive ? "Active" : "Inactive")</span>
-                                </label>
+                                </div>
                             </div>
-                            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.IsClosed, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <div class="form-check form-switch">
-                                @Html.CheckBox("IsClosed", Model.IsClosed  , new { @class = "form-check-input", id = "isClosedSwitch" })
-                                <label class="form-check-label" for="isClosedSwitch">
-                                    <span id="isClosedLabel">@(Model.IsClosed ? "Closed" : "Open")</span>
-                                </label>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label col-md-12" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%;" } })
+                                        @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
                             </div>
-                            @Html.ValidationMessageFor(model => model.IsClosed, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Description (Satu Baris Penuh) -->
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.JobDescription, htmlAttributes: new { @class = "control-label col-md-12" })
+                                    <div class="col-md-12">
+                                        @Html.TextAreaFor(model => model.JobDescription, new { @class = "form-control col-md-12", style = "max-width: 100%; height: 100px; resize: vertical;" })
+                                        @Html.ValidationMessageFor(model => model.JobDescription, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Minimum Experience & Skill (Di Kanan, Bawah Description) -->
+                        <div class="row mt-3">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.EmploymentTypeID, htmlAttributes: new { @class = "control-label col-md-12" })
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.EmploymentTypeID, (SelectList)ViewBag.EmploymentTypeDDL, "Select Type",
+                                            new { @class = "form-control", style = "max-width: 100%;" })
+                                        @Html.ValidationMessageFor(model => model.EmploymentTypeID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.Label("SelectedAttachmentTypes", "Attachment Types", new { @class = "control-label col-md-12" })
+                                    <div class="col-md-12">
+                                        @if (ViewBag.AttachmentDDL != null)
+                                        {
+                                            foreach (var item in ViewBag.AttachmentDDL)
+                                            {
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="SelectedAttachmentTypes" value="@item.AttachmentTypeID" class="form-check-input" id="attachment_@item.AttachmentTypeID" />
+                                                    <label class="form-check-label" for="attachment_@item.AttachmentTypeID">@item.Name</label>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">No attachment types available.</p>
+                                        }
+                                        @Html.ValidationMessage("SelectedAttachmentTypes", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MinimumExperience, htmlAttributes: new { @class = "control-label col-md-12" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.MinimumExperience, new { htmlAttributes = new { @class = "form-control", style = "max-width: 100%;" } })
+                                        @Html.ValidationMessageFor(model => model.MinimumExperience, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.SelectedSkills, htmlAttributes: new { @class = "control-label col-md-12" })
+                                    <div class="col-md-12">
+                                        @Html.ListBoxFor(model => model.SelectedSkills, (MultiSelectList)ViewBag.SkillDDL, new { @id = "ddlSkills", @class = "form-control", @multiple = "multiple",
+                                       style = "width: 100%;"})
+                                        @Html.ValidationMessageFor(model => model.SelectedSkills, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status & Close Job Posting -->
+                        <div class="row mt-3">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-12" })
+                                    <div class="col-md-12">
+                                        <div class="form-check form-switch">
+                                            @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-check-input", id = "isActiveSwitch" })
+                                            <label class="form-check-label" for="isActiveSwitch">
+                                                <span id="isActiveLabel">@(Model.IsActive ? "Active" : "Inactive")</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.IsClosed, htmlAttributes: new { @class = "control-label col-md-12" })
+                                    <div class="col-md-12">
+                                        <div class="form-check form-switch">
+                                            @Html.CheckBox("IsClosed", Model.IsClosed, new { @class = "form-check-input", id = "isClosedSwitch" })
+                                            <label class="form-check-label" for="isClosedSwitch">
+                                                <span id="isClosedLabel">@(Model.IsClosed ? "Closed" : "Open")</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Submit -->
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="button" class="btn btn-danger px-4 py-2 me-2" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary px-4 py-2">Save</button>
                         </div>
                     </div>
-
-
-
-
-                    <div class="d-flex justify-content-end mt-3">
-                        <button type="button" class="btn btn-danger px-4 py-2 me-2" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4 py-2">Save</button>
-                    </div>
-                </div>
                 }
-
             </div>
         </div>
     </div>
 </div>
+
 
 
 
