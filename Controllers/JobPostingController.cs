@@ -159,7 +159,8 @@ namespace AlumniManagement.Frontend.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                   
+                    var listJobAttachments = new List<JobAttachmentModel>();
+
                     for (int i = 0; i < fileUpload.Length; i++)
                     {
                         if (fileUpload[i] != null && fileUpload[i].ContentLength > 0)
@@ -178,7 +179,7 @@ namespace AlumniManagement.Frontend.Controllers
                             fileUpload[i].SaveAs(filePath);
 
                             // Ambil attachment model terkait jika ada
-                            var attachment = jobAttachments.Length > i ? jobAttachments[i] : new JobAttachmentModel();
+                            var attachment = new JobAttachmentModel();
 
                             // Simpan ke database
                             //attachment.JobID = jobId;
@@ -186,16 +187,17 @@ namespace AlumniManagement.Frontend.Controllers
                             attachment.FileName = fileName;
                             attachment.AlumniID = alumniId;
                             attachment.JobID = jobAttachments[i].JobID;
+                            attachment.AttachmentTypeID = jobAttachments[i].AttachmentTypeID;
 
-                            _jobPostingRepository.InsertApplyJob(attachment);
-                            
+                           listJobAttachments.Add(attachment);
+
                         }
                     }
 
-
+                    _jobPostingRepository.InsertApplyJob(listJobAttachments, alumniId, listJobAttachments[0].JobID);
+                    
 
                     TempData["SuccessMessage"] = "Job Applied Successfully!";
-                    TempData.Keep("SuccessMessage"); // Menjaga nilai TempData 
                     return RedirectToAction("Index");
                 }
                 else

@@ -768,10 +768,10 @@ namespace AlumniManagement.Frontend.PostingJobService {
         System.Threading.Tasks.Task InsertJobPostingAsync(AlumniManagement.Frontend.PostingJobService.JobPostingDTO jobPostingDTO);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPostingJobService/InsertApplyJob", ReplyAction="http://tempuri.org/IPostingJobService/InsertApplyJobResponse")]
-        void InsertApplyJob(AlumniManagement.Frontend.PostingJobService.JobAttachmentDTO jobAttachmentDTO);
+        void InsertApplyJob(AlumniManagement.Frontend.PostingJobService.JobAttachmentDTO[] jobAttachmentDTO, System.Guid jobId, int alumniId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPostingJobService/InsertApplyJob", ReplyAction="http://tempuri.org/IPostingJobService/InsertApplyJobResponse")]
-        System.Threading.Tasks.Task InsertApplyJobAsync(AlumniManagement.Frontend.PostingJobService.JobAttachmentDTO jobAttachmentDTO);
+        System.Threading.Tasks.Task InsertApplyJobAsync(AlumniManagement.Frontend.PostingJobService.JobAttachmentDTO[] jobAttachmentDTO, System.Guid jobId, int alumniId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPostingJobService/UpdateJobPosting", ReplyAction="http://tempuri.org/IPostingJobService/UpdateJobPostingResponse")]
         void UpdateJobPosting(AlumniManagement.Frontend.PostingJobService.JobPostingDTO jobPostingDTO);
@@ -883,12 +883,12 @@ namespace AlumniManagement.Frontend.PostingJobService {
             return base.Channel.InsertJobPostingAsync(jobPostingDTO);
         }
         
-        public void InsertApplyJob(AlumniManagement.Frontend.PostingJobService.JobAttachmentDTO jobAttachmentDTO) {
-            base.Channel.InsertApplyJob(jobAttachmentDTO);
+        public void InsertApplyJob(AlumniManagement.Frontend.PostingJobService.JobAttachmentDTO[] jobAttachmentDTO, System.Guid jobId, int alumniId) {
+            base.Channel.InsertApplyJob(jobAttachmentDTO, jobId, alumniId);
         }
         
-        public System.Threading.Tasks.Task InsertApplyJobAsync(AlumniManagement.Frontend.PostingJobService.JobAttachmentDTO jobAttachmentDTO) {
-            return base.Channel.InsertApplyJobAsync(jobAttachmentDTO);
+        public System.Threading.Tasks.Task InsertApplyJobAsync(AlumniManagement.Frontend.PostingJobService.JobAttachmentDTO[] jobAttachmentDTO, System.Guid jobId, int alumniId) {
+            return base.Channel.InsertApplyJobAsync(jobAttachmentDTO, jobId, alumniId);
         }
         
         public void UpdateJobPosting(AlumniManagement.Frontend.PostingJobService.JobPostingDTO jobPostingDTO) {

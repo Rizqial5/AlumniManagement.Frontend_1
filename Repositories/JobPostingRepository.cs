@@ -99,11 +99,11 @@ namespace AlumniManagement.Frontend.Repositories
             _service.DeletingJobPosting(jobId);
         }
 
-        public void InsertApplyJob(JobAttachmentModel jobAttachmentModel)
+        public void InsertApplyJob(List<JobAttachmentModel> jobAttachmentModel, int alumniId, Guid jobId)
         {
-            var result = Mapping.Mapper.Map<JobAttachmentDTO>(jobAttachmentModel);
+            var result = Mapping.Mapper.Map<List<JobAttachmentDTO>>(jobAttachmentModel).ToArray();
 
-            _service.InsertApplyJob(result);
+            _service.InsertApplyJob(result, jobId, alumniId);
         }
 
         public IEnumerable<ShowCandidateModel> GetAllCandidateBYJObId(Guid jobID)

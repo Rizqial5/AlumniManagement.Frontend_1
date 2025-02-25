@@ -107,7 +107,9 @@
   <xs:element name="InsertApplyJob">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="jobAttachmentDTO" nillable="true" type="q12:JobAttachmentDTO" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="jobAttachmentDTO" nillable="true" type="q12:ArrayOfJobAttachmentDTO" />
+        <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="jobId" type="q13:guid" />
+        <xs:element minOccurs="0" name="alumniId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -119,7 +121,7 @@
   <xs:element name="UpdateJobPosting">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="jobPostingDTO" nillable="true" type="q13:JobPostingDTO" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="jobPostingDTO" nillable="true" type="q14:JobPostingDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -131,7 +133,7 @@
   <xs:element name="DeletingJobPosting">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="jobId" type="q14:guid" />
+        <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="jobId" type="q15:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -143,7 +145,7 @@
   <xs:element name="UpsertJobPosting">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="jobPostingDTO" nillable="true" type="q15:JobPostingDTO" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="jobPostingDTO" nillable="true" type="q16:JobPostingDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

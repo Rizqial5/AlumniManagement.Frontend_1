@@ -19,6 +19,12 @@ namespace AlumniManagement.Frontend.Models
 
         public List<JobAttachmentDTO> JobAttachments { get; set; }
         
-        public List<string> ListUrls { get; set; }
+        public List<ShowUrlModel> ListUrls { get; set; }
+    }
+
+    public class ShowUrlModel
+    {
+        public string Urls { get; set; }
+        public string NameType { get; set; }
     }
 }

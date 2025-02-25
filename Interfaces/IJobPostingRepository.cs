@@ -36,7 +36,7 @@ namespace AlumniManagement.Frontend.Interfaces
         
         void DeletingJobPosting(Guid jobId);
 
-        void InsertApplyJob(JobAttachmentModel jobAttachmentModel);
+        void InsertApplyJob(List<JobAttachmentModel> jobAttachmentModel, int alumniId, Guid jobId);
 
         IEnumerable<ShowCandidateModel> GetAllCandidateBYJObId(Guid jobID);
 

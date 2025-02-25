@@ -1,5 +1,6 @@
 ﻿using AlumniManagement.Frontend.Interfaces;
 using AlumniManagement.Frontend.JobHistoryService;
+using AlumniManagement.Frontend.Models;
 using AlumniManagement.Frontend.Repositories;
 using System;
 using System.Collections.Generic;
@@ -42,12 +43,25 @@ namespace AlumniManagement.Frontend.Controllers
 
             foreach (var candidate in candidatesData)
             {
+                var listUrls = new List<ShowUrlModel>();
+
                 if (candidate.JobAttachments != null && candidate.JobAttachments.Any())
                 {
-                    candidate.ListUrls = candidate.JobAttachments
-                        .Select(att => Url.Content(att.FilePath.Replace("~", "") + "/" + att.FileName))
-                        .ToList();
+                    foreach (var item in candidate.JobAttachments)
+                    {
+                        var showUrlModel = new ShowUrlModel
+                        {
+                            Urls = Url.Content(item.FilePath.Replace("~", "") + "/" + item.FileName),
+                            NameType = GetTypeName(item.AttachmentTypeID)
+
+                        };
+
+                        listUrls.Add(showUrlModel);
+                    }
+
                 }
+
+                candidate.ListUrls = listUrls;
             }
 
             var json = Json(new { data = candidatesData }, JsonRequestBehavior.AllowGet);
@@ -55,6 +69,22 @@ namespace AlumniManagement.Frontend.Controllers
             json.MaxJsonLength = int.MaxValue;
 
             return json;
+        }
+
+        public string GetTypeName(int attahcmentTypeId)
+        {
+            switch(attahcmentTypeId)
+            {
+                case 1:
+                    return "CV File";
+                case 2:
+                    return "Identity Card File";
+                case 3:
+                    return "Certificate File";
+                default:
+                    return "";
+
+            }
         }
 
 
