@@ -4,6 +4,7 @@ using AlumniManagement.Frontend.Models;
 using AlumniManagement.Frontend.Repositories;
 using AlumniManagement.Web.Repositories;
 using Aspose.Cells;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -469,25 +470,73 @@ namespace AlumniManagement.Frontend.Controllers
             return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "AlumniData.xlsx");
         }
 
+        // Get Show Tabel
         [HttpPost]
-        public ActionResult ImportExcel(HttpPostedFileBase file)
+        public ActionResult ShowTableView(HttpPostedFileBase file)
+        {
+            var resultListImported = ImportExcel(file);
+
+            ViewBag.ValidData = resultListImported.Where(a => a.ErrorDetails.Count() == 0).Count();
+            ViewBag.ErrorData = resultListImported.Where(a => a.ErrorDetails.Count() > 0).Count();
+            ViewBag.RecordData = resultListImported.Count();
+            ViewBag.CheckIsError = false;
+            var totalError = resultListImported.Where(a => a.ErrorDetails.Count() > 0).Count();
+
+            if (totalError > 0)
+            {
+                ViewBag.CheckIsError = true;
+            }
+
+            ViewBag.AllData = resultListImported;
+
+            return View("TabelSummaryView", resultListImported);
+
+
+        }
+
+        public JsonResult GetTableImported(List<AlumniModel> listImport)
+        {
+            return Json(new { data = listImport }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult SubmitImportedTable(List<AlumniModel> submittedData)
         {
             try
             {
-                if (file != null && file.ContentLength > 0)
+                if (submittedData == null || !submittedData.Any())
                 {
-                    _excelRepository.ImportAlumniFromExcel(file);
+                    return Json(new { success = false, message = "No data received!" });
                 }
 
-                TempData["SuccessMessage"] = "Data imported Succesfully";
-                return RedirectToAction("Index");
+                foreach (var item in submittedData)
+                {
+                    item.DateOfBirth = DateTime.Parse(item.ShowDateOfBirth);
+                }
+
+                _alumniRepository.UpsertMultipleAlumni(submittedData);
+
+                return Json(new { success = true, message = "Alumni updated successfully!" });
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = ex.Message;
-                ModelState.AddModelError("", "Unable to import due to " + ex.Message);
-                return RedirectToAction("Index");
+                return Json(new { success = false, message = "Alumni insert failed: " + ex.Message });
             }
+        }
+
+        [HttpPost]
+        public List<AlumniModel> ImportExcel(HttpPostedFileBase file)
+        {
+     
+            var resultList = new List<AlumniModel>();
+
+            if (file != null && file.ContentLength > 0)
+            {
+                resultList = _excelRepository.ImportAlumniFromExcel(file);
+            }
+            return resultList;
+            
+
         }
 
         [HttpPost]

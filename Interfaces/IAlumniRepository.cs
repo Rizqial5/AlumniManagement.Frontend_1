@@ -49,5 +49,7 @@ namespace AlumniManagement.Frontend.Interfaces
         void ImportFromExcel(AlumniModel alumniDTO);
 
         void UpsertAlumni(AlumniModel alumni);
+
+        void UpsertMultipleAlumni(List<AlumniModel> alumni);
     }
 }

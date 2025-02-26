@@ -120,6 +120,8 @@ namespace AlumniManagement.Frontend.Repositories
 
 
 
+            
+
             workSheet.Protect(ProtectionType.All);
 
             for (int i = 0; i < data.Count(); i++)
@@ -245,37 +247,46 @@ namespace AlumniManagement.Frontend.Repositories
             lastNameVal.ErrorTitle = "Invalid input";
             lastNameVal.ErrorMessage = "The text length max is 3 characters.";
 
-            int emailI = 4; // Index kolom state Province Code
+            int emailI = 4; // Index kolom untuk email
             CellArea email = CellArea.CreateCellArea(1, emailI, 1000, emailI);
             Validation emailVal = workSheet.Validations[workSheet.Validations.Add(email)];
-            emailVal.Type = ValidationType.TextLength;
-            emailVal.Operator = OperatorType.Between;
-            emailVal.Formula1 = "1"; // min length
-            emailVal.Formula2 = "50"; // max length
-            emailVal.ShowError = true;
-            emailVal.AlertStyle = ValidationAlertType.Stop;
-            emailVal.ErrorTitle = "Invalid input";
-            emailVal.ErrorMessage = "The text length max is 3 characters.";
+
+            //Ubah tipe validasi menjadi Custom untuk validasi dengan formula
+            //emailVal.Type = ValidationType.Custom;
+
+            //Gunakan formula untuk validasi email
+            //emailVal.Formula1 = @"=AND(ISTEXT(RC), ISNUMBER(SEARCH(""@"", RC)), ISNUMBER(SEARCH(""."", RC)))";
+
+            //emailVal.ShowError = true;
+            //emailVal.AlertStyle = ValidationAlertType.Stop;
+            //emailVal.ErrorTitle = "Invalid Email";
+            //emailVal.ErrorMessage = "Please enter a valid email address.";
+
+            emailVal.ShowInput = true;
+            emailVal.InputTitle = "Enter Email";
+            emailVal.InputMessage = "Enter a valid Email. Example: user@example.com";
+
+
 
             int mobileNumI = 5; // Index kolom state Province Code
             CellArea mobileArea = CellArea.CreateCellArea(1, mobileNumI, 1000, mobileNumI);
             Validation mobileVal = workSheet.Validations[workSheet.Validations.Add(mobileArea)];
             mobileVal.Type = ValidationType.TextLength;
             mobileVal.Operator = OperatorType.Between;
-            mobileVal.Formula1 = "1"; // min length
+            mobileVal.Formula1 = "10"; // min length
             mobileVal.Formula2 = "15"; // max length
             mobileVal.ShowError = true;
             mobileVal.AlertStyle = ValidationAlertType.Stop;
             mobileVal.ErrorTitle = "Invalid input";
             mobileVal.ErrorMessage = "The text length max is 15 characters.";
 
-            //Validation customMobileVal = workSheet.Validations[workSheet.Validations.Add(mobileArea)];
-            //customMobileVal.Type = ValidationType.Custom;
-            //customMobileVal.Formula1 ="AND(ISNUMBER(F1), LEFT(TEXT(F1, \"0\"),2)=\"08\", LEN(TEXT(F1, \"0\"))>=10, LEN(TEXT(F1, \"0\"))<=15)"; // Menggunakan kolom F
-            //customMobileVal.ShowError = true;
-            //customMobileVal.AlertStyle = ValidationAlertType.Stop;
-            //customMobileVal.ErrorTitle = "Invalid phone number";
-            //customMobileVal.ErrorMessage = "The phone number must start with '08'.";
+            Validation customMobileVal = workSheet.Validations[workSheet.Validations.Add(mobileArea)];
+            customMobileVal.Type = ValidationType.Custom;
+            customMobileVal.Formula1 = "=AND(ISNUMBER(O2),LEN(O2)>=10,LEN(O2)<=15)";
+            customMobileVal.ShowError = true;
+            customMobileVal.AlertStyle = ValidationAlertType.Stop;
+            customMobileVal.ErrorTitle = "Invalid phone number";
+            customMobileVal.ErrorMessage = "The phone number must start with '08'.";
 
             mobileVal.ShowInput = true;
             mobileVal.InputTitle = "Enter Phone Number";
@@ -302,12 +313,13 @@ namespace AlumniManagement.Frontend.Repositories
         }
 
 
-        public void ImportAlumniFromExcel(HttpPostedFileBase file)
+        public List<AlumniModel> ImportAlumniFromExcel(HttpPostedFileBase file)
         {
             var workbook = new Workbook(file.InputStream);
             var worksheet = workbook.Worksheets[0];
 
-            var listAlumnis = new List<AlumniDTO>();
+            var listAlumnis = new List<AlumniModel>();
+            var listStringError = new List<string>();
 
             for(int i = 1; i <= worksheet.Cells.MaxDataRow; i++)
             {
@@ -316,7 +328,7 @@ namespace AlumniManagement.Frontend.Repositories
                 string MiddleName = (worksheet.Cells[i, 2].StringValue ?? "") ;
                 string LastName = worksheet.Cells[i, 3].StringValue;
                 string Email = worksheet.Cells[i, 4].StringValue;
-                string MobileNumber = ConvertMobileNumber(worksheet,i);
+                string MobileNumber = ConvertMobileNumber(worksheet,i,listStringError);
                 string Address = worksheet.Cells[i, 6].StringValue;
                 string StateDistrict = worksheet.Cells[i, 7].StringValue;
                 DateTime DateOfBirth = ConvertDOB(worksheet,i);
@@ -351,20 +363,29 @@ namespace AlumniManagement.Frontend.Repositories
                     Degree = Degree,
                     MajorID = _majorServiceClient.GetMajorIdByName(majorName).MajorID,
                     LinkedInProfile = LinkedInProfile,
-                    ModifiedDate= DateTime.Now
+                    ModifiedDate= DateTime.Now,
+                    FullName = FirstName + " " + (MiddleName ?? "") + " " + LastName,
+                    FullAddress = Address + ", " + districtName + ", " + stateName,
+                    ShowDateOfBirth = DateConverter(DateOfBirth),
+                    FacultyName = facultName,
+                    StateName = majorName,
+                    ErrorDetails = string.Join(", ", listStringError)
 
                 };
 
-                var result = Mapping.Mapper.Map<AlumniDTO>(alumniData);
+                
 
-                listAlumnis.Add(result);
+                listAlumnis.Add(alumniData);
+                listStringError = new List<string>();
                 //_alumniServiceClient.ImportFromExcel(result);
 
             }
 
 
-            _alumniServiceClient.UpsertMultipleAlumni(listAlumnis.ToArray());
+            //_alumniServiceClient.UpsertMultipleAlumni(listAlumnis.ToArray());
             //manggil upsert with list
+
+            return listAlumnis;
         }
 
         private int ConvertJob(Worksheet worksheet, int i)
@@ -391,7 +412,14 @@ namespace AlumniManagement.Frontend.Repositories
             }
         }
 
-        private string ConvertMobileNumber(Worksheet worksheet, int i)
+        private string DateConverter(DateTime? dateTime)
+        {
+            if (dateTime == DateTime.MinValue || dateTime == null) { return "N/A"; }
+
+            return dateTime.Value.ToString("yyyy-MM-dd");
+        }
+
+        private string ConvertMobileNumber(Worksheet worksheet, int i, List<string> errorList)
         {
             string pattern = @"^08\d{8,13}$"; // Nomor HP harus dimulai dengan 08 dan hanya angka (10-15 digit)
 
@@ -399,7 +427,9 @@ namespace AlumniManagement.Frontend.Repositories
             {
                 if (!Regex.IsMatch(worksheet.Cells[i, 5].StringValue, pattern))
                 {
-                    throw new Exception("Invalid phone number! using only Indonesian Number (08xxxxxxx) and contain only numbers (10-15 digits).");
+                    //throw new Exception("Invalid phone number! using only Indonesian Number (08xxxxxxx) and contain only numbers (10-15 digits).");
+
+                    errorList.Add("Nomor Hp Error");
                 }
 
                 return worksheet.Cells[i, 5].StringValue;

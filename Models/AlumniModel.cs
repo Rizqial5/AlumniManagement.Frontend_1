@@ -115,6 +115,9 @@ namespace AlumniManagement.Frontend.Models
 
         public string ShowDateOfBirth { get; set; }
 
+        [Ignore]
+        public string ErrorDetails { get; set; }
+
         //[Ignore]
         //public MultiSelectList HobbiesDDl { get; set; }
 

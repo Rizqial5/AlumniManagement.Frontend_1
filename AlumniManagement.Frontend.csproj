@@ -430,6 +430,7 @@
     <Content Include="Views\JobPosting\_EditPartial.cshtml" />
     <Content Include="Views\JobPosting\_ApplyPartial.cshtml" />
     <Content Include="Views\Candidate\Index.cshtml" />
+    <Content Include="Views\Alumni\TabelSummaryView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\AlumniImages\" />

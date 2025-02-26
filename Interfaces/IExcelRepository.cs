@@ -1,4 +1,6 @@
-﻿using Aspose.Cells;
+﻿using AlumniManagement.Frontend.AlumniService;
+using AlumniManagement.Frontend.Models;
+using Aspose.Cells;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,6 @@ namespace AlumniManagement.Frontend.Interfaces
     {
         Workbook AlumniExportExcel();
 
-        void ImportAlumniFromExcel(HttpPostedFileBase file);
+        List<AlumniModel> ImportAlumniFromExcel(HttpPostedFileBase file);
     }
 }
