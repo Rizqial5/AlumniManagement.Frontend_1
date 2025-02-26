@@ -45,15 +45,21 @@
 <p>Data Valid: @ViewBag.ValidData</p>
 <p>Data Error : @ViewBag.ErrorData</p>
 
-@if (ViewBag.CheckIsError)
-{
-    <button class="btn btn-danger" style="" id="submitImportedData" disabled>Error Import Data</button>
-    <p class="mt-1">Please resolve the error before submit data</p>
-}
-else
-{
-    <button class="btn btn-success" style="" id="submitImportedData" >Submit Imported Data</button>
-}
+
+<div>
+    <a class="btn btn-primary" href="@Url.Action("Index","Alumni")"> Back to Index </a>
+    @if (ViewBag.CheckIsError)
+    {
+        <button class="btn btn-danger" style="" id="submitImportedData" disabled>Error Import Data</button>
+        <p class="mt-1">Please resolve the error before submit data</p>
+    }
+    else
+    {
+        <button class="btn btn-success" style="" id="submitImportedData">Submit Imported Data</button>
+    }
+</div>
+
+
 
 
 
