@@ -197,11 +197,15 @@ else
 
 
         $("#submitImportedData").click(function () {
+            var formData = new FormData();
+            formData.append("submittedData", JSON.stringify(importedData)); // Simpan data sebagai string
+
             $.ajax({
                 url: "/Alumni/SubmitImportedTable",
                 type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ submittedData: importedData }), // Kirim model sebagai JSON
+                processData: false,  // Jangan proses data otomatis
+                contentType: false,  // Biarkan browser menentukan content type
+                data: formData,
                 success: function (response) {
                     Swal.fire({
                         title: "Success",

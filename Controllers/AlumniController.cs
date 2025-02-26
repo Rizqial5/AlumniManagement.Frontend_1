@@ -494,33 +494,26 @@ namespace AlumniManagement.Frontend.Controllers
 
         }
 
-        public JsonResult GetTableImported(List<AlumniModel> listImport)
-        {
-            return Json(new { data = listImport }, JsonRequestBehavior.AllowGet);
-        }
-
         [HttpPost]
-        public JsonResult SubmitImportedTable(List<AlumniModel> submittedData)
+        public JsonResult SubmitImportedTable(FormCollection form)
         {
             try
             {
+                string jsonString = form["submittedData"]; // Ambil data sebagai string
+                var submittedData = JsonConvert.DeserializeObject<List<AlumniModel>>(jsonString);
+
                 if (submittedData == null || !submittedData.Any())
                 {
-                    return Json(new { success = false, message = "No data received!" });
-                }
-
-                foreach (var item in submittedData)
-                {
-                    item.DateOfBirth = DateTime.Parse(item.ShowDateOfBirth);
+                    return Json(new { success = false, message = "No data received!" }, JsonRequestBehavior.AllowGet);
                 }
 
                 _alumniRepository.UpsertMultipleAlumni(submittedData);
 
-                return Json(new { success = true, message = "Alumni updated successfully!" });
+                return Json(new { success = true, message = "Alumni updated successfully!" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Alumni insert failed: " + ex.Message });
+                return Json(new { success = false, message = "Alumni insert failed: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
