@@ -365,5 +365,41 @@ namespace AlumniManagement.Frontend.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        [HttpPost]
+        public ActionResult DeleteSelected(Guid[] ids)
+        {
+            try
+            {
+                if (ids != null && ids.Length > 0)
+                {
+                    foreach (var item in ids)
+                    {
+                        _jobPostingRepository.DeletingJobPosting(item);
+                    }
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Selected job posting has been deleted succesfully"
+                    });
+
+                }
+
+                return Json(new
+                {
+                    error = true,
+                    message = "no job posting selected"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = "Error deleting job posting " + ex.Message
+                });
+            }
+        }
     }
 }

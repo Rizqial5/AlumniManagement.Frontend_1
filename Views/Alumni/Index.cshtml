@@ -41,9 +41,12 @@
 
 <h2>Alumni</h2>
 
+
+
 <div>
     <button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Create Alumni</button>
     <a class="btn btn-primary" style="display:inline-block" href="@Url.Action("ExportExcel","Alumni")"> Export to Excel </a>
+    <button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
 </div>
 
 @using (Html.BeginForm("ImportExcel", "Alumni", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -61,6 +64,7 @@
 <table class="table" id="alumniData" style="width:100%">
     <thead>
         <tr>
+            <th><input type="checkbox" id="selectAll" /></th>
             <th>Actions</th>
             <th>No</th>
             <th>Photo </th>
@@ -153,19 +157,29 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
+                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.AlumniID + '" />'
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
                             var editLink = '@Url.Action("Edit", "Alumni", new { id = "PLACEHOLDER"})'.replace("PLACEHOLDER", row.AlumniID);
                             var jobLink = '@Url.Action("Index", "Job", new { id = "PLACEHOLDER"})'.replace("PLACEHOLDER", row.AlumniID);
                             return '<div class="btn-group">' +
                                 '<a class="btn btn-primary" id="editButton" data-id="' + row.AlumniID + '" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
-                                'Edit</a>' +
+                                '<i class="fas fa-edit"></i>' +
+                                '</a>' +
                                 '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.AlumniID + '">' +
-                                'Delete</button>' +
+                                '<i class="fas fa-trash"></i>'
+                                + '</button>' +
                                 '</div>' +
                                 '<div class="btn-group mt-3">' +
                                     '<a href="/Job/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
-                                    'Jobs</a>' +
+                                    '<i class="fas fa-briefcase"></i>' +
+                                    '</a > ' +
                                     '<a href="/AlumniImage/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
-                                    'Images</a>' +
+                                     '<i class="fas fa-image"></i>' +
+                                    '</a>' +
                                 '</div>'
 
                         }
@@ -226,9 +240,9 @@
                 "scrollX": true,
                 "scrollCollapse": true,
                 "fixedHeader": true,
-                "fixedColumns": {
-                    "leftColumns": 4
-                },
+                //"fixedColumns": {
+                //    "leftColumns": 4
+                //},
                 "language": {
                     "paginate": {
                         "previous": "Previous",
@@ -238,6 +252,12 @@
                     }
                 }
             });
+
+            $('#selectAll').on('click', function () {
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked)
+            })
+
         });
 
         ////Use this for datatables, becase the buttons are created dynamically
@@ -281,6 +301,51 @@
                     }
                 });
         });
+
+        /*     Delete selected rows*/
+        $('#deleteSelected').on('click', function () {
+            var selectedIds = [];
+            $('.selectCheckbox:checked').each(function () {
+                selectedIds.push($(this).data('id'));
+            });
+
+            if (selectedIds.length > 0) {
+                Swal.fire({
+                    title: "Are you sure? you will not be able to recover these items!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete them!",
+                    cancelButtonText: "No, keep them"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX call to delete the selected items
+                        $.ajax({
+                            url: '/Alumni/DeleteSelected/',
+                            type: 'POST',
+                            data: { ids: selectedIds },
+                            traditional: true,
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        $('#alumniData').DataTable().ajax.reload(); // Reload the DataTable
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                            },
+                            error: function (error) {
+                                Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire("Cancelled", "Your items are safe :)", "error");
+                    }
+                });
+            } else {
+                Swal.fire("No items selected", "Please select items to delete.", "info");
+            }
+        });
+
 
         $(document).ready(function () {
             var table = $('#alumniData').DataTable();

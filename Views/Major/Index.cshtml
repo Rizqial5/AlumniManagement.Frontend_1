@@ -100,9 +100,11 @@
 
                             return '<div class="btn-group">' +
                                 '<a class="btn btn-primary" data-id="' + row.MajorID + '" id="editButton" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
-                                'Edit</a>' +
+                                '<i class="fas fa-edit"></i>' +
+                                '</a>' +
                                 '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.MajorID + '">' +
-                                'Delete</button>' +
+                                '<i class="fas fa-trash"></i>'
+                                + '</button>' +
                                 '</div>'
 
                         }

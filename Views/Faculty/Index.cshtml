@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <style>
         .dataTables_wrapper {
-            width: 900px;
+            width: 100%;
         }
 
             .dataTables_wrapper .dataTables_paginate {
@@ -92,9 +92,11 @@
 
                             return '<div class="btn-group">' +
                                 '<a class="btn btn-primary" data-id="' + row.FacultyID + '" id="editButton" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
-                                'Edit</a>' +
+                                '<i class="fas fa-edit"></i>' +
+                                '</a>' +
                                 '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.FacultyID + '">' +
-                                'Delete</button>' +
+                                '<i class="fas fa-trash"></i>'
+                                + '</button>' +
                                 '</div>'
 
                         }

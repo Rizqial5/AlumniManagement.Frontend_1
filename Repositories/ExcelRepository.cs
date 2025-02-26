@@ -269,13 +269,13 @@ namespace AlumniManagement.Frontend.Repositories
             mobileVal.ErrorTitle = "Invalid input";
             mobileVal.ErrorMessage = "The text length max is 15 characters.";
 
-            Validation customMobileVal = workSheet.Validations[workSheet.Validations.Add(mobileArea)];
-            customMobileVal.Type = ValidationType.Custom;
-            customMobileVal.Formula1 = $"=LEFT(F1,2)=\"08\""; // Menggunakan kolom F
-            customMobileVal.ShowError = true;
-            customMobileVal.AlertStyle = ValidationAlertType.Stop;
-            customMobileVal.ErrorTitle = "Invalid phone number";
-            customMobileVal.ErrorMessage = "The phone number must start with '08'.";
+            //Validation customMobileVal = workSheet.Validations[workSheet.Validations.Add(mobileArea)];
+            //customMobileVal.Type = ValidationType.Custom;
+            //customMobileVal.Formula1 ="AND(ISNUMBER(F1), LEFT(TEXT(F1, \"0\"),2)=\"08\", LEN(TEXT(F1, \"0\"))>=10, LEN(TEXT(F1, \"0\"))<=15)"; // Menggunakan kolom F
+            //customMobileVal.ShowError = true;
+            //customMobileVal.AlertStyle = ValidationAlertType.Stop;
+            //customMobileVal.ErrorTitle = "Invalid phone number";
+            //customMobileVal.ErrorMessage = "The phone number must start with '08'.";
 
             mobileVal.ShowInput = true;
             mobileVal.InputTitle = "Enter Phone Number";

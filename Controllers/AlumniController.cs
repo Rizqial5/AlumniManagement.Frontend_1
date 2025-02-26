@@ -420,6 +420,42 @@ namespace AlumniManagement.Frontend.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult DeleteSelected(int[] ids)
+        {
+            try
+            {
+                if (ids != null && ids.Length > 0)
+                {
+                    foreach (var item in ids)
+                    {
+                        _alumniRepository.DeleteAlumni(item); // template yang dirubah
+                    }
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Selected Alumni have been deleted succesfully" // message dirubah sesuai objek
+                    });
+
+                }
+
+                return Json(new
+                {
+                    error = true,
+                    message = "no alumni selected "  // message dirubah sesuai objek
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = "Error deleting alumni:  " + ex.Message  // message dirubah sesuai objek
+                });
+            }
+        }
+
         public ActionResult ExportExcel()
         {
 
