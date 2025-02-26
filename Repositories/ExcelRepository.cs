@@ -309,6 +309,25 @@ namespace AlumniManagement.Frontend.Repositories
             dateVal.InputMessage = "Enter a valid date (YYYY-MM-DD). Example: 1995-06-15";
 
 
+            // Validation for Graduation Year
+            int gradeYearI = 9;
+            CellArea yearArea = CellArea.CreateCellArea(1, gradeYearI, 1000, gradeYearI);
+            Validation yearVal = workSheet.Validations[workSheet.Validations.Add(yearArea)];
+            yearVal.Type = ValidationType.Date;
+            yearVal.Operator = OperatorType.Between;
+            yearVal.Formula1 = "1980";
+            yearVal.Formula2 = "2024";
+            yearVal.ShowError = true;
+            yearVal.AlertStyle= ValidationAlertType.Stop;
+            yearVal.ErrorTitle = "Invalid Graduation Year Input";
+            yearVal.ErrorMessage = "Please enter year between 1980 - 2024";
+
+            yearVal.ShowInput = true;
+            yearVal.InputTitle = "Enter Graduation year";
+            yearVal.InputMessage = "Enter year between 1980 - 2024";
+
+
+
             return workBook;
         }
 
@@ -327,7 +346,7 @@ namespace AlumniManagement.Frontend.Repositories
                 string FirstName = worksheet.Cells[i, 1].StringValue;
                 string MiddleName = (worksheet.Cells[i, 2].StringValue ?? "") ;
                 string LastName = worksheet.Cells[i, 3].StringValue;
-                string Email = worksheet.Cells[i, 4].StringValue;
+                string Email = ValidateEmail(worksheet,i,listStringError);
                 string MobileNumber = ConvertMobileNumber(worksheet,i,listStringError);
                 string Address = worksheet.Cells[i, 6].StringValue;
                 string StateDistrict = worksheet.Cells[i, 7].StringValue;
@@ -433,6 +452,27 @@ namespace AlumniManagement.Frontend.Repositories
                 }
 
                 return worksheet.Cells[i, 5].StringValue;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private string ValidateEmail(Worksheet worksheet, int i, List<string> errorList)
+        {
+            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"; // Pola email yang valid
+
+            if (worksheet.Cells[i, 4].Value != null) // Asumsikan kolom ke-6 menyimpan email
+            {
+                string email = worksheet.Cells[i, 4].StringValue.Trim();
+
+                if (!Regex.IsMatch(email, pattern))
+                {
+                    errorList.Add("Email Error: Format email tidak valid");
+                }
+
+                return email;
             }
             else
             {
