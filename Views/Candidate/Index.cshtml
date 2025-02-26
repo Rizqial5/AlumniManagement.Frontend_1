@@ -98,7 +98,7 @@
                         "data": "ListUrls",
                         "render": function (data, type, row) {
                             if (Array.isArray(data) && data.length > 0) {
-                                return data.map(url => `<a href="${url.Urls}" target="_blank">${url.NameType}</a>`).join("<br>");
+                                return data.map(url => `<a href="${url.Urls}" download="${url.Urls}" target="_blank">${url.NameType}</a>`).join("<br>");
                             }
                             return "No attachments";
                         }
