@@ -29,6 +29,7 @@
                 justify-content: space-between;
                 align-items: center;
             }
+
         th {
             white-space: nowrap;
         }
@@ -41,6 +42,7 @@
 
 <button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Add New</button>
 
+<button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
 
 
 <table class="table" id="majorData" style="width:100%">
@@ -88,13 +90,13 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.FacultyID + '" />'
+                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.MajorID + '" />'
                         }
                     },
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                           
+
 
                             return '<div class="btn-group">' +
                                 '<a class="btn btn-primary" data-id="' + row.MajorID + '" id="editButton" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
@@ -144,6 +146,11 @@
                     }
                 }
             });
+
+            $('#selectAll').on('click', function () {
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked)
+            })
         });
 
         ////Use this for datatables, becase the buttons are created dynamically
@@ -279,7 +286,7 @@
                             success: function (response) {
                                 if (response.success) {
                                     Swal.fire("Deleted!", response.message, "success").then(() => {
-                                        $('#facultyData').DataTable().ajax.reload(); // Reload the DataTable
+                                        $('#majorData').DataTable().ajax.reload(); // Reload the DataTable
                                     });
                                 } else {
                                     Swal.fire("Error!", response.message, "error");

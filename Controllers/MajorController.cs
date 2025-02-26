@@ -163,6 +163,44 @@ namespace AlumniManagement.Frontend.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult DeleteSelected(int[] ids)
+        {
+            try
+            {
+                if(ids != null && ids.Length > 0)
+                {
+                    foreach (var item in ids)
+                    {
+                        _majorRepository.DeleteMajor(item);
+                    }
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Selected major has been deleted succesfully"
+                    });
+                }
+
+                return Json(new
+                {
+                    success = true,
+                    message = "There is no selected major"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = "Error deleting major: " + ex.Message
+
+                });
+
+
+            }
+        }
+
 
         private void FacultyDDl()
         {
