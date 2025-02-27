@@ -71,6 +71,9 @@
                 @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
+                Gender
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
@@ -140,11 +143,12 @@
                         }
                     },
                     { "data": "FullName" },
+                    { "data": "Gender" },
                     { "data": "Email" },
                     { "data": "MobileNumber" },
-                    { "data": "FullAddress" },
+                    { "data": "Address" },
                     {
-                        "data": "ShowDateOfBirth",
+                        "data": "DateOfBirth",
                         "render": function (data, type, row) {
                             return moment(data).format('DD-MMM-yyyy');
                         }

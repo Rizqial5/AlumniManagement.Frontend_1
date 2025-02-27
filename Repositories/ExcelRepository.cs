@@ -117,7 +117,7 @@ namespace AlumniManagement.Frontend.Repositories
             dateStyle.Custom = dateStyle.Custom = "dd-mmm-yyyy";
             StyleFlag flag = new StyleFlag();
             flag.NumberFormat = true;
-            workSheet.Cells.Columns[8].ApplyStyle(dateStyle, flag);
+            workSheet.Cells.Columns[9].ApplyStyle(dateStyle, flag);
 
             //style nomor hp
             Style textStyle = workSheet.Workbook.CreateStyle();
@@ -158,7 +158,12 @@ namespace AlumniManagement.Frontend.Repositories
                 }
            
                 maxColumnWidths[3] = Math.Max(maxColumnWidths[3], data.ToList()[i].LastName.Length);
-                maxColumnWidths[4] = Math.Max(maxColumnWidths[4], data.ToList()[i].Gender.Length);
+
+                if(data.ToList()[i].Gender != null)
+                {
+                    maxColumnWidths[4] = Math.Max(maxColumnWidths[4], data.ToList()[i].Gender.Length);
+                }
+                
                 maxColumnWidths[5] = Math.Max(maxColumnWidths[5], data.ToList()[i].Email.ToString().Length);
                 maxColumnWidths[6] = Math.Max(maxColumnWidths[6], data.ToList()[i].MobileNumber.ToString().Length);
                 maxColumnWidths[7] = Math.Max(maxColumnWidths[7], data.ToList()[i].Address.ToString().Length);
@@ -201,7 +206,7 @@ namespace AlumniManagement.Frontend.Repositories
 
             for (int i = 0; i < genderList.Count(); i++)
             {
-                masterSheet.Cells[i, 3].PutValue(degreeList[i]);
+                masterSheet.Cells[i, 3].PutValue(genderList[i]);
             }
 
             masterSheet.VisibilityType = VisibilityType.VeryHidden;
@@ -269,20 +274,10 @@ namespace AlumniManagement.Frontend.Repositories
             lastNameVal.ErrorTitle = "Invalid input";
             lastNameVal.ErrorMessage = "The text length max is 3 characters.";
 
-            int emailI = 4; // Index kolom untuk email
+            int emailI = 5; // Index kolom untuk email
             CellArea email = CellArea.CreateCellArea(1, emailI, 1000, emailI);
             Validation emailVal = workSheet.Validations[workSheet.Validations.Add(email)];
 
-            //Ubah tipe validasi menjadi Custom untuk validasi dengan formula
-            //emailVal.Type = ValidationType.Custom;
-
-            //Gunakan formula untuk validasi email
-            //emailVal.Formula1 = @"=AND(ISTEXT(RC), ISNUMBER(SEARCH(""@"", RC)), ISNUMBER(SEARCH(""."", RC)))";
-
-            //emailVal.ShowError = true;
-            //emailVal.AlertStyle = ValidationAlertType.Stop;
-            //emailVal.ErrorTitle = "Invalid Email";
-            //emailVal.ErrorMessage = "Please enter a valid email address.";
 
             emailVal.ShowInput = true;
             emailVal.InputTitle = "Enter Email";
@@ -290,7 +285,7 @@ namespace AlumniManagement.Frontend.Repositories
 
 
 
-            int mobileNumI = 5; // Index kolom state Province Code
+            int mobileNumI = 6; // Index kolom state Province Code
             CellArea mobileArea = CellArea.CreateCellArea(1, mobileNumI, 1000, mobileNumI);
             Validation mobileVal = workSheet.Validations[workSheet.Validations.Add(mobileArea)];
             mobileVal.Type = ValidationType.TextLength;
@@ -314,7 +309,7 @@ namespace AlumniManagement.Frontend.Repositories
             mobileVal.InputTitle = "Enter Phone Number";
             mobileVal.InputMessage = "Enter a valid Number using Indonesian Number Code. Example: 08xxxxxxx";
 
-            int dOBI = 8;
+            int dOBI = 9;
             CellArea dateArea = CellArea.CreateCellArea(1, dOBI, 1000, dOBI);
             Validation dateVal = workSheet.Validations[workSheet.Validations.Add(dateArea)];
             dateVal.Type = ValidationType.Date;
@@ -332,7 +327,7 @@ namespace AlumniManagement.Frontend.Repositories
 
 
             // Validation for Graduation Year
-            int gradeYearI = 9;
+            int gradeYearI = 10;
             CellArea yearArea = CellArea.CreateCellArea(1, gradeYearI, 1000, gradeYearI);
             Validation yearVal = workSheet.Validations[workSheet.Validations.Add(yearArea)];
             yearVal.Type = ValidationType.Date;
@@ -368,9 +363,9 @@ namespace AlumniManagement.Frontend.Repositories
                 string FirstName = worksheet.Cells[i, 1].StringValue;
                 string MiddleName = (worksheet.Cells[i, 2].StringValue ?? "") ;
                 string LastName = worksheet.Cells[i, 3].StringValue;
-                string Gender = worksheet.Cells[i, 4].StringValue;
-                string Email = worksheet.Cells[i, 5].StringValue;
-                string MobileNumber = ConvertMobileNumber(worksheet,i);
+                string Gender = GenderValue(worksheet,i, listStringError);
+                string Email = ValidateEmail(worksheet,i, listStringError);
+                string MobileNumber = ConvertMobileNumber(worksheet,i,listStringError);
                 string Address = worksheet.Cells[i, 7].StringValue;
                 string StateDistrict = worksheet.Cells[i, 8].StringValue;
                 DateTime DateOfBirth = ConvertDOB(worksheet,i);
@@ -408,6 +403,12 @@ namespace AlumniManagement.Frontend.Repositories
                     LinkedInProfile = LinkedInProfile,
                     ModifiedDate= DateTime.Now,
                     Gender = Gender,
+                    ErrorDetails = String.Join(" ,", listStringError),
+                    FullName = FirstName + " " + (MiddleName ?? "") + " " + LastName,
+                    StateName = stateName,
+                    DistrictName = districtName,
+                    MajorName = majorName,
+                    FacultyName = facultName
 
                 };
 
@@ -450,6 +451,19 @@ namespace AlumniManagement.Frontend.Repositories
             }
         }
 
+        private string GenderValue(Worksheet worksheet, int i, List<string> errorList)
+        {
+            if (worksheet.Cells[i, 4].Value != null)
+            {
+                return worksheet.Cells[i, 4].StringValue;
+            }
+            else
+            {
+                errorList.Add("Gender is null");
+                return "";
+            }
+        }
+
         private string DateConverter(DateTime? dateTime)
         {
             if (dateTime == DateTime.MinValue || dateTime == null) { return "N/A"; }
@@ -482,9 +496,9 @@ namespace AlumniManagement.Frontend.Repositories
         {
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"; // Pola email yang valid
 
-            if (worksheet.Cells[i, 4].Value != null) // Asumsikan kolom ke-6 menyimpan email
+            if (worksheet.Cells[i, 5].Value != null) // Asumsikan kolom ke-6 menyimpan email
             {
-                string email = worksheet.Cells[i, 4].StringValue.Trim();
+                string email = worksheet.Cells[i, 5].StringValue.Trim();
 
                 if (!Regex.IsMatch(email, pattern))
                 {

@@ -476,6 +476,9 @@ namespace AlumniManagement.Frontend.Controllers
         {
             var resultListImported = ImportExcel(file);
 
+         
+
+
             ViewBag.ValidData = resultListImported.Where(a => a.ErrorDetails.Count() == 0).Count();
             ViewBag.ErrorData = resultListImported.Where(a => a.ErrorDetails.Count() > 0).Count();
             ViewBag.RecordData = resultListImported.Count();
@@ -552,7 +555,7 @@ namespace AlumniManagement.Frontend.Controllers
             catch (Exception ex)
             {
 
-                TempData["SuccessMessage"] = "Alumni updated Failed " + ex.Message;
+                TempData["ErrorMessage"] = "Alumni updated Failed " + ex.Message;
 
                 return RedirectToAction("Index");
             }
