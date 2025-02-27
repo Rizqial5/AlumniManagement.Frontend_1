@@ -41,7 +41,8 @@ namespace AlumniManagement.Frontend.Repositories
                 GraduationYear = a.GraduationYear,
                 Degree = a.Degree,
                 FacultyMajor = a.FacultyName + " - " + a.MajorName,
-                LinkedInProfile = a.LinkedInProfile
+                LinkedInProfile = a.LinkedInProfile,
+                Gender = a.Gender
             });
 
             //dropdown
@@ -53,6 +54,12 @@ namespace AlumniManagement.Frontend.Repositories
                 "S1",
                 "S2",
                 "S3"
+            };
+
+            var genderList = new List<string>()
+            {
+                "Male",
+                "Female"
             };
 
 
@@ -68,28 +75,30 @@ namespace AlumniManagement.Frontend.Repositories
             workSheet.Cells[0, 1].PutValue("First Name");
             workSheet.Cells[0, 2].PutValue("Middle Name");
             workSheet.Cells[0, 3].PutValue("Last Name");
-            workSheet.Cells[0, 4].PutValue("Email");
-            workSheet.Cells[0, 5].PutValue("Mobile Number");
-            workSheet.Cells[0, 6].PutValue("Address");
-            workSheet.Cells[0, 7].PutValue("State - District");
-            workSheet.Cells[0, 8].PutValue("Date of Birth");
-            workSheet.Cells[0, 9].PutValue("Graduation Year");
-            workSheet.Cells[0, 10].PutValue("Degree");
-            workSheet.Cells[0, 11].PutValue("Faculty Major");
-            workSheet.Cells[0, 12].PutValue("LinkedIn Profile");
+            workSheet.Cells[0, 4].PutValue("Gender");
+            workSheet.Cells[0, 5].PutValue("Email");
+            workSheet.Cells[0, 6].PutValue("Mobile Number");
+            workSheet.Cells[0, 7].PutValue("Address");
+            workSheet.Cells[0, 8].PutValue("State - District");
+            workSheet.Cells[0, 9].PutValue("Date of Birth");
+            workSheet.Cells[0, 10].PutValue("Graduation Year");
+            workSheet.Cells[0, 11].PutValue("Degree");
+            workSheet.Cells[0, 12].PutValue("Faculty Major");
+            workSheet.Cells[0, 13].PutValue("LinkedIn Profile");
 
             maxColumnWidths[1] = "First Name".Length;
             maxColumnWidths[2] = "Middle Name".Length;
             maxColumnWidths[3] = "Last Name".Length;
-            maxColumnWidths[4] = "Email".Length;
-            maxColumnWidths[5] = "Mobile Number".Length;
-            maxColumnWidths[6] = "Address".Length;
-            maxColumnWidths[7] = "State - District".Length;
-            maxColumnWidths[8] = "Date of Birth".Length;
-            maxColumnWidths[9] = "Graduation Year".Length;
-            maxColumnWidths[10] = "Degree".Length;
-            maxColumnWidths[11] = "Faculty Major".Length;
-            maxColumnWidths[12] = "LinkedIn Profile".Length;
+            maxColumnWidths[4] = "Gender".Length;
+            maxColumnWidths[5] = "Email".Length;
+            maxColumnWidths[6] = "Mobile Number".Length;
+            maxColumnWidths[7] = "Address".Length;
+            maxColumnWidths[8] = "State - District".Length;
+            maxColumnWidths[9] = "Date of Birth".Length;
+            maxColumnWidths[10] = "Graduation Year".Length;
+            maxColumnWidths[11] = "Degree".Length;
+            maxColumnWidths[12] = "Faculty Major".Length;
+            maxColumnWidths[13] = "LinkedIn Profile".Length;
 
             workSheet.Cells.HideColumn(0);
 
@@ -130,15 +139,16 @@ namespace AlumniManagement.Frontend.Repositories
                 workSheet.Cells[i + 1, 1].PutValue(data.ToList()[i].FirstName);
                 workSheet.Cells[i + 1, 2].PutValue(data.ToList()[i].MiddleName);
                 workSheet.Cells[i + 1, 3].PutValue(data.ToList()[i].LastName);
-                workSheet.Cells[i + 1, 4].PutValue(data.ToList()[i].Email);
-                workSheet.Cells[i + 1, 5].PutValue(data.ToList()[i].MobileNumber);
-                workSheet.Cells[i + 1, 6].PutValue(data.ToList()[i].Address);
-                workSheet.Cells[i + 1, 7].PutValue(data.ToList()[i].StateDistrict);
-                workSheet.Cells[i + 1, 8].PutValue(data.ToList()[i].DateOfBirth);
-                workSheet.Cells[i + 1, 9].PutValue(data.ToList()[i].GraduationYear);
-                workSheet.Cells[i + 1, 10].PutValue(data.ToList()[i].Degree);
-                workSheet.Cells[i + 1, 11].PutValue(data.ToList()[i].FacultyMajor);
-                workSheet.Cells[i + 1, 12].PutValue(data.ToList()[i].LinkedInProfile);
+                workSheet.Cells[i + 1, 4].PutValue(data.ToList()[i].Gender);
+                workSheet.Cells[i + 1, 5].PutValue(data.ToList()[i].Email);
+                workSheet.Cells[i + 1, 6].PutValue(data.ToList()[i].MobileNumber);
+                workSheet.Cells[i + 1, 7].PutValue(data.ToList()[i].Address);
+                workSheet.Cells[i + 1, 8].PutValue(data.ToList()[i].StateDistrict);
+                workSheet.Cells[i + 1, 9].PutValue(data.ToList()[i].DateOfBirth);
+                workSheet.Cells[i + 1, 10].PutValue(data.ToList()[i].GraduationYear);
+                workSheet.Cells[i + 1, 11].PutValue(data.ToList()[i].Degree);
+                workSheet.Cells[i + 1, 12].PutValue(data.ToList()[i].FacultyMajor);
+                workSheet.Cells[i + 1, 13].PutValue(data.ToList()[i].LinkedInProfile);
                     
 
                 maxColumnWidths[1] = Math.Max(maxColumnWidths[1], data.ToList()[i].FirstName.Length);
@@ -148,18 +158,19 @@ namespace AlumniManagement.Frontend.Repositories
                 }
            
                 maxColumnWidths[3] = Math.Max(maxColumnWidths[3], data.ToList()[i].LastName.Length);
-                maxColumnWidths[4] = Math.Max(maxColumnWidths[4], data.ToList()[i].Email.ToString().Length);
-                maxColumnWidths[5] = Math.Max(maxColumnWidths[5], data.ToList()[i].MobileNumber.ToString().Length);
-                maxColumnWidths[6] = Math.Max(maxColumnWidths[6], data.ToList()[i].Address.ToString().Length);
-                maxColumnWidths[7] = Math.Max(maxColumnWidths[7], data.ToList()[i].StateDistrict.ToString().Length);
-                maxColumnWidths[8] = Math.Max(maxColumnWidths[8], data.ToList()[i].DateOfBirth.ToString().Length);
-                maxColumnWidths[9] = Math.Max(maxColumnWidths[9], data.ToList()[i].GraduationYear.ToString().Length);
-                maxColumnWidths[10] = Math.Max(maxColumnWidths[10], data.ToList()[i].Degree.ToString().Length);
-                maxColumnWidths[11] = Math.Max(maxColumnWidths[11], data.ToList()[i].FacultyMajor.ToString().Length);
+                maxColumnWidths[4] = Math.Max(maxColumnWidths[4], data.ToList()[i].Gender.Length);
+                maxColumnWidths[5] = Math.Max(maxColumnWidths[5], data.ToList()[i].Email.ToString().Length);
+                maxColumnWidths[6] = Math.Max(maxColumnWidths[6], data.ToList()[i].MobileNumber.ToString().Length);
+                maxColumnWidths[7] = Math.Max(maxColumnWidths[7], data.ToList()[i].Address.ToString().Length);
+                maxColumnWidths[8] = Math.Max(maxColumnWidths[8], data.ToList()[i].StateDistrict.ToString().Length);
+                maxColumnWidths[9] = Math.Max(maxColumnWidths[9], data.ToList()[i].DateOfBirth.ToString().Length);
+                maxColumnWidths[10] = Math.Max(maxColumnWidths[10], data.ToList()[i].GraduationYear.ToString().Length);
+                maxColumnWidths[11] = Math.Max(maxColumnWidths[11], data.ToList()[i].Degree.ToString().Length);
+                maxColumnWidths[12] = Math.Max(maxColumnWidths[12], data.ToList()[i].FacultyMajor.ToString().Length);
 
                 if (data.ToList()[i].LinkedInProfile != null)
                 {
-                    maxColumnWidths[12] = Math.Max(maxColumnWidths[12], data.ToList()[i].LinkedInProfile.ToString().Length);
+                    maxColumnWidths[13] = Math.Max(maxColumnWidths[13], data.ToList()[i].LinkedInProfile.ToString().Length);
                 }
 
 
@@ -188,6 +199,11 @@ namespace AlumniManagement.Frontend.Repositories
                 masterSheet.Cells[i, 2].PutValue(degreeList[i]);
             }
 
+            for (int i = 0; i < genderList.Count(); i++)
+            {
+                masterSheet.Cells[i, 3].PutValue(degreeList[i]);
+            }
+
             masterSheet.VisibilityType = VisibilityType.VeryHidden;
 
             //dropdown
@@ -208,6 +224,12 @@ namespace AlumniManagement.Frontend.Repositories
             Validation degreeVal = workSheet.Validations[workSheet.Validations.Add(degreeArea)];
             degreeVal.Type = ValidationType.List;
             degreeVal.Formula1 = "=Master!$C$1:$C$" + degreeList.Count();
+
+            int genderIndex = 4;
+            CellArea genderArea = CellArea.CreateCellArea(1, genderIndex, 1000, genderIndex);
+            Validation genderVal = workSheet.Validations[workSheet.Validations.Add(genderArea)];
+            genderVal.Type = ValidationType.List;
+            genderVal.Formula1 = "=Master!$D$1:$D$" + genderList.Count();
 
             //Firsname text lenght
             int firstNameI = 1; // Index kolom state Province Code
@@ -346,16 +368,17 @@ namespace AlumniManagement.Frontend.Repositories
                 string FirstName = worksheet.Cells[i, 1].StringValue;
                 string MiddleName = (worksheet.Cells[i, 2].StringValue ?? "") ;
                 string LastName = worksheet.Cells[i, 3].StringValue;
-                string Email = ValidateEmail(worksheet,i,listStringError);
-                string MobileNumber = ConvertMobileNumber(worksheet,i,listStringError);
-                string Address = worksheet.Cells[i, 6].StringValue;
-                string StateDistrict = worksheet.Cells[i, 7].StringValue;
+                string Gender = worksheet.Cells[i, 4].StringValue;
+                string Email = worksheet.Cells[i, 5].StringValue;
+                string MobileNumber = ConvertMobileNumber(worksheet,i);
+                string Address = worksheet.Cells[i, 7].StringValue;
+                string StateDistrict = worksheet.Cells[i, 8].StringValue;
                 DateTime DateOfBirth = ConvertDOB(worksheet,i);
 
-                int GraduationYear = worksheet.Cells[i, 9].IntValue;
-                string Degree = worksheet.Cells[i, 10].StringValue;
-                string FacultyMajor = worksheet.Cells[i, 11].StringValue;
-                string LinkedInProfile = worksheet.Cells[i, 12].StringValue;
+                int GraduationYear = worksheet.Cells[i, 10].IntValue;
+                string Degree = worksheet.Cells[i, 11].StringValue;
+                string FacultyMajor = worksheet.Cells[i, 12].StringValue;
+                string LinkedInProfile = worksheet.Cells[i, 13].StringValue;
 
                 var parts = StateDistrict.Split(new[] { " - " }, StringSplitOptions.None);
                 string stateName = parts[0];
@@ -365,7 +388,8 @@ namespace AlumniManagement.Frontend.Repositories
                 string facultName = parts2[0];
                 string majorName = parts2[1];
 
-                
+
+
 
                 var alumniData = new AlumniModel
                 {
@@ -383,12 +407,7 @@ namespace AlumniManagement.Frontend.Repositories
                     MajorID = _majorServiceClient.GetMajorIdByName(majorName).MajorID,
                     LinkedInProfile = LinkedInProfile,
                     ModifiedDate= DateTime.Now,
-                    FullName = FirstName + " " + (MiddleName ?? "") + " " + LastName,
-                    FullAddress = Address + ", " + districtName + ", " + stateName,
-                    ShowDateOfBirth = DateConverter(DateOfBirth),
-                    FacultyName = facultName,
-                    StateName = majorName,
-                    ErrorDetails = string.Join(", ", listStringError)
+                    Gender = Gender,
 
                 };
 
@@ -421,9 +440,9 @@ namespace AlumniManagement.Frontend.Repositories
 
         private DateTime ConvertDOB(Worksheet worksheet, int i)
         {
-            if (worksheet.Cells[i, 8].Value != null)
+            if (worksheet.Cells[i, 9].Value != null)
             {
-                return worksheet.Cells[i, 8].DateTimeValue;
+                return worksheet.Cells[i, 9].DateTimeValue;
             }
             else
             {
@@ -442,16 +461,16 @@ namespace AlumniManagement.Frontend.Repositories
         {
             string pattern = @"^08\d{8,13}$"; // Nomor HP harus dimulai dengan 08 dan hanya angka (10-15 digit)
 
-            if (worksheet.Cells[i, 5].Value != null)
+            if (worksheet.Cells[i, 6].Value != null)
             {
-                if (!Regex.IsMatch(worksheet.Cells[i, 5].StringValue, pattern))
+                if (!Regex.IsMatch(worksheet.Cells[i, 6].StringValue, pattern))
                 {
                     //throw new Exception("Invalid phone number! using only Indonesian Number (08xxxxxxx) and contain only numbers (10-15 digits).");
 
                     errorList.Add("Nomor Hp Error");
                 }
 
-                return worksheet.Cells[i, 5].StringValue;
+                return worksheet.Cells[i, 6].StringValue;
             }
             else
             {

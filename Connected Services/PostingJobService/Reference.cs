@@ -790,6 +790,12 @@ namespace AlumniManagement.Frontend.PostingJobService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPostingJobService/UpsertJobPosting", ReplyAction="http://tempuri.org/IPostingJobService/UpsertJobPostingResponse")]
         System.Threading.Tasks.Task UpsertJobPostingAsync(AlumniManagement.Frontend.PostingJobService.JobPostingDTO jobPostingDTO);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPostingJobService/UpsertJobPostingList", ReplyAction="http://tempuri.org/IPostingJobService/UpsertJobPostingListResponse")]
+        void UpsertJobPostingList(AlumniManagement.Frontend.PostingJobService.JobPostingDTO[] jobPostingDTO);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPostingJobService/UpsertJobPostingList", ReplyAction="http://tempuri.org/IPostingJobService/UpsertJobPostingListResponse")]
+        System.Threading.Tasks.Task UpsertJobPostingListAsync(AlumniManagement.Frontend.PostingJobService.JobPostingDTO[] jobPostingDTO);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -913,6 +919,14 @@ namespace AlumniManagement.Frontend.PostingJobService {
         
         public System.Threading.Tasks.Task UpsertJobPostingAsync(AlumniManagement.Frontend.PostingJobService.JobPostingDTO jobPostingDTO) {
             return base.Channel.UpsertJobPostingAsync(jobPostingDTO);
+        }
+        
+        public void UpsertJobPostingList(AlumniManagement.Frontend.PostingJobService.JobPostingDTO[] jobPostingDTO) {
+            base.Channel.UpsertJobPostingList(jobPostingDTO);
+        }
+        
+        public System.Threading.Tasks.Task UpsertJobPostingListAsync(AlumniManagement.Frontend.PostingJobService.JobPostingDTO[] jobPostingDTO) {
+            return base.Channel.UpsertJobPostingListAsync(jobPostingDTO);
         }
     }
 }

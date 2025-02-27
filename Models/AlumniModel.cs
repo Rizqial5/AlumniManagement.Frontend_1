@@ -77,6 +77,9 @@ namespace AlumniManagement.Frontend.Models
 
         public string PhotoName { get; set; }
 
+        [Required(ErrorMessage = "Gender is required")]
+        public string Gender { get; set; }
+
         // tambahan
         [DisplayName("Address")]
         public string FullAddress { get; set; }

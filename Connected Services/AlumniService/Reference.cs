@@ -62,6 +62,9 @@ namespace AlumniManagement.Frontend.AlumniService {
         private string FullNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string GenderField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> GraduationYearField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -284,6 +287,19 @@ namespace AlumniManagement.Frontend.AlumniService {
                 if ((object.ReferenceEquals(this.FullNameField, value) != true)) {
                     this.FullNameField = value;
                     this.RaisePropertyChanged("FullName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Gender {
+            get {
+                return this.GenderField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.GenderField, value) != true)) {
+                    this.GenderField = value;
+                    this.RaisePropertyChanged("Gender");
                 }
             }
         }
