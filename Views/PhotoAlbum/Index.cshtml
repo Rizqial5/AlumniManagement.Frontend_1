@@ -29,15 +29,12 @@
                 margin: 0 5px;
             }
 
-                .pagination .page-item a { /* Styling untuk semua link pagination */
+                .pagination .page-item a {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
+                    padding: 0.5rem 0.75rem;
                     text-align: center;
-                    line-height: 40px;
                     color: #495057;
                     background-color: #f8f9fa;
                     border: 1px solid #ddd;
@@ -77,20 +74,27 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3">
     @foreach (var item in Model)
     {
-        <div class="col-md-3 mb-4">
-            <div class="card">
+        <div class="col">
+            <div class="card h-100 text-center p-2">
                 <a href="@Url.Action("ListPhoto","PhotoAlbum", new {albumId = item.AlbumID})">
-                    <img src="@item.ThumbnailImage" class="card-img-top" alt="Album Image" style="cursor: pointer;">
+                    <img src="@item.ThumbnailImage" class="card-img-top mx-auto" alt="Album Image"
+                         style="cursor: pointer; width: 120px; height: 120px; object-fit: cover;">
                 </a>
-                <div class="card-body text-center">
-                    <h5 class="card-title">@item.AlbumName</h5>
-                    <p class="card-text"><small class="text-muted">Last Updated: @item.ModifiedDate.ToString("dd-MMM-yyyy HH:mm:ss tt")</small></p>
+                <div class="card-body p-2">
+                    <h6 class="card-title text-center w-100"
+                        style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        @item.AlbumName
+                    </h6>
                     <div class="d-flex justify-content-center">
-                        <button class="btn btn-sm btn-outline-primary mx-1" id="editButton" data-id="@item.AlbumID" data-toggle="modal" data-target="#editModal"><i class="fas fa-pencil-alt"></i></button>
-                        <button class="btn btn-sm btn-outline-danger mx-1" id="deleteButton" data-id="@item.AlbumID"><i class="fas fa-trash-alt"></i></button>
+                        <button class="btn btn-sm btn-outline-primary mx-1" id="editButton" data-id="@item.AlbumID" data-toggle="modal" data-target="#editModal">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger mx-1" id="deleteButton" data-id="@item.AlbumID">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                         <input type="checkbox" class="form-check-input mx-1 selectCheckbox" data-id="@item.AlbumID">
                     </div>
                 </div>
@@ -99,26 +103,33 @@
     }
 </div>
 
-<div class="d-flex justify-content-between align-items-center mt-4">
-    <select class="form-select w-auto">
-        <option>10</option>
-        <option>20</option>
-        <option>50</option>
-    </select>
-    <div class="text-center">
+<div class="d-flex  align-items-center mt-4">
+    <!-- Dropdown untuk memilih jumlah item per halaman -->
+    <div>
+        <select class="form-select w-auto">
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+        </select>
+    </div>
+
+    <!-- Pagination -->
+    <div class="ms-3">
         @Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = ViewBag.PageSize }),
-               new PagedListRenderOptions
-               {
-                   DisplayLinkToFirstPage = PagedListDisplayMode.Always,
-                   DisplayLinkToLastPage = PagedListDisplayMode.Always,
-                   DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-                   DisplayLinkToNextPage = PagedListDisplayMode.Always,
-                   DisplayEllipsesWhenNotShowingAllPageNumbers = true,
-                   MaximumPageNumbersToDisplay = 5,
-                   ContainerDivClasses = new[] { "pagination-container" },
-                   UlElementClasses = new[] { "pagination", "justify-content-center" },
-                   LiElementClasses = new[] { "page-item" } // Tidak ada PageClasses, jadi kita pakai CSS
-               })
+                 new PagedListRenderOptions
+                 {
+                     DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                     DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                     DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                     DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                     DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                     MaximumPageNumbersToDisplay = 5,
+                     ContainerDivClasses = new[] { "pagination-container" },
+                     UlElementClasses = new[] { "pagination", "justify-content-center" },
+                     LiElementClasses = new[] { "page-item" },
+                     LinkToPreviousPageFormat = "Previous",
+                     LinkToNextPageFormat = "Next"
+                 })
     </div>
 </div>
 

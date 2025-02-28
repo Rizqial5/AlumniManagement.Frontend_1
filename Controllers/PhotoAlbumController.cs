@@ -43,6 +43,14 @@ namespace AlumniManagement.Frontend.Controllers
             var data = _photoAlbumRepository.GetPhotoAlbums().ToList();
 
 
+            foreach (var item in data)
+            {
+                if(item.ThumbnailImage == "")
+                {
+                    item.ThumbnailImage = "/App_Data/Albums/blank-profile-picture-973460_1280.png";
+                }
+            }
+
 
             return View(data.ToPagedList(pageNumber,size));
         }

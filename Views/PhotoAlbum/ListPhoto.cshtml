@@ -28,15 +28,12 @@
                 margin: 0 5px;
             }
 
-                .pagination .page-item a { /* Styling untuk semua link pagination */
+                .pagination .page-item a {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
+                    padding: 0.5rem 0.75rem;
                     text-align: center;
-                    line-height: 40px;
                     color: #495057;
                     background-color: #f8f9fa;
                     border: 1px solid #ddd;
@@ -68,63 +65,72 @@
 <div class="d-flex mb-3">
     <a id="addButton" class="btn btn-primary">Add Photos</a>
     <button id="deleteSelected" class="btn btn-danger mx-2">Delete Selected</button>
+    <a class="btn btn-primary" href="@Url.Action("Index","PhotoALbum")">Back to Gallery</a>
 </div>
 
 <div class="row">
     @{ int itemIndex = 0; }
     @foreach (var item in Model)
     {
-        <div class="col-md-3 mb-4">
-            <div class="card">
+        <div class="col-md-3 mb-4 d-flex align-items-stretch">
+            <div class="card w-100">
                 <img src="@item.ShowPhoto"
-                     class="card-img-top photo-thumbnail"
+                     class="card-img-top img-fluid"
                      alt="Album Thumbnail"
                      data-id="@item.PhotoID"
                      data-albumid="@item.AlbumID"
                      data-index="@itemIndex"
-                     style="cursor: pointer;">
+                     style="cursor: pointer; height: 200px; object-fit: cover;">
 
-                <div class="card-body text-center">
+                <div class="card-body d-flex flex-column text-center">
                     <p class="card-text">
                         <input type="checkbox" class="form-check-input mx-1 selectCheckbox"
                                data-id="@item.PhotoID" data-albumId="@item.AlbumID">
                     </p>
 
                     <!-- Radio button untuk memilih thumbnail album -->
-                    <input type="radio" class="form-check-input mx-1 albumThumbnailRadio"
-                           name="albumThumbnail_@item.AlbumID"
-                           data-id="@item.PhotoID"
-                           data-albumid="@item.AlbumID"
-                           @(item.IsPhotoAlbumThumbnail == true ? "checked" : "")>
-                    Set as Album Thumbnail
+                    <div class="mt-auto">
+                        <input type="radio" class="form-check-input mx-1 albumThumbnailRadio"
+                               name="albumThumbnail_@item.AlbumID"
+                               data-id="@item.PhotoID"
+                               data-albumid="@item.AlbumID"
+                               @(item.IsPhotoAlbumThumbnail == true ? "checked" : "")>
+                        Set as Album Thumbnail
+                    </div>
                 </div>
             </div>
         </div>
-
         itemIndex++;
     }
 </div>
 
-<div class="d-flex justify-content-between align-items-center mt-4">
-    <select class="form-select w-auto">
-        <option>10</option>
-        <option>20</option>
-        <option>50</option>
-    </select>
-    <div class="text-center">
+<div class="d-flex  align-items-center mt-4">
+    <!-- Dropdown untuk memilih jumlah item per halaman -->
+    <div>
+        <select class="form-select w-auto">
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+        </select>
+    </div>
+
+    <!-- Pagination -->
+    <div class="ms-3">
         @Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = ViewBag.PageSize }),
-               new PagedListRenderOptions
-               {
-                   DisplayLinkToFirstPage = PagedListDisplayMode.Always,
-                   DisplayLinkToLastPage = PagedListDisplayMode.Always,
-                   DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-                   DisplayLinkToNextPage = PagedListDisplayMode.Always,
-                   DisplayEllipsesWhenNotShowingAllPageNumbers = true,
-                   MaximumPageNumbersToDisplay = 5,
-                   ContainerDivClasses = new[] { "pagination-container" },
-                   UlElementClasses = new[] { "pagination", "justify-content-center" },
-                   LiElementClasses = new[] { "page-item" } // Tidak ada PageClasses, jadi kita pakai CSS
-               })
+                 new PagedListRenderOptions
+                 {
+                     DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                     DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                     DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                     DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                     DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                     MaximumPageNumbersToDisplay = 5,
+                     ContainerDivClasses = new[] { "pagination-container" },
+                     UlElementClasses = new[] { "pagination", "justify-content-center" },
+                     LiElementClasses = new[] { "page-item" },
+                     LinkToPreviousPageFormat = "Previous",
+                     LinkToNextPageFormat = "Next"
+                 })
     </div>
 </div>
 
@@ -168,12 +174,12 @@
             var currentIndex = 0;
             var photos = [];
 
-            // Ketika gambar diklik, tampilkan modal dan simpan daftar foto
-            $(".photo-thumbnail").on("click", function () {
-                photos = $(".photo-thumbnail").map(function () {
+            // Event delegation untuk menangkap klik pada gambar
+            $(document).on("click", ".card-img-top", function () {
+                photos = $(".card-img-top").map(function (index, element) {
                     return {
-                        src: $(this).attr("src"),
-                        index: $(this).data("index")
+                        src: $(element).attr("src"),
+                        index: index
                     };
                 }).get();
 
