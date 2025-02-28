@@ -21,17 +21,20 @@ namespace AlumniManagement.Frontend.Models
         [StringLength(255, ErrorMessage = "Max char length is 100")]
         public string Description { get; set; }
 
+   
         public string EventImagePath { get; set; }
 
 
         public string EventImageName { get; set; }
 
         [DataType(DataType.Date)]
+        [Required(ErrorMessage ="Start Date is Required")]
         [DisplayName("Start Date")]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
         public System.Nullable<System.DateTime> StartDate { get; set; }
 
         [DataType(DataType.Date)]
+        [Required(ErrorMessage = "End Date is Required")]
         [DisplayName("End Date")]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
         public System.Nullable<System.DateTime> EndDate { get; set; }

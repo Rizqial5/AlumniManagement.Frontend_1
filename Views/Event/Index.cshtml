@@ -39,7 +39,7 @@
 
 <h2>Events</h2>
 
-<button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Add Events</button>
+<button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Add New</button>
 
 <button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
 
@@ -151,7 +151,7 @@
                                 return ""; // Jika ShowImagePath tidak ada, return kosong
                             }
                             return '<div><img class="img-thumbnail preview-image" src="' + row.ShowImage +
-                                '" alt="Alumni Image" style="max-width: 120px; cursor: pointer;" ' +
+                                '" alt="Alumni Image" style="max-width: 300px; cursor: pointer;" ' +
                                 'data-src="' + row.ShowImage + '" data-name="' + row.Title + '"/></div>';
                         }
                     },
@@ -192,7 +192,33 @@
                     if (data.IsClosed) { // Jika isClosed bernilai true
                         $(row).css("background-color", "#BAE0F3"); // Warna biru muda
                     }
-                }
+                },
+                "columnDefs": [
+                    {
+                        "targets": 4,  // Indeks kolom "DateDisplay" (mulai dari 0)
+                        "width": "100px"  // Menambahkan kelas untuk penataan teks di tengah
+                    },
+                    {
+                        "targets": 5,  // Indeks kolom "DateDisplay" (mulai dari 0)
+                        "width": "250px"  // Menambahkan kelas untuk penataan teks di tengah
+                    },
+                    {
+                        "targets": 6,  // Indeks kolom "DateDisplay" (mulai dari 0)
+                        "width": "230px",  // Tentukan lebar kolom
+                        "className": "text-center"  // Menambahkan kelas untuk penataan teks di tengah
+                    },
+                    {
+                        "targets": 3,  // Indeks kolom "DateDisplay" (mulai dari 0)
+                        "width": "300px",  // Tentukan lebar kolom
+                        "className": "text-center"  // Menambahkan kelas untuk penataan teks di tengah
+                    },
+                    {
+                        "targets": 8,  // Indeks kolom "ModifiedDate" (mulai dari 0)
+                        "width": "180px"  // Tentukan lebar kolom
+                        // Menambahkan kelas untuk penataan teks di tengah
+                    }
+                ]
+  
             });
 
             $('#eventData_filter input').unbind();
@@ -379,6 +405,25 @@
                                 $('#photoPreview').attr('src', reader.result).removeClass('d-none');
                             };
                             reader.readAsDataURL(file);
+                        }
+                    });
+
+                    document.getElementById('submitBtn').addEventListener('click', function (event) {
+                        // Ambil elemen input file
+                        var fileInput = document.getElementById('photoUpload');
+
+                        // Cek apakah file dipilih
+                        if (!fileInput.files.length) {
+                            // Jika tidak ada file yang dipilih, tampilkan pesan error
+                            alert('Please upload a photo before submitting.');
+                            event.preventDefault(); // Mencegah form untuk disubmit
+                        } else {
+                            // Cek jika file lebih besar dari 3MB
+                            var file = fileInput.files[0];
+                            if (file.size > 3 * 1024 * 1024) {
+                                alert('File size exceeds the maximum allowed size of 3MB.');
+                                event.preventDefault(); // Mencegah form untuk disubmit
+                            }
                         }
                     });
 

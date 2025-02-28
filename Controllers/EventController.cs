@@ -59,7 +59,7 @@ namespace AlumniManagement.Frontend.Controllers
         {
             var newEvent = new EventModel();
 
-            newEvent.IsClosed = true;
+            newEvent.IsClosed = false;
 
             return PartialView("_CreatePartial", newEvent);
         }

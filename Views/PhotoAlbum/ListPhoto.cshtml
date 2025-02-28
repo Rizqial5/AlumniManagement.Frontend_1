@@ -74,29 +74,29 @@
     {
         <div class="col-md-2 mb-4 d-flex align-items-stretch">
             <div class="card w-100" style="height: 300px;">
-                <!-- Membuat kartu lebih kotak -->
+                <!-- Gambar lebih dominan dengan memaksimalkan ruang kartu -->
                 <img src="@item.ShowPhoto"
                      class="card-img-top img-fluid"
                      alt="Album Thumbnail"
                      data-id="@item.PhotoID"
                      data-albumid="@item.AlbumID"
                      data-index="@itemIndex"
-                     style="cursor: pointer; height: 200px; width: 100%; object-fit: cover;"> <!-- Gambar lebih mendominasi -->
+                     style="cursor: pointer; height: 70%; width: 100%; object-fit: cover;"> <!-- Gambar lebih besar -->
 
-                <div class="card-body d-flex flex-column text-center">
-                    <p class="card-text">
+                <div class="card-body d-flex flex-column text-center" style="height: 30%;">
+                    <!-- Membuat card-body lebih kecil -->
+                    <div class="d-flex justify-content-center align-items-center">
+                        <!-- Checkbox -->
                         <input type="checkbox" class="form-check-input mx-1 selectCheckbox"
                                data-id="@item.PhotoID" data-albumId="@item.AlbumID">
-                    </p>
 
-                    <!-- Radio button untuk memilih thumbnail album -->
-                    <div class="mt-auto">
+                        <!-- Radio button untuk memilih thumbnail album -->
                         <input type="radio" class="form-check-input mx-1 albumThumbnailRadio"
                                name="albumThumbnail_@item.AlbumID"
                                data-id="@item.PhotoID"
                                data-albumid="@item.AlbumID"
                                @(item.IsPhotoAlbumThumbnail == true ? "checked" : "")>
-                        Set as Album Thumbnail
+                        <span class="ms-2">Album Thumbnail</span>
                     </div>
                 </div>
             </div>
@@ -110,30 +110,30 @@
 <div class="d-flex  align-items-center mt-4">
     <!-- Dropdown untuk memilih jumlah item per halaman -->
     <div>
-        <select class="form-select w-auto">
-            <option>10</option>
-            <option>20</option>
-            <option>50</option>
+        <select class="form-select w-auto" id="pageSizeSelect" onchange="changePageSize()">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
         </select>
     </div>
 
     <!-- Pagination -->
     <div class="ms-3">
         @Html.PagedListPager(Model, page => Url.Action("ListPhoto", new { albumId = ViewBag.AlbumId, page, pageSize = ViewBag.PageSize }),
-                 new PagedListRenderOptions
-                 {
-                     DisplayLinkToFirstPage = PagedListDisplayMode.Always,
-                     DisplayLinkToLastPage = PagedListDisplayMode.Always,
-                     DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-                     DisplayLinkToNextPage = PagedListDisplayMode.Always,
-                     DisplayEllipsesWhenNotShowingAllPageNumbers = true,
-                     MaximumPageNumbersToDisplay = 5,
-                     ContainerDivClasses = new[] { "pagination-container" },
-                     UlElementClasses = new[] { "pagination", "justify-content-center" },
-                     LiElementClasses = new[] { "page-item" },
-                     LinkToPreviousPageFormat = "Previous",
-                     LinkToNextPageFormat = "Next"
-                 })
+        new PagedListRenderOptions
+        {
+            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = PagedListDisplayMode.Always,
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+            MaximumPageNumbersToDisplay = ViewBag.PageSize,
+            ContainerDivClasses = new[] { "pagination-container" },
+            UlElementClasses = new[] { "pagination", "justify-content-center" },
+            LiElementClasses = new[] { "page-item" },
+            LinkToPreviousPageFormat = "Previous",
+            LinkToNextPageFormat = "Next"
+        })
     </div>
 </div>
 
@@ -173,6 +173,18 @@
         //    var photoId = $(this).data("id");
         //    window.location.href = "/Photo/Details/" + photoId;
         //});
+        function changePageSize() {
+            // Ambil nilai page size yang dipilih
+            var pageSize = document.getElementById("pageSizeSelect").value;
+
+            // Redirect ke URL yang sama dengan parameter pageSize yang baru
+            var url = new URL(window.location.href);
+            url.searchParams.set('pageSize', pageSize);
+            url.searchParams.set('page', 1); // Reset ke halaman pertama saat pageSize berubah
+
+            window.location.href = url.toString(); // Pindah ke URL baru
+        }
+
         $(document).ready(function () {
             var currentIndex = 0;
             var photos = [];
