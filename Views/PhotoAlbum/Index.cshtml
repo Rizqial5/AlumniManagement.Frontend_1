@@ -70,14 +70,14 @@
         <button class="btn btn-danger" id="deleteSelected">Delete Selected</button>
     </div>
     <div>
-        <input type="text" class="form-control" placeholder="Search.." />
+        <input type="text" id="searchInput" class="form-control" placeholder="Search.." />
     </div>
 </div>
 
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3">
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3" id="albumList">
     @foreach (var item in Model)
     {
-        <div class="col">
+        <div class="col album-item">
             <div class="card h-100 text-center p-2">
                 <a href="@Url.Action("ListPhoto","PhotoAlbum", new {albumId = item.AlbumID})">
                     <img src="@item.ThumbnailImage" class="card-img-top mx-auto" alt="Album Image"
@@ -148,6 +148,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
+
+        $(document).ready(function () {
+            // Fungsi untuk melakukan pencarian
+            $('#searchInput').on('input', function () {
+                var searchTerm = $(this).val().toLowerCase();
+
+                if (searchTerm.length >= 3) { // Mulai mencari jika minimal 3 karakter
+                    $('.album-item').each(function () {
+                        var albumName = $(this).find('.card-title').text().toLowerCase();
+
+                        if (albumName.indexOf(searchTerm) !== -1) {
+                            $(this).show(); // Tampilkan jika ditemukan
+                        } else {
+                            $(this).hide(); // Sembunyikan jika tidak ditemukan
+                        }
+                    });
+                } else {
+                    // Jika kurang dari 3 karakter, tampilkan semua item
+                    $('.album-item').show();
+                }
+            });
+        });
 
         function changePageSize() {
             // Ambil nilai page size yang dipilih
