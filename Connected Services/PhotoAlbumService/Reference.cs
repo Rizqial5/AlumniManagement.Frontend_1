@@ -31,6 +31,9 @@ namespace AlumniManagement.Frontend.PhotoAlbumService {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime ModifiedDateField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ThumbnailPhotoField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -76,6 +79,19 @@ namespace AlumniManagement.Frontend.PhotoAlbumService {
                 if ((this.ModifiedDateField.Equals(value) != true)) {
                     this.ModifiedDateField = value;
                     this.RaisePropertyChanged("ModifiedDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ThumbnailPhoto {
+            get {
+                return this.ThumbnailPhotoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ThumbnailPhotoField, value) != true)) {
+                    this.ThumbnailPhotoField = value;
+                    this.RaisePropertyChanged("ThumbnailPhoto");
                 }
             }
         }
@@ -272,6 +288,12 @@ namespace AlumniManagement.Frontend.PhotoAlbumService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoAlbumService/DeletePhoto", ReplyAction="http://tempuri.org/IPhotoAlbumService/DeletePhotoResponse")]
         System.Threading.Tasks.Task DeletePhotoAsync(int albumID, int photoID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoAlbumService/SetThumbnail", ReplyAction="http://tempuri.org/IPhotoAlbumService/SetThumbnailResponse")]
+        void SetThumbnail(int photoId, int albumId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoAlbumService/SetThumbnail", ReplyAction="http://tempuri.org/IPhotoAlbumService/SetThumbnailResponse")]
+        System.Threading.Tasks.Task SetThumbnailAsync(int photoId, int albumId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -371,6 +393,14 @@ namespace AlumniManagement.Frontend.PhotoAlbumService {
         
         public System.Threading.Tasks.Task DeletePhotoAsync(int albumID, int photoID) {
             return base.Channel.DeletePhotoAsync(albumID, photoID);
+        }
+        
+        public void SetThumbnail(int photoId, int albumId) {
+            base.Channel.SetThumbnail(photoId, albumId);
+        }
+        
+        public System.Threading.Tasks.Task SetThumbnailAsync(int photoId, int albumId) {
+            return base.Channel.SetThumbnailAsync(photoId, albumId);
         }
     }
 }

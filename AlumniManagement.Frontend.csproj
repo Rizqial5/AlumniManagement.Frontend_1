@@ -52,6 +52,12 @@
       <HintPath>..\..\Latihan Project\KSP2022\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -204,6 +210,7 @@
     <Compile Include="Models\ModelMapping.cs" />
     <Compile Include="Models\PhotoAlbumModel.cs" />
     <Compile Include="Models\PhotoModel.cs" />
+    <Compile Include="Models\PhotoShowThumbnail.cs" />
     <Compile Include="Models\ShowCandidateModel.cs" />
     <Compile Include="Models\SkillModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -397,6 +404,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -497,8 +505,13 @@
     <Content Include="Views\Event\_CreatePartial.cshtml" />
     <Content Include="Views\Event\_EditPartial.cshtml" />
     <Content Include="Views\PhotoAlbum\Index.cshtml" />
+    <Content Include="Views\PhotoAlbum\_CreatePhotoAlbum.cshtml" />
+    <Content Include="Views\PhotoAlbum\_EditPhotoAlbum.cshtml" />
+    <Content Include="Views\PhotoAlbum\ListPhoto.cshtml" />
+    <Content Include="Views\PhotoAlbum\_AddPhoto.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\Albums\" />
     <Folder Include="App_Data\AlumniImages\" />
     <Folder Include="App_Data\Events\" />
     <Folder Include="App_Data\Photo\" />

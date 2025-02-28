@@ -1,4 +1,5 @@
 ﻿using AlumniManagement.Frontend.Models;
+using AlumniManagement.Frontend.PhotoAlbumService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace AlumniManagement.Frontend.Interfaces
         IEnumerable<PhotoAlbumModel> GetPhotoAlbums();
 
 
-        
+
         IEnumerable<PhotoModel> GetAllPhotoByAlbumId(int AlbumId);
 
         
@@ -37,5 +38,7 @@ namespace AlumniManagement.Frontend.Interfaces
 
         
         void DeletePhoto(int albumID, int photoID);
+
+        void SetThumbnail(int photoId, int albumId);
     }
 }

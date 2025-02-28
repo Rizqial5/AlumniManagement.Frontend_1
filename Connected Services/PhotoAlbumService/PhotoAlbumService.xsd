@@ -118,4 +118,17 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="SetThumbnail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="photoId" type="xs:int" />
+        <xs:element minOccurs="0" name="albumId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetThumbnailResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

@@ -61,6 +61,12 @@
   <wsdl:message name="IPhotoAlbumService_DeletePhoto_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeletePhotoResponse" />
   </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_SetThumbnail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetThumbnail" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_SetThumbnail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetThumbnailResponse" />
+  </wsdl:message>
   <wsdl:portType name="IPhotoAlbumService">
     <wsdl:operation name="GetPhotoAlbums">
       <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/GetPhotoAlbums" message="tns:IPhotoAlbumService_GetPhotoAlbums_InputMessage" />
@@ -97,6 +103,10 @@
     <wsdl:operation name="DeletePhoto">
       <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/DeletePhoto" message="tns:IPhotoAlbumService_DeletePhoto_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/DeletePhotoResponse" message="tns:IPhotoAlbumService_DeletePhoto_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetThumbnail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/SetThumbnail" message="tns:IPhotoAlbumService_SetThumbnail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/SetThumbnailResponse" message="tns:IPhotoAlbumService_SetThumbnail_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IPhotoAlbumService" type="tns:IPhotoAlbumService">
@@ -175,6 +185,15 @@
     </wsdl:operation>
     <wsdl:operation name="DeletePhoto">
       <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/DeletePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetThumbnail">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/SetThumbnail" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

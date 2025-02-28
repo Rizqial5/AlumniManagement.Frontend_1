@@ -1,17 +1,76 @@
-﻿@model IEnumerable<AlumniManagement.Frontend.Models.PhotoAlbumModel>
+﻿@model PagedList.IPagedList<AlumniManagement.Frontend.Models.PhotoAlbumModel>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Photo Gallery";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
+    <style>
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination {
+            display: flex;
+            padding-left: 0;
+            list-style: none;
+            border-radius: 5px;
+        }
+
+            .pagination .page-item {
+                margin: 0 5px;
+            }
+
+                .pagination .page-item a { /* Styling untuk semua link pagination */
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    text-align: center;
+                    line-height: 40px;
+                    color: #495057;
+                    background-color: #f8f9fa;
+                    border: 1px solid #ddd;
+                    transition: all 0.3s ease;
+                    text-decoration: none;
+                }
+
+                    .pagination .page-item a:hover {
+                        background-color: #007bff;
+                        color: white;
+                    }
+
+                .pagination .page-item.active a {
+                    background-color: #6c757d;
+                    color: white;
+                    border-color: #6c757d;
+                    font-weight: bold;
+                }
+
+                .pagination .page-item.disabled a {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+    </style>
+}
+
 <h2>Photo Gallery</h2>
 
 <div class="d-flex justify-content-between mb-3">
     <div>
-        <button class="btn btn-primary">Add Album</button>
-        <button class="btn btn-secondary">Add Photo</button>
-        <button class="btn btn-danger">Delete Selected</button>
+        <button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Add Album</button>
+        <button class="btn btn-secondary" id="addButton" data-toggle="modal" data-target="#addModal">Add Photo</button>
+        <button class="btn btn-danger" id="deleteSelected">Delete Selected</button>
     </div>
     <div>
         <input type="text" class="form-control" placeholder="Search.." />
@@ -23,14 +82,16 @@
     {
         <div class="col-md-3 mb-4">
             <div class="card">
-                <img src="~/images/placeholder.png" class="card-img-top" alt="Album Image">
+                <a href="@Url.Action("ListPhoto","PhotoAlbum", new {albumId = item.AlbumID})">
+                    <img src="@item.ThumbnailImage" class="card-img-top" alt="Album Image" style="cursor: pointer;">
+                </a>
                 <div class="card-body text-center">
                     <h5 class="card-title">@item.AlbumName</h5>
                     <p class="card-text"><small class="text-muted">Last Updated: @item.ModifiedDate.ToString("dd-MMM-yyyy HH:mm:ss tt")</small></p>
                     <div class="d-flex justify-content-center">
-                        <button class="btn btn-sm btn-outline-primary mx-1"><i class="fas fa-pencil-alt"></i></button>
-                        <button class="btn btn-sm btn-outline-danger mx-1"><i class="fas fa-trash-alt"></i></button>
-                        <input type="checkbox" class="form-check-input mx-1">
+                        <button class="btn btn-sm btn-outline-primary mx-1" id="editButton" data-id="@item.AlbumID" data-toggle="modal" data-target="#editModal"><i class="fas fa-pencil-alt"></i></button>
+                        <button class="btn btn-sm btn-outline-danger mx-1" id="deleteButton" data-id="@item.AlbumID"><i class="fas fa-trash-alt"></i></button>
+                        <input type="checkbox" class="form-check-input mx-1 selectCheckbox" data-id="@item.AlbumID">
                     </div>
                 </div>
             </div>
@@ -44,19 +105,233 @@
         <option>20</option>
         <option>50</option>
     </select>
-    <nav>
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">« Prev</a></li>
-            <li class="page-item active"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item"><a class="page-link" href="#">5</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next »</a></li>
-        </ul>
-    </nav>
+    <div class="text-center">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = ViewBag.PageSize }),
+               new PagedListRenderOptions
+               {
+                   DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                   DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                   DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                   DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                   DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                   MaximumPageNumbersToDisplay = 5,
+                   ContainerDivClasses = new[] { "pagination-container" },
+                   UlElementClasses = new[] { "pagination", "justify-content-center" },
+                   LiElementClasses = new[] { "page-item" } // Tidak ada PageClasses, jadi kita pakai CSS
+               })
+    </div>
 </div>
 
-<div></div>
 
-@section Scripts {
-    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
+
+<div id="modalContainer"></div>
+
+
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            // Event listener untuk klik gambar
+            $('#eventData').on('click', '.preview-image', function () {
+                var imageUrl = $(this).data('src'); // Ambil URL gambar dari atribut data-src
+                var fullName = $(this).data('name'); // Ambil nama alumni dari atribut data-name
+                $('#modalImage').attr('src', imageUrl); // Set gambar di modal
+                $('#imageModalLabel').text(fullName); // Set nama alumni sebagai judul modal
+                $('#imageModal').modal('show'); // Tampilkan modal
+            });
+        });
+
+        //Use this for datatables, becase the buttons are created dynamically
+        $(document).on('click', '#deleteButton', function () {
+            const itemId = $(this).data('id'); // Retrieve the ID of the item to delete
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this item!",
+                icon: "warning",
+                showCancelButton: true, // Enable the cancel button
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX call to delete the item
+                        $.ajax({
+                            url: '/PhotoAlbum/DeleteAlbum', // URL of your Delete method
+                            type: 'POST', // Use POST for data modification
+                            data: { id: itemId }, // Pass the ID as data
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        window.location.href = "/PhotoAlbum/Index";
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                                //}).then(() => {
+                                //    // Optional: Reload the page or update the UI
+                                //    location.reload();
+                                //});
+                            },
+                            error: function (error) {
+                                Swal.fire("Error!", "Unable to delete the item " + response.message + " . Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss == Swal.DismissReason.cancel) {
+                        Swal.fire("Your item is safe!");
+                    }
+                });
+
+
+        });
+
+
+
+   /*     Delete selected rows*/
+        $('#deleteSelected').on('click', function () {
+            var selectedIds = [];
+            $('.selectCheckbox:checked').each(function () {
+                selectedIds.push($(this).data('id'));
+            });
+
+            if (selectedIds.length > 0) {
+                Swal.fire({
+                    title: "Are you sure? you will not be able to recover these items!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete them!",
+                    cancelButtonText: "No, keep them"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX call to delete the selected items
+                        $.ajax({
+                            url: '/PhotoAlbum/DeleteAlbumSelected/',
+                            type: 'POST',
+                            data: { ids: selectedIds },
+                            traditional: true,
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        window.location.href = "/PhotoAlbum/Index";
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                            },
+                            error: function (error) {
+                                Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire("Cancelled", "Your items are safe :)", "error");
+                    }
+                });
+            } else {
+                Swal.fire("No items selected", "Please select items to delete.", "info");
+            }
+        });
+
+         //mengatur partial views yang ada pada create
+        $(document).on('click', '#createButton', function () {
+            $.ajax({
+                url: '@Url.Action("CreateAlbum", "PhotoAlbum")',
+                type: 'GET',
+                success: function(data) {
+                    $('#modalContainer').html(data);
+                    var myModal = new bootstrap.Modal(document.getElementById('createModal'));
+
+                    // Inisialisasi validasi
+                    reinitializeValidation();
+
+                    myModal.show();
+                },
+                error: function() {
+                    alert("An error occurred while loading the modal.");
+                }
+            });
+        });
+
+
+        // mengatur partial views yang ada di edit
+        $(document).on('click', '#editButton', function () {
+            var eventId = $(this).data('id'); // Ambil ID Event dari atribut data-id
+
+            $.ajax({
+                url: '/PhotoAlbum/EditAlbum/' + eventId, // Panggil action Edit untuk mendapatkan data event
+                type: 'GET',
+                success: function (data) {
+                    $('#modalContainer').html(data); // Load HTML ke dalam modal
+
+                    // **Reinisialisasi validasi form**
+                    reinitializeValidation();
+
+                    // **Tampilkan modal setelah semua inisialisasi selesai**
+                    $('#editModal').modal('show');
+
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    alert('An error occurred while fetching data.');
+                }
+            });
+        });
+
+         $(document).on('click', '#addButton', function () {
+             $.ajax({
+                 url: '@Url.Action("AddPhoto", "PhotoAlbum")',
+                 type: 'GET',
+                 success: function(data) {
+                     $('#modalContainer').html(data);
+                     var myModal = new bootstrap.Modal(document.getElementById('addModal'));
+
+                     // Inisialisasi validasi
+                     reinitializeValidation();
+
+                     $(document).on('change', '#photoUpload', function (event) {
+                         var file = event.target.files[0];
+                         if (file) {
+                             var fileSize = file.size / 1024 / 1024; // Convert to MB
+                             var fileType = file.type;
+                             var validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+
+                             if (!validExtensions.includes(fileType)) {
+                                 alert("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                                 $(this).val(""); // Reset file input
+                                 return;
+                             }
+
+                             if (fileSize > 3) {
+                                 alert("File size exceeds 3MB. Please select a smaller file.");
+                                 $(this).val(""); // Reset file input
+                                 return;
+                             }
+
+                             // Preview Image
+                             var reader = new FileReader();
+                             reader.onload = function () {
+                                 $('#photoPreview').attr('src', reader.result).removeClass('d-none');
+                             };
+                             reader.readAsDataURL(file);
+                         }
+                     });
+
+                     myModal.show();
+                 },
+                 error: function() {
+                     alert("An error occurred while loading the modal.");
+                 }
+             });
+         });
+
+    </script>
+
 }

@@ -49,6 +49,18 @@
     <button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
 </div>
 
+<div class="row mb-3">
+    <div class="col-md-4">
+        <label for="facultyFilter">Faculty</label>
+        @Html.DropDownList("FacultyFilter", ViewBag.FacultyDdl as SelectList, "All Faculties", new { @class = "form-control", id = "facultyFilter" })
+    </div>
+    <div class="col-md-4">
+        <label for="majorFilter">Major</label>
+        @Html.DropDownList("MajorFilter", ViewBag.MajorDDL as SelectList, "All Majors", new { @class = "form-control", id = "majorFilter" })
+    </div>
+</div>
+
+
 @using (Html.BeginForm("ShowTableView", "Alumni", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="border border-secondary p-3 shadow-sm mt-2" style="width: 100%; max-width: 400px;">
@@ -178,7 +190,7 @@
                                     '<a href="/Job/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
                                     '<i class="fas fa-briefcase"></i>' +
                                     '</a > ' +
-                                    '<a href="/AlumniImage/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' 
+                                    '<a href="/AlumniImage/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">'
                                     + '<i class="fas fa-image"></i>' +
                                     '</a>' +
                                 '</div>'
@@ -260,6 +272,53 @@
                 $('input[type="checkbox"]', rows).prop('checked', this.checked)
             })
 
+        });
+
+        function reloadTable() {
+            var facultyId = $('#facultyFilter').val();
+            var majorId = $('#majorFilter').val();
+
+            $('#alumniData').DataTable().ajax.url('/Alumni/GetAlumnis?facultyId=' + facultyId + '&majorId=' + majorId).load();
+        }
+
+        function loadMajors(facultyId) {
+            $.ajax({
+                url: '/Alumni/GetMajorsByFaculty',
+                type: 'GET',
+                data: { facultyId: facultyId },
+                success: function (data) {
+                    var $majorDropdown = $('#majorFilter');
+                    $majorDropdown.empty(); // Kosongkan dropdown major
+
+                    // Tambahkan opsi default
+                    $majorDropdown.append('<option value="">All Majors</option>');
+
+                    // Loop dan tambahkan opsi major dari hasil AJAX
+                    $.each(data, function (index, item) {
+                        $majorDropdown.append('<option value="' + item.MajorID + '">' + item.MajorName + '</option>');
+                    });
+
+                    // Trigger reload DataTable setelah major diperbarui
+                    reloadTable();
+                }
+            });
+        }
+
+        // Event saat Faculty dipilih
+        $('#facultyFilter').on('change', function () {
+            var facultyId = $(this).val();
+            if (facultyId) {
+                loadMajors(facultyId);
+            } else {
+                $('#majorFilter').html('<option value="">All Majors</option>');
+            }
+
+            reloadTable(); // Reload tabel alumni setelah faculty dipilih
+        });
+
+        // Trigger reload when dropdown changes
+        $('#facultyFilter, #majorFilter').on('change', function () {
+            reloadTable();
         });
 
         ////Use this for datatables, becase the buttons are created dynamically

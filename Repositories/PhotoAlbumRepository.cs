@@ -5,6 +5,7 @@ using AlumniManagement.Frontend.PhotoAlbumService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Web;
 
 namespace AlumniManagement.Frontend.Repositories
@@ -31,7 +32,13 @@ namespace AlumniManagement.Frontend.Repositories
         public IEnumerable<PhotoAlbumModel> GetPhotoAlbums()
         {
             var data = _photoAlbumClient.GetPhotoAlbums();
-            var result = data.Select(f => Mapping.Mapper.Map<PhotoAlbumModel>(f));
+            var result = data.Select(f => new PhotoAlbumModel
+            {
+                AlbumID = f.AlbumID,
+                AlbumName = f.AlbumName,
+                ModifiedDate = f.ModifiedDate,
+                ThumbnailImage = f.ThumbnailPhoto
+            });
 
             return result.ToList();
         }
@@ -80,6 +87,11 @@ namespace AlumniManagement.Frontend.Repositories
         public void DeletePhotoAlbum(int albumID)
         {
             _photoAlbumClient.DeletePhotoAlbum(albumID);
+        }
+
+        public void SetThumbnail(int photoId, int albumId)
+        {
+            _photoAlbumClient.SetThumbnail(photoId, albumId);
         }
     }
 }

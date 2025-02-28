@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper.Configuration.Annotations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -12,8 +13,11 @@ namespace AlumniManagement.Frontend.Models
         [Key]
         public int PhotoID { get; set; }
 
+        [DisplayName("Album")]
+        [Required(ErrorMessage = "Album is Required")]
         public int AlbumID { get; set; }
 
+        [DisplayName("Photo")]
         public string PhotoPath { get; set; }
 
         public string PhotoFilleName { get; set; }
@@ -24,5 +28,9 @@ namespace AlumniManagement.Frontend.Models
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy HH:mm:ss tt}")]
         [DisplayName("Last Update")]
         public System.DateTime ModifiedDate { get; set; }
+
+        [Ignore]
+        public string ShowPhoto { get; set; }
+
     }
 }

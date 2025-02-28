@@ -48,6 +48,12 @@ namespace AlumniManagement.Frontend.Controllers
         // GET: Alumni
         public ActionResult Index()
         {
+            var facultyDdl = _facultyRepository.GetAll();
+            var majorDdl = _majorRepository.GetAll();
+
+            ViewBag.FacultyDdl = new SelectList(facultyDdl, "FacultyID", "FacultyName");
+            ViewBag.MajorDDL = new SelectList(majorDdl, "MajorID", "MajorName");
+
             return View();
         }
 
@@ -82,9 +88,19 @@ namespace AlumniManagement.Frontend.Controllers
             }
         }
 
-        public JsonResult GetAlumnis()
+        public JsonResult GetAlumnis(int? facultyId, int? majorId)
         {
             var alumniesData = _alumniRepository.GetAll();
+
+            if (facultyId.HasValue && facultyId.Value > 0)
+            {
+                alumniesData = alumniesData.Where(a => a.FacultyID == facultyId.Value).ToList();
+            }
+
+            if (majorId.HasValue && majorId.Value > 0)
+            {
+                alumniesData = alumniesData.Where(a => a.MajorID == majorId.Value).ToList();
+            }
 
             foreach (var item in alumniesData)
             {
@@ -97,6 +113,19 @@ namespace AlumniManagement.Frontend.Controllers
             }
 
             return Json(new { data = alumniesData }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetMajorsByFaculty(int facultyId)
+        {
+            var majors = _majorRepository.GetAll()
+                .Where(m => m.FacultyID == facultyId)
+                .Select(m => new
+                {
+                    m.MajorID,
+                    m.MajorName
+                }).ToList();
+
+            return Json(majors, JsonRequestBehavior.AllowGet);
         }
 
 

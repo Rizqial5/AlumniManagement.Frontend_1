@@ -11,6 +11,7 @@
       <xs:element minOccurs="0" name="AlbumID" type="xs:int" />
       <xs:element minOccurs="0" name="AlbumName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ModifiedDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ThumbnailPhoto" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PhotoAlbumDTO" nillable="true" type="tns:PhotoAlbumDTO" />
