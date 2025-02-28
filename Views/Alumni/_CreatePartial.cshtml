@@ -103,12 +103,13 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group row align-items-center mt-2">
-                                <label class="col-md-4 col-form-label">@Html.DisplayNameFor(model => model.DateOfBirth)</label>
-                                <div class="col-md-8">
-                                    @Html.TextBoxFor(model => model.DateOfBirth, new { @class = "form-control", @id = "DateOfBirth" })
-                                    @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+                            <div class="form-group d-inline-flex align-items-center mt-2" style="gap: 10px;">
+                                <label class="col-form-label text-end">@Html.DisplayNameFor(model => model.DateOfBirth)</label>
+                                <div class="input-group ms-4" style="width: auto;">
+                                    @Html.TextBoxFor(model => model.DateOfBirth, "{0:dd-MMM-yyyy}", new { @class = "form-control", @id = "DateOfBirth", style = "width: 150px;" })
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
+                                @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
                             </div>
 
                             <div class="form-group row align-items-center mt-2">
