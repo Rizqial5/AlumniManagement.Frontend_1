@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="420cfcfb-4f41-4b2c-b35a-f4836fcb7295" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:56362/Services/EventService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="EventService.xsd" MetadataType="Schema" ID="f94ee530-6a7a-4f13-b2ef-d367ea5dc0ac" SourceId="1" SourceUrl="http://localhost:56362/Services/EventService.svc?xsd=xsd0" />
+    <MetadataFile FileName="EventService1.xsd" MetadataType="Schema" ID="f73bc305-2f88-4002-a86e-554c32d2a841" SourceId="1" SourceUrl="http://localhost:56362/Services/EventService.svc?xsd=xsd1" />
+    <MetadataFile FileName="EventService.wsdl" MetadataType="Wsdl" ID="2d1f7157-22b8-4323-b64c-ca2e887544d9" SourceId="1" SourceUrl="http://localhost:56362/Services/EventService.svc?wsdl" />
+    <MetadataFile FileName="EventService2.xsd" MetadataType="Schema" ID="04c4b56f-c967-4465-abca-70e509be692b" SourceId="1" SourceUrl="http://localhost:56362/Services/EventService.svc?xsd=xsd2" />
+    <MetadataFile FileName="EventService.disco" MetadataType="Disco" ID="42e23f56-ef0f-4187-9de2-a9f8ba771fe7" SourceId="1" SourceUrl="http://localhost:56362/Services/EventService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

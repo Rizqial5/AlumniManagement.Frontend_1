@@ -1,0 +1,454 @@
+﻿@model IEnumerable<AlumniManagement.Frontend.Models.EventModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
+    <style>
+        .dataTables_wrapper {
+            width: 100%;
+        }
+
+            .dataTables_wrapper .dataTables_paginate {
+                float: none;
+                text-align: center;
+            }
+
+            .dataTables_wrapper .dataTables_info {
+                float: left;
+                padding-top: 0.755em;
+            }
+
+            .dataTables_wrapper .bottom {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+        th {
+            white-space: nowrap;
+        }
+    </style>
+}
+
+<h2>Events</h2>
+
+<button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Add Events</button>
+
+<button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
+
+
+<table class="table" id="eventData" style="width:100%">
+    <thead>
+        <tr>
+            <th><input type="checkbox" id="selectAll" /></th>
+            <th>Actions</th>
+            <th>No. </th>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateDisplay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </th>
+        </tr>
+    </thead>
+</table>
+
+<div id="modalContainer"></div>
+
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid" alt="Alumni Image">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#eventData').DataTable({
+                "ajax": {
+                    "url": "/Event/GetEvents",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.EventID + '" />'}
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+
+
+                            return '<div class="btn-group">' +
+                                '<a class="btn btn-primary" data-id="' + row.EventID + '" id="editButton" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
+                                '<i class="fas fa-edit"></i>' +
+                                '</a>' +
+                                '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.EventID + '">' +
+                                '<i class="fas fa-trash"></i>'
+                                + '</button>' +
+                                '</div>'
+
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row, meta) {
+                            return meta.row + 1;  // Display the row number (meta.row is zero-indexed)
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+
+                            if (!row.ShowImage) {
+                                return ""; // Jika ShowImagePath tidak ada, return kosong
+                            }
+                            return '<div><img class="img-thumbnail preview-image" src="' + row.ShowImage +
+                                '" alt="Alumni Image" style="max-width: 120px; cursor: pointer;" ' +
+                                'data-src="' + row.ShowImage + '" data-name="' + row.Title + '"/></div>';
+                        }
+                    },
+                    { "data": "Title" },
+                    { "data": "Description" },
+                    { "data": "DateDisplay" },
+                    { "data": "Status" },
+                    {
+                        "data": "ModifiedDate",
+                        "render": function (data, type, row) {
+                            return moment(data).format('DD-MMM-YYYY HH:mm:ss');
+                        }
+                    },
+                ],
+/*                "order": [[0, "desc"]],*/
+                "dom": '<"top"f>rt<"bottom"lpi><"clear">', // search on the top right, show entries, paging, showing on the bottom
+                "pagingType": "full_numbers",
+                "scrollY": "400px",
+                "scrollX": true,
+                "scrollCollapse": true,
+                "fixedHeader": true,
+                //"pagingType": "simple_numbers",
+                "pageLength": 10,
+                "lengthMenu": [10, 25, 50, 100],
+                "scrollY": "400px",
+                "scrollX": true,
+                "scrollCollapse": true,
+                "fixedHeader": true,
+                "language": {
+                    "paginate": {
+                        "previous": "Previous",
+                        "next": "Next",
+                        "first": "<<",
+                        "last": ">>"
+                    }
+                }
+            });
+
+            $('#eventData_filter input').unbind();
+
+            // Bind a new event handler
+            $('#eventData_filter input').on('keyup', function (e) {
+                var value = $(this).val();
+                if (value.length >= 3 || value.length === 0) {
+                    table.search(value).draw();
+                }
+            });
+
+            $('#selectAll').on('click', function () {
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked)
+            })
+
+
+
+        });
+
+        $(document).ready(function () {
+            // Event listener untuk klik gambar
+            $('#eventData').on('click', '.preview-image', function () {
+                var imageUrl = $(this).data('src'); // Ambil URL gambar dari atribut data-src
+                var fullName = $(this).data('name'); // Ambil nama alumni dari atribut data-name
+                $('#modalImage').attr('src', imageUrl); // Set gambar di modal
+                $('#imageModalLabel').text(fullName); // Set nama alumni sebagai judul modal
+                $('#imageModal').modal('show'); // Tampilkan modal
+            });
+        });
+
+        ////Use this for datatables, becase the buttons are created dynamically
+        $(document).on('click', '#deleteButton', function () {
+            const itemId = $(this).data('id'); // Retrieve the ID of the item to delete
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this item!",
+                icon: "warning",
+                showCancelButton: true, // Enable the cancel button
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX call to delete the item
+                        $.ajax({
+                            url: '/Event/Delete', // URL of your Delete method
+                            type: 'POST', // Use POST for data modification
+                            data: { id: itemId }, // Pass the ID as data
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        $("#eventData").DataTable().ajax.reload(); // Reload the page or update UI
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                                //}).then(() => {
+                                //    // Optional: Reload the page or update the UI
+                                //    location.reload();
+                                //});
+                            },
+                            error: function (error) {
+                                Swal.fire("Error!", "Unable to delete the item " + response.message + " . Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss == Swal.DismissReason.cancel) {
+                        Swal.fire("Your item is safe!");
+                    }
+                });
+
+
+        });
+
+
+
+   /*     Delete selected rows*/
+        $('#deleteSelected').on('click', function () {
+            var selectedIds = [];
+            $('.selectCheckbox:checked').each(function () {
+                selectedIds.push($(this).data('id'));
+            });
+
+            if (selectedIds.length > 0) {
+                Swal.fire({
+                    title: "Are you sure? you will not be able to recover these items!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete them!",
+                    cancelButtonText: "No, keep them"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Make an AJAX call to delete the selected items
+                        $.ajax({
+                            url: '/Event/DeleteSelected/',
+                            type: 'POST',
+                            data: { ids: selectedIds },
+                            traditional: true,
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        $('#eventData').DataTable().ajax.reload(); // Reload the DataTable
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                            },
+                            error: function (error) {
+                                Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire("Cancelled", "Your items are safe :)", "error");
+                    }
+                });
+            } else {
+                Swal.fire("No items selected", "Please select items to delete.", "info");
+            }
+        });
+
+         //mengatur partial views yang ada pada create
+         $(document).on('click', '#createButton', function () {
+
+             $.ajax({
+                 url: '@Url.Action("Create", "Event")',
+                 type: 'GET',
+                 success: function(data) {
+                     $('#modalContainer').html(data);
+                     var myModal = new bootstrap.Modal(document.getElementById('createModal'));
+
+                     //inisialisasi
+                     reinitializeValidation();
+
+                     updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
+
+                     $('#StartDate').datepicker({
+                         format: "dd-M-yyyy",
+                         autoclose: true,
+                         todayHighlight: true
+                     });
+
+                     $('#EndDate').datepicker({
+                         format: "dd-M-yyyy",
+                         autoclose: true,
+                         todayHighlight: true
+                     });
+
+                     $("#isClosedSwitch").change(function () {
+                         updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
+                     });
+
+                     $(document).on('change', '#photoUpload', function (event) {
+                         var file = event.target.files[0];
+                         if (file) {
+                             var fileSize = file.size / 1024 / 1024; // Convert to MB
+                             var fileType = file.type;
+                             var validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+
+                             if (!validExtensions.includes(fileType)) {
+                                 alert("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                                 $(this).val(""); // Reset file input
+                                 return;
+                             }
+
+                             if (fileSize > 3) {
+                                 alert("File size exceeds 3MB. Please select a smaller file.");
+                                 $(this).val(""); // Reset file input
+                                 return;
+                             }
+
+                             // Preview Image
+                             var reader = new FileReader();
+                             reader.onload = function () {
+                                 $('#photoPreview').attr('src', reader.result).removeClass('d-none');
+                             };
+                             reader.readAsDataURL(file);
+                         }
+                     });
+
+                     myModal.show();
+
+                 },
+                 error: function() {
+                     alert("An error occurred while loading the modal.");
+                 }
+             });
+         });
+
+
+        // mengatur partial views yang ada di edit
+        $(document).on('click', '#editButton', function () {
+            var personId = $(this).data('id'); // Get the ProductCategoryID from the button's data-id attribute
+
+            // Make an AJAX request to get the data for the selected ProductCategory
+            $.ajax({
+                url: '/Event/Edit/' + personId, // URL to fetch data for the specific category
+                type: 'GET',
+                success: function (data) {
+
+                    // Show the Edit Modal
+                    $('#modalContainer').html(data);
+
+                    //inisialisasi
+
+                    reinitializeValidation();
+
+                    updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
+
+
+                    $("#isClosedSwitch").change(function () {
+                        updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
+                    });
+
+
+                    var existingPhotoUrl = $('#photoPreview').data('src'); // URL foto dari ViewBag.SourceImage
+                    if (existingPhotoUrl) {
+                        $('#photoPreview').attr('src', existingPhotoUrl).removeClass('d-none');
+                    }
+
+                    // **Event listener untuk preview gambar saat file di-upload**
+                    $('#photoUpload').on('change', function (event) {
+                        var file = event.target.files[0];
+                        if (file) {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                $('#photoPreview').attr('src', e.target.result).removeClass('d-none');
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+
+                    // **Event listener untuk tombol hapus foto**
+                    $('#removePhotoBtn').on('click', function () {
+                        $('#photoPreview').attr('src', '#').addClass('d-none');
+                        $('#previewName').text('No file selected').removeClass('text-success').addClass('text-muted'); // Kosongkan teks nama file
+                        $('#photoUpload').val(''); // Kosongkan input file
+                        $('#existingPhoto').val(''); // Hapus nama file di input hidden
+                        $(this).addClass('d-none'); // Sembunyikan tombol remove
+                    });
+
+                    $('#editModal').modal('show');
+
+                    $('#editModal').on('shown.bs.modal', function () {
+                        // Inisialisasi Datepicker setelah modal ditampilkan
+                        $('#StartDate').datepicker({
+                            format: "dd-M-yyyy",
+                            autoclose: true,
+                            todayHighlight: true
+                        });
+
+                        $('#EndDate').datepicker({
+                            format: "dd-M-yyyy",
+                            autoclose: true,
+                            todayHighlight: true
+                        });
+                    });
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    alert('An error occurred while fetching data.');
+                }
+            });
+        });
+
+        function updateSwitchLabel(switchId, labelId, trueText, falseText) {
+            var isChecked = $(switchId).is(':checked');
+            $(labelId).text(isChecked ? trueText : falseText);
+        }
+
+    </script>
+
+}

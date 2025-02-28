@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AlumniDTO = AlumniManagement.Frontend.AlumniService.AlumniDTO;
+using AlumniManagement.Frontend.EventService;
 
 namespace AlumniManagement.Frontend
 {
@@ -48,6 +49,7 @@ namespace AlumniManagement.Frontend
             CreateMap<EmploymentTypeModel, EmploymentTypeDTO>().ReverseMap();
             CreateMap<JobAttachmentModel, JobAttachmentDTO>().ReverseMap();
             CreateMap<ShowCandidateModel, JobCandidateDTO>().ReverseMap();
+            CreateMap<EventModel, EventDTO>().ReverseMap();
 
         }
     }
