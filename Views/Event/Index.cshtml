@@ -355,10 +355,12 @@
 
                     updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
 
+
                     $('#StartDate').datepicker({
                         format: "dd-M-yyyy",
                         autoclose: true,
-                        todayHighlight: true
+                        todayHighlight: true,
+                        startDate: new Date()
                     }).on("changeDate", function (selected) {
                         let startDate = selected.date;
                         if (startDate) {
@@ -453,7 +455,8 @@
                     $('#StartDate').datepicker({
                         format: "dd-M-yyyy",
                         autoclose: true,
-                        todayHighlight: true
+                        todayHighlight: true,
+                        startDate: new Date()
                     }).on("changeDate", function (selected) {
                         let startDate = selected.date;
                         if (startDate) {

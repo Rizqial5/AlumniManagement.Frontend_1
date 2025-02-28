@@ -38,7 +38,7 @@
                             <label class="col-md-2 control-label">Date</label>
                             <div class="col-md-4">
                                 <div class="input-group date" id="StartDatePicker">
-                                    @Html.TextBoxFor(model => model.StartDate, "{0:dd-MMM-yyyy}", new { @class = "form-control", @id = "StartDate", autocomplete = "off" })
+                                    @Html.TextBoxFor(model => model.StartDate, "{0:dd-MMM-yyyy}", new { @class = "form-control", @id = "StartDate", autocomplete = "off"})
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
                                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
