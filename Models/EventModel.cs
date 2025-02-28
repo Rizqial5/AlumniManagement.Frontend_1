@@ -37,6 +37,7 @@ namespace AlumniManagement.Frontend.Models
         public System.Nullable<System.DateTime> EndDate { get; set; }
 
         [Required(ErrorMessage = "Status is required")]
+        [DisplayName("Mark as Closed")]
         public bool IsClosed { get; set; } = true;
 
 

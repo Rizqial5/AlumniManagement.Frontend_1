@@ -116,15 +116,25 @@
                         "render": function (data, type, row) {
 
 
-                            return '<div class="btn-group">' +
-                                '<a class="btn btn-primary" data-id="' + row.EventID + '" id="editButton" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
-                                '<i class="fas fa-edit"></i>' +
-                                '</a>' +
-                                '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.EventID + '">' +
-                                '<i class="fas fa-trash"></i>'
-                                + '</button>' +
-                                '</div>'
+                            //return '<div class="btn-group">' +
+                            //    '<a class="btn btn-primary" data-id="' + row.EventID + '" id="editButton" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
+                            //    '<i class="fas fa-edit"></i>' +
+                            //    '</a>' +
+                            //    '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.EventID + '">' +
+                            //    '<i class="fas fa-trash"></i>'
+                            //    + '</button>' +
+                            //    '</div>'
 
+                            var editButton = '<a class="btn btn-primary" id="editButton" data-id="' + row.EventID + '" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;"><i class="fas fa-edit"></i></a>';
+                            var deleteButton = '<button id="deleteButton" class="btn btn-danger deleteButton" style="margin-right: 5px;"  data-id="' + row.EventID + '"><i class="fas fa-trash"></i></button>';
+
+                            if (row.IsClosed) {
+                                editButton = ""
+                                deleteButton = ""
+                               
+                            }
+
+                            return '<div class ="btn-group  ">' + editButton + deleteButton + '</div>'
                         }
                     },
                     {
@@ -176,6 +186,11 @@
                         "next": "Next",
                         "first": "<<",
                         "last": ">>"
+                    }
+                },
+                "rowCallback": function (row, data, index) {
+                    if (data.IsClosed) { // Jika isClosed bernilai true
+                        $(row).css("background-color", "#BAE0F3"); // Warna biru muda
                     }
                 }
             });

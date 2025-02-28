@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:56362/Services/PhotoAlbumService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" />
+  <xs:element name="GetPhotoAlbums">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPhotoAlbumsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetPhotoAlbumsResult" nillable="true" type="q1:ArrayOfPhotoAlbumDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllPhotoByAlbumId">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AlbumId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllPhotoByAlbumIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetAllPhotoByAlbumIdResult" nillable="true" type="q2:ArrayOfPhotoDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPhotoAlbumById">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AlbumId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPhotoAlbumByIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetPhotoAlbumByIdResult" nillable="true" type="q3:PhotoAlbumDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPhotoByAlbumIdAndPhotoId">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AlbumId" type="xs:int" />
+        <xs:element minOccurs="0" name="photoId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPhotoByAlbumIdAndPhotoIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="GetPhotoByAlbumIdAndPhotoIdResult" nillable="true" type="q4:PhotoDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertPhotoAlbum">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="photoAlbum" nillable="true" type="q5:PhotoAlbumDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertPhotoAlbumResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertPhoto">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="photo" nillable="true" type="q6:PhotoDTO" />
+        <xs:element minOccurs="0" name="albumID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertPhotoResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdatePhotoAlbum">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="photoAlbum" nillable="true" type="q7:PhotoAlbumDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdatePhotoAlbumResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeletePhotoAlbum">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="albumID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeletePhotoAlbumResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeletePhoto">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="albumID" type="xs:int" />
+        <xs:element minOccurs="0" name="photoID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeletePhotoResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
