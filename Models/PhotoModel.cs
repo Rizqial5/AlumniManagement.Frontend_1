@@ -22,7 +22,7 @@ namespace AlumniManagement.Frontend.Models
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy HH:mm:ss tt}")]
-        [DisplayName("Last Update")
+        [DisplayName("Last Update")]
         public System.DateTime ModifiedDate { get; set; }
     }
 }

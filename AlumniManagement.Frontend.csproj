@@ -177,6 +177,7 @@
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\JobPostingController.cs" />
     <Compile Include="Controllers\MajorController.cs" />
+    <Compile Include="Controllers\PhotoAlbumController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -495,6 +496,7 @@
     <Content Include="Views\Event\Index.cshtml" />
     <Content Include="Views\Event\_CreatePartial.cshtml" />
     <Content Include="Views\Event\_EditPartial.cshtml" />
+    <Content Include="Views\PhotoAlbum\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\AlumniImages\" />
