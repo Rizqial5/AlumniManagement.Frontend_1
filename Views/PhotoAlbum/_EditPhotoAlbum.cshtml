@@ -5,33 +5,33 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Edit Album</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("EditAlbum", "PhotoAlbum", FormMethod.Post, new { id = "createForm" }))
+                @using (Html.BeginForm("EditAlbum", "PhotoAlbum", FormMethod.Post, new { id = "editForm" }))
                 {
                     @Html.AntiForgeryToken()
-
-                <div class="form-horizontal">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.AlbumID)
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.AlbumName, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.AlbumName, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.AlbumName, "", new { @class = "text-danger" })
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <!-- Album Name -->
+                        <div class="form-group row align-items-center">
+                            <label class="col-md-2 control-label">@Html.LabelFor(model => model.AlbumName)</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.AlbumName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.AlbumName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="button" class="btn btn-danger px-4 py-2 me-2" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary px-4 py-2">Save</button>
                         </div>
                     </div>
-
-                    <div class="d-flex justify-content-end mt-3">
-                        <button type="button" class="btn btn-danger px-4 py-2 me-2" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4 py-2">Save</button>
-                    </div>
-                </div>
                 }
-
             </div>
         </div>
     </div>
