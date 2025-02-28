@@ -7,22 +7,19 @@ using System.Web;
 
 namespace AlumniManagement.Frontend.Models
 {
-    public class PhotoDTO
+    public class PhotoAlbumModel
     {
         [Key]
-        public int PhotoID { get; set; }
-
         public int AlbumID { get; set; }
 
-        public string PhotoPath { get; set; }
-
-        public string PhotoFilleName { get; set; }
-
-        public System.Nullable<bool> IsPhotoAlbumThumbnail { get; set; }
+        [Required(ErrorMessage ="Album name is Required")]
+        [StringLength(50)]
+        [DisplayName("Name")]
+        public string AlbumName { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy HH:mm:ss tt}")]
-        [DisplayName("Last Update")
+        [DisplayName("Last Update")]
         public System.DateTime ModifiedDate { get; set; }
     }
 }
