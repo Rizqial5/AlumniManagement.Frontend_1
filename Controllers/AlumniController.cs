@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -246,6 +247,17 @@ namespace AlumniManagement.Frontend.Controllers
             if(photoUpload == null)
             {
                 return;
+            }
+
+
+            if (alumniModel.PhotoPath!= null)
+            {
+                var fileExist = Path.Combine(Server.MapPath(alumniModel.PhotoPath), alumniModel.PhotoName);
+
+                if (System.IO.File.Exists(fileExist))
+                {
+                    System.IO.File.Delete(fileExist);
+                }
             }
 
             string[] allowedExtensions = { ".jpeg", ".jpg", ".png" };

@@ -19,6 +19,8 @@
                 <div class="form-horizontal">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.AlumniID)
+                    @Html.HiddenFor(model => model.PhotoPath)
+                    @Html.HiddenFor(model => model.PhotoName)
 
                     <div class="row">
                         <div class="col-md-6">
