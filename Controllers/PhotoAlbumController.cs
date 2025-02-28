@@ -197,7 +197,7 @@ namespace AlumniManagement.Frontend.Controllers
             var listPhotoData = _photoAlbumRepository.GetAllPhotoByAlbumId(albumId).ToList();
 
             int pageNumber = page ?? 1;
-            int size = pageSize ?? 5;
+            int size = pageSize ?? 10;
             ViewBag.PageSize = size;
 
             foreach (var item in listPhotoData)
