@@ -301,108 +301,150 @@
         });
 
          //mengatur partial views yang ada pada create
-         $(document).on('click', '#createButton', function () {
-
-             $.ajax({
-                 url: '@Url.Action("Create", "Event")',
-                 type: 'GET',
-                 success: function(data) {
-                     $('#modalContainer').html(data);
-                     var myModal = new bootstrap.Modal(document.getElementById('createModal'));
-
-                     //inisialisasi
-                     reinitializeValidation();
-
-                     updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
-
-                     $('#StartDate').datepicker({
-                         format: "dd-M-yyyy",
-                         autoclose: true,
-                         todayHighlight: true
-                     });
-
-                     $('#EndDate').datepicker({
-                         format: "dd-M-yyyy",
-                         autoclose: true,
-                         todayHighlight: true
-                     });
-
-                     $("#isClosedSwitch").change(function () {
-                         updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
-                     });
-
-                     $(document).on('change', '#photoUpload', function (event) {
-                         var file = event.target.files[0];
-                         if (file) {
-                             var fileSize = file.size / 1024 / 1024; // Convert to MB
-                             var fileType = file.type;
-                             var validExtensions = ["image/jpeg", "image/jpg", "image/png"];
-
-                             if (!validExtensions.includes(fileType)) {
-                                 alert("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
-                                 $(this).val(""); // Reset file input
-                                 return;
-                             }
-
-                             if (fileSize > 3) {
-                                 alert("File size exceeds 3MB. Please select a smaller file.");
-                                 $(this).val(""); // Reset file input
-                                 return;
-                             }
-
-                             // Preview Image
-                             var reader = new FileReader();
-                             reader.onload = function () {
-                                 $('#photoPreview').attr('src', reader.result).removeClass('d-none');
-                             };
-                             reader.readAsDataURL(file);
-                         }
-                     });
-
-                     myModal.show();
-
-                 },
-                 error: function() {
-                     alert("An error occurred while loading the modal.");
-                 }
-             });
-         });
-
-
-        // mengatur partial views yang ada di edit
-        $(document).on('click', '#editButton', function () {
-            var personId = $(this).data('id'); // Get the ProductCategoryID from the button's data-id attribute
-
-            // Make an AJAX request to get the data for the selected ProductCategory
+        $(document).on('click', '#createButton', function () {
             $.ajax({
-                url: '/Event/Edit/' + personId, // URL to fetch data for the specific category
+                url: '@Url.Action("Create", "Event")',
                 type: 'GET',
-                success: function (data) {
-
-                    // Show the Edit Modal
+                success: function(data) {
                     $('#modalContainer').html(data);
+                    var myModal = new bootstrap.Modal(document.getElementById('createModal'));
 
-                    //inisialisasi
-
+                    // Inisialisasi validasi
                     reinitializeValidation();
 
                     updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
 
+                    $('#StartDate').datepicker({
+                        format: "dd-M-yyyy",
+                        autoclose: true,
+                        todayHighlight: true
+                    }).on("changeDate", function (selected) {
+                        let startDate = selected.date;
+                        if (startDate) {
+                            let minEndDate = new Date(startDate);
+                            minEndDate.setDate(minEndDate.getDate() + 1); // End Date harus setelah Start Date
+
+                            $('#EndDate').datepicker("setStartDate", minEndDate);
+                            $('#EndDate').val(""); // Reset End Date jika sebelumnya sudah dipilih
+                        }
+                    });
+
+                    $('#EndDate').datepicker({
+                        format: "dd-M-yyyy",
+                        autoclose: true,
+                        todayHighlight: true
+                    });
 
                     $("#isClosedSwitch").change(function () {
                         updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
                     });
 
+                    $(document).on('change', '#photoUpload', function (event) {
+                        var file = event.target.files[0];
+                        if (file) {
+                            var fileSize = file.size / 1024 / 1024; // Convert to MB
+                            var fileType = file.type;
+                            var validExtensions = ["image/jpeg", "image/jpg", "image/png"];
 
-                    var existingPhotoUrl = $('#photoPreview').data('src'); // URL foto dari ViewBag.SourceImage
+                            if (!validExtensions.includes(fileType)) {
+                                alert("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                                $(this).val(""); // Reset file input
+                                return;
+                            }
+
+                            if (fileSize > 3) {
+                                alert("File size exceeds 3MB. Please select a smaller file.");
+                                $(this).val(""); // Reset file input
+                                return;
+                            }
+
+                            // Preview Image
+                            var reader = new FileReader();
+                            reader.onload = function () {
+                                $('#photoPreview').attr('src', reader.result).removeClass('d-none');
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+
+                    myModal.show();
+                },
+                error: function() {
+                    alert("An error occurred while loading the modal.");
+                }
+            });
+        });
+
+
+        // mengatur partial views yang ada di edit
+        $(document).on('click', '#editButton', function () {
+            var eventId = $(this).data('id'); // Ambil ID Event dari atribut data-id
+
+            $.ajax({
+                url: '/Event/Edit/' + eventId, // Panggil action Edit untuk mendapatkan data event
+                type: 'GET',
+                success: function (data) {
+                    $('#modalContainer').html(data); // Load HTML ke dalam modal
+
+                    // **Reinisialisasi validasi form**
+                    reinitializeValidation();
+
+                    // **Inisialisasi Datepicker untuk Start Date**
+                    $('#StartDate').datepicker({
+                        format: "dd-M-yyyy",
+                        autoclose: true,
+                        todayHighlight: true
+                    }).on("changeDate", function (selected) {
+                        let startDate = selected.date;
+                        if (startDate) {
+                            let minEndDate = new Date(startDate);
+                            minEndDate.setDate(minEndDate.getDate() + 1); // End Date harus setelah Start Date
+
+                            $('#EndDate').datepicker("setStartDate", minEndDate);
+                            $('#EndDate').val(""); // Reset End Date jika sebelumnya sudah dipilih
+                        }
+                    });
+
+                    // **Inisialisasi Datepicker untuk End Date**
+                    $('#EndDate').datepicker({
+                        format: "dd-M-yyyy",
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+                    // **Update label switch untuk status Open/Closed**
+                    updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
+
+                    $("#isClosedSwitch").change(function () {
+                        updateSwitchLabel("#isClosedSwitch", "#isClosedLabel", "Closed", "Open");
+                    });
+
+                    // **Menampilkan foto lama jika ada**
+                    var existingPhotoUrl = $('#photoPreview').data('src');
                     if (existingPhotoUrl) {
                         $('#photoPreview').attr('src', existingPhotoUrl).removeClass('d-none');
                     }
 
-                    // **Event listener untuk preview gambar saat file di-upload**
+                    // **Preview gambar ketika memilih file baru**
                     $('#photoUpload').on('change', function (event) {
                         var file = event.target.files[0];
                         if (file) {
+                            var fileSize = file.size / 1024 / 1024; // Convert to MB
+                            var fileType = file.type;
+                            var validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+
+                            if (!validExtensions.includes(fileType)) {
+                                alert("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                                $(this).val(""); // Reset input file
+                                return;
+                            }
+
+                            if (fileSize > 3) {
+                                alert("File size exceeds 3MB. Please select a smaller file.");
+                                $(this).val(""); // Reset input file
+                                return;
+                            }
+
                             var reader = new FileReader();
                             reader.onload = function (e) {
                                 $('#photoPreview').attr('src', e.target.result).removeClass('d-none');
@@ -414,27 +456,17 @@
                     // **Event listener untuk tombol hapus foto**
                     $('#removePhotoBtn').on('click', function () {
                         $('#photoPreview').attr('src', '#').addClass('d-none');
-                        $('#previewName').text('No file selected').removeClass('text-success').addClass('text-muted'); // Kosongkan teks nama file
-                        $('#photoUpload').val(''); // Kosongkan input file
+                        $('#photoUpload').val(''); // Reset input file
                         $('#existingPhoto').val(''); // Hapus nama file di input hidden
                         $(this).addClass('d-none'); // Sembunyikan tombol remove
                     });
 
+                    // **Tampilkan modal setelah semua inisialisasi selesai**
                     $('#editModal').modal('show');
 
                     $('#editModal').on('shown.bs.modal', function () {
-                        // Inisialisasi Datepicker setelah modal ditampilkan
-                        $('#StartDate').datepicker({
-                            format: "dd-M-yyyy",
-                            autoclose: true,
-                            todayHighlight: true
-                        });
-
-                        $('#EndDate').datepicker({
-                            format: "dd-M-yyyy",
-                            autoclose: true,
-                            todayHighlight: true
-                        });
+                        $('#StartDate').datepicker("update");
+                        $('#EndDate').datepicker("update");
                     });
                 },
                 error: function (xhr) {
