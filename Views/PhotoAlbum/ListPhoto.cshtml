@@ -277,7 +277,7 @@
 
         $(document).on('click', '#addButton', function () {
         $.ajax({
-            url: '@Url.Action("AddPhoto", "PhotoAlbum")',
+            url: '@Url.Action("AddPhotoFromPhoto", "PhotoAlbum", new {albumID = ViewBag.AlbumId })',
             type: 'GET',
             success: function(data) {
                 $('#modalContainer').html(data);

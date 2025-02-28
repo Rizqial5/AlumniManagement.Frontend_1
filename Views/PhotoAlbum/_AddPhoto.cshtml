@@ -11,16 +11,30 @@
                 @using (Html.BeginForm("AddPhoto", "PhotoAlbum", FormMethod.Post, new { id = "createForm", enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
+                    @Html.Hidden("isFromPhoto", (bool)ViewBag.IsFromPhoto)
+                    @Html.Hidden("checkRedirect", (int)ViewBag.AlbumId )
 
                     <div class="form-horizontal">
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+                        @{
+                            var isDisabled = ViewBag.DisableDropdown != null && (bool)ViewBag.DisableDropdown ? "disabled" : "";
+                        }
                         <!-- Select Album -->
                         <div class="form-group row align-items-center">
                             <label class="col-md-2 control-label">@Html.LabelFor(model => model.AlbumID)</label>
                             <div class="col-md-10">
-                                @Html.DropDownListFor(model => model.AlbumID, (SelectList)ViewBag.PhotoAlbum, "Select Album",
-                                new { @class = "form-control", @id = "AlbumDropdown" })
+                                @if (ViewBag.DisableDropdown == false)
+                                {
+                                    @Html.DropDownListFor(model => model.AlbumID, (SelectList)ViewBag.PhotoAlbum, "Select Album",
+                                    new { @class = "form-control", @id = "AlbumDropdown" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.AlbumID, (SelectList)ViewBag.PhotoAlbum, "Select Album",
+                                    new { @class = "form-control", @id = "AlbumDropdown", @disabled = "disabled" })
+                                }
+                                @Html.HiddenFor(model => model.AlbumID)
                                 @Html.ValidationMessageFor(model => model.AlbumID, "", new { @class = "text-danger" })
                             </div>
                         </div>

@@ -67,6 +67,17 @@ namespace AlumniManagement.Frontend.Controllers
             return PartialView("_CreatePhotoAlbum");
         }
 
+        public ActionResult CreateAlbumFromGallery(int albumId)
+        {
+
+            var addPhoto = new PhotoModel
+            {
+                AlbumID = albumId
+            };
+
+            return PartialView("_CreatePhotoAlbum", addPhoto);
+        }
+
         // POST: PhotoAlbum/Create
         [HttpPost]
         public ActionResult CreateAlbum(PhotoAlbumModel albumModel)
@@ -200,6 +211,7 @@ namespace AlumniManagement.Frontend.Controllers
 
             ViewBag.AlbumName = _photoAlbumRepository.GetPhotoAlbumById(albumId).AlbumName;
             ViewBag.AlbumId = albumId;
+            
 
             return View("ListPhoto",listPhotoData.ToPagedList(pageNumber,size));
         }
@@ -210,12 +222,27 @@ namespace AlumniManagement.Frontend.Controllers
             var albumDDL = _photoAlbumRepository.GetPhotoAlbums();
 
             ViewBag.PhotoAlbum = new SelectList(albumDDL, "AlbumID", "AlbumName");
+            ViewBag.DisableDropdown = false; // atau false
+            ViewBag.isFromPhoto = false;
+            ViewBag.AlbumId = 0;
+
+            return PartialView("_AddPhoto");
+        }
+
+        public ActionResult AddPhotoFromPhoto(int albumId)
+        {
+            var albumDDL = _photoAlbumRepository.GetPhotoAlbums();
+
+            ViewBag.PhotoAlbum = new SelectList(albumDDL, "AlbumID", "AlbumName");
+            ViewBag.DisableDropdown = true;
+            ViewBag.IsFromPhoto = true;
+            ViewBag.AlbumId=albumId;
 
             return PartialView("_AddPhoto");
         }
 
         [HttpPost]
-        public ActionResult AddPhoto(PhotoModel model, HttpPostedFileBase photoUpload)
+        public ActionResult AddPhoto(PhotoModel model, HttpPostedFileBase photoUpload, bool isFromPhoto, int checkRedirect)
         {
             try
             {
@@ -229,12 +256,23 @@ namespace AlumniManagement.Frontend.Controllers
 
                 TempData["SuccessMessage"] = "Photo Added Succesfully";
 
+                if(isFromPhoto)
+                {
+                    return RedirectToAction("ListPhoto", new {albumId = model.AlbumID});
+                }
+
                 return RedirectToAction("Index");
+
             }
             catch (Exception ex)
             {
 
                 TempData["ErrorMessage"] = "Photo Added Failed " + ex.Message;
+
+                if (isFromPhoto)
+                {
+                    return RedirectToAction("ListPhoto", new { albumId = model.AlbumID });
+                }
 
                 return RedirectToAction("Index");
             }
