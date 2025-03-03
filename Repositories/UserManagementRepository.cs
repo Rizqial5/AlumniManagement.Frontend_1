@@ -24,7 +24,9 @@ namespace AlumniManagement.Frontend.Repositories
 
         public IEnumerable<AspNetUserModel.UserModel> GetAllUsers()
         {
-            throw new NotImplementedException();
+            var data = Mapping.Mapper.Map<List<AspNetUserModel.UserModel>>(_userManagementServices.GetAllUsers());
+
+            return data;
         }
 
         public AspNetUserModel.UserModel GetUser(string id)

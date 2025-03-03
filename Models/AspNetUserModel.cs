@@ -1,5 +1,8 @@
-﻿using System;
+﻿using AutoMapper.Configuration.Annotations;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -31,7 +34,11 @@ namespace AlumniManagement.Frontend.Models
 
         public class UserModel
         {
+            [Key]
             public string Id { get; set; }
+
+            [Required]
+            [DisplayName("Full Name")]
             public string FullName { get; set; }
             public string Email { get; set; }
             public bool EmailConfirmed { get; set; }
@@ -46,6 +53,13 @@ namespace AlumniManagement.Frontend.Models
             public ICollection<UserRoleModel> UserRoles { get; set; }
             public ICollection<UserClaimModel> UserClaims { get; set; }
             public ICollection<UserLoginModel> UserLogins { get; set; }
+
+            [Ignore]
+            public string ShowRoles { get; set; }
+
+            [Ignore]
+            [DisplayName("Is Superadmin")]
+            public bool IsSuperAdmin { get; set; }
         }
 
         public class UserRoleModel
