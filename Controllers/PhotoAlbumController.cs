@@ -16,6 +16,7 @@ using PagedList;
 
 namespace AlumniManagement.Frontend.Controllers
 {
+    [Authorize]
     public class PhotoAlbumController : Controller
     {
         private IPhotoAlbumRepository _photoAlbumRepository;

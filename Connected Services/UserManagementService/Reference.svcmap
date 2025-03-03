@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="10c4e472-70ce-4c6c-ac0a-d4845080356a" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:56362/Services/UserManagementService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="UserManagementService.xsd" MetadataType="Schema" ID="cf7425ae-2713-46ae-ae68-9d4a5ee621e8" SourceId="1" SourceUrl="http://localhost:56362/Services/UserManagementService.svc?xsd=xsd2" />
+    <MetadataFile FileName="UserManagementService1.xsd" MetadataType="Schema" ID="2578521f-1a9e-4a28-a016-67066344cf9b" SourceId="1" SourceUrl="http://localhost:56362/Services/UserManagementService.svc?xsd=xsd1" />
+    <MetadataFile FileName="UserManagementService2.xsd" MetadataType="Schema" ID="451fceae-6e1b-4140-b328-322d2cb4e36e" SourceId="1" SourceUrl="http://localhost:56362/Services/UserManagementService.svc?xsd=xsd0" />
+    <MetadataFile FileName="UserManagementService.wsdl" MetadataType="Wsdl" ID="6fae9e6d-4854-4f71-8629-959114c759ad" SourceId="1" SourceUrl="http://localhost:56362/Services/UserManagementService.svc?wsdl" />
+    <MetadataFile FileName="UserManagementService.disco" MetadataType="Disco" ID="a57eb3cd-0bcb-4e82-b3f5-c1dee3776220" SourceId="1" SourceUrl="http://localhost:56362/Services/UserManagementService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

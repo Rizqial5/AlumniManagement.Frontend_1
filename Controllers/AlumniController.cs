@@ -16,6 +16,7 @@ using System.Web.Mvc;
 
 namespace AlumniManagement.Frontend.Controllers
 {
+    [Authorize]
     public class AlumniController : Controller
     {
 
@@ -24,6 +25,7 @@ namespace AlumniManagement.Frontend.Controllers
         private IMajorRepository _majorRepository;
         private IExcelRepository _excelRepository;
         private IJobRepository _jobRepository;
+
 
         private string photoPath = ConfigurationManager.AppSettings["PhotoPath"];
         private string fileTypes = ConfigurationManager.AppSettings["FileTypes"];
@@ -47,6 +49,7 @@ namespace AlumniManagement.Frontend.Controllers
 
 
         // GET: Alumni
+        
         public ActionResult Index()
         {
             var facultyDdl = _facultyRepository.GetAll();
@@ -54,6 +57,12 @@ namespace AlumniManagement.Frontend.Controllers
 
             ViewBag.FacultyDdl = new SelectList(facultyDdl, "FacultyID", "FacultyName");
             ViewBag.MajorDDL = new SelectList(majorDdl, "MajorID", "MajorName");
+            ViewBag.SuperAdmin = false;
+
+            if (User.IsInRole("Superadmin"))
+            {
+                ViewBag.SuperAdmin = true;
+            }
 
             return View();
         }
@@ -172,6 +181,7 @@ namespace AlumniManagement.Frontend.Controllers
         //    return View(alumniModel);
         //}
 
+        [Authorize(Roles = "Superadmin")]
         public ActionResult Create()
         {
 
@@ -200,6 +210,7 @@ namespace AlumniManagement.Frontend.Controllers
 
         // POST: Alumni/Create
         [HttpPost]
+        [Authorize(Roles = "Superadmin")]
         public ActionResult Create(AlumniModel alumniModel, HttpPostedFileBase photoUpload)
         {
             try
@@ -498,6 +509,7 @@ namespace AlumniManagement.Frontend.Controllers
             }
         }
 
+        [Authorize(Roles = "Superadmin")]
         public ActionResult ExportExcel()
         {
 
@@ -513,6 +525,7 @@ namespace AlumniManagement.Frontend.Controllers
 
         // Get Show Tabel
         [HttpPost]
+        [Authorize(Roles = "Superadmin")]
         public ActionResult ShowTableView(HttpPostedFileBase file)
         {
             var resultListImported = ImportExcel(file);
@@ -561,6 +574,7 @@ namespace AlumniManagement.Frontend.Controllers
             }
         }
 
+        [Authorize(Roles = "Superadmin")]
         [HttpPost]
         public List<AlumniModel> ImportExcel(HttpPostedFileBase file)
         {
@@ -576,6 +590,7 @@ namespace AlumniManagement.Frontend.Controllers
 
         }
 
+        [Authorize(Roles = "Superadmin")]
         [HttpPost]
         public ActionResult UpsertAlumni(AlumniModel alumni, HttpPostedFileBase photoUpload)
         {

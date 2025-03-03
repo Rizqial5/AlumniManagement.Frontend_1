@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace AlumniManagement.Web.Controllers
 {
+    [Authorize]
     public class FacultyController : Controller
     {
         private IFacultyRepository _facultyRepository;
@@ -43,12 +44,14 @@ namespace AlumniManagement.Web.Controllers
 
 
         // GET: Faculty/Create
+        [Authorize(Roles = "SuperAdmin")]
         public ActionResult Create()
         {
             return PartialView("_CreatePartial");
         }
 
         // POST: Faculty/Create
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         public ActionResult Create(FacultyModel facultyModel)
         {

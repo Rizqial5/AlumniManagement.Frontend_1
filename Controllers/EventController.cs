@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace AlumniManagement.Frontend.Controllers
 {
+    [Authorize]
     public class EventController : Controller
     {
         private IEventRepository _eventRepository;

@@ -35,9 +35,6 @@ namespace AlumniManagement.Frontend.AlumniService {
         private string DegreeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Web.Mvc.SelectListItem[] DistrictDDLField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> DistrictIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -71,9 +68,6 @@ namespace AlumniManagement.Frontend.AlumniService {
         private int[] HobbiesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Web.Mvc.SelectListItem[] HobbiesDDlField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string HobbiesListNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -81,9 +75,6 @@ namespace AlumniManagement.Frontend.AlumniService {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LinkedInProfileField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Web.Mvc.SelectListItem[] MajorDDlField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> MajorIDField;
@@ -170,19 +161,6 @@ namespace AlumniManagement.Frontend.AlumniService {
                 if ((object.ReferenceEquals(this.DegreeField, value) != true)) {
                     this.DegreeField = value;
                     this.RaisePropertyChanged("Degree");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Web.Mvc.SelectListItem[] DistrictDDL {
-            get {
-                return this.DistrictDDLField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DistrictDDLField, value) != true)) {
-                    this.DistrictDDLField = value;
-                    this.RaisePropertyChanged("DistrictDDL");
                 }
             }
         }
@@ -331,19 +309,6 @@ namespace AlumniManagement.Frontend.AlumniService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Web.Mvc.SelectListItem[] HobbiesDDl {
-            get {
-                return this.HobbiesDDlField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.HobbiesDDlField, value) != true)) {
-                    this.HobbiesDDlField = value;
-                    this.RaisePropertyChanged("HobbiesDDl");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
         public string HobbiesListName {
             get {
                 return this.HobbiesListNameField;
@@ -378,19 +343,6 @@ namespace AlumniManagement.Frontend.AlumniService {
                 if ((object.ReferenceEquals(this.LinkedInProfileField, value) != true)) {
                     this.LinkedInProfileField = value;
                     this.RaisePropertyChanged("LinkedInProfile");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Web.Mvc.SelectListItem[] MajorDDl {
-            get {
-                return this.MajorDDlField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MajorDDlField, value) != true)) {
-                    this.MajorDDlField = value;
-                    this.RaisePropertyChanged("MajorDDl");
                 }
             }
         }

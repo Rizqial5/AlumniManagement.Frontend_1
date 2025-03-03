@@ -69,13 +69,20 @@
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Faculty", "Index", "Faculty", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Major", "Index", "Major", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Alumni", "Index", "Alumni", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Job Posting", "Index", "JobPosting", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Events", "Index", "Event", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Gallery", "Index", "PhotoAlbum", new { area = "" }, new { @class = "nav-link" })</li>
+
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Faculty", "Index", "Faculty", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Major", "Index", "Major", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Alumni", "Index", "Alumni", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Job Posting", "Index", "JobPosting", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Events", "Index", "Event", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Gallery", "Index", "PhotoAlbum", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
+
+
                 </ul>
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </nav>
