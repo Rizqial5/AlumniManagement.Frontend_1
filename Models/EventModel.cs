@@ -21,7 +21,7 @@ namespace AlumniManagement.Frontend.Models
         [StringLength(255, ErrorMessage = "Max char length is 100")]
         public string Description { get; set; }
 
-   
+ 
         public string EventImagePath { get; set; }
 
 
@@ -55,5 +55,9 @@ namespace AlumniManagement.Frontend.Models
         public string Status { get; set; }
 
         public string ShowImage { get;set; }
+
+
+        [Required(ErrorMessage = "Image is Required")]
+        public HttpPostedFileBase File {  get; set; }
     }
 }

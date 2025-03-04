@@ -97,17 +97,33 @@ namespace AlumniManagement.Frontend.Controllers
         {
             try
             {
+                var errors = new Dictionary<string, string>();
+
+                if (photoUpload == null || photoUpload.ContentLength == 0)
+                {
+                    errors["photoUpload"] = "Photo is required.";
+                }
+
+
                 if (ModelState.IsValid)
                 {
+
 
                     UploadBehaviour(model, photoUpload);
 
                     _eventRepository.UpsertEvent(model);
+
+                }else if(!ModelState.IsValid)
+                {
+                    return PartialView("_CreatePartial", model);
                 }
 
-                TempData["SuccessMessage"] = "Event updated Succesfully";
+
+
+                TempData["SuccesMessage"] = "Event succesfully created";
 
                 return RedirectToAction("Index");
+
             }
             catch (Exception ex)
             {
@@ -120,11 +136,7 @@ namespace AlumniManagement.Frontend.Controllers
 
         private void UploadBehaviour(EventModel model, HttpPostedFileBase photoUpload)
         {
-            // Validasi tipe file
-            if (photoUpload == null)
-            {
-                return;
-            }
+ 
 
             if (model.EventImagePath != null)
             {

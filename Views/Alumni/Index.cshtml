@@ -14,28 +14,31 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
     <style>
         .dataTables_wrapper {
-            width: 100%; /* Lebarkan tabel */
+            width: 100%;  
+            /*height: 100px;*/
         }
 
-            .dataTables_wrapper .dataTables_paginate {
-                float: none;
-                text-align: center;
-            }
+        .dataTables_wrapper .dataTables_paginate {
+            float: none;
+            text-align: center;
+        }
 
-            .dataTables_wrapper .dataTables_info {
-                float: left;
-                padding-top: 0.755em;
-            }
+        .dataTables_wrapper .dataTables_info {
+            float: left;
+            padding-top: 0.755em;
+        }
 
-            .dataTables_wrapper .bottom {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+        .dataTables_wrapper .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
         th {
             white-space: nowrap;
         }
+
+         
     </style>
 }
 
@@ -81,53 +84,28 @@
 
 
 
-<table class="table" id="alumniData" style="width:100%">
+<table class="table"  id="alumniData" >
     <thead>
         <tr>
-            <th><input type="checkbox" id="selectAll" /></th>
-            <th>Actions</th>
-            <th>No</th>
-            <th>Photo </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>Gender</th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MobileNumber)
-            </th>
-            <th>
-                Hobbies
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FullAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GraduationYear)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Degree)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FacultyName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MajorName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LinkedInProfile)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedDate)
-            </th>
+            <th ><input type="checkbox" id="selectAll" /></th>
+            <th >Actions</th>
+            <th >No</th>
+            <th >Photo</th>
+            <th >@Html.DisplayNameFor(model => model.FullName)</th>
+            <th >Gender</th>
+            <th >@Html.DisplayNameFor(model => model.Email)</th>
+            <th >@Html.DisplayNameFor(model => model.MobileNumber)</th>
+            <th >Hobbies</th>
+            <th >@Html.DisplayNameFor(model => model.FullAddress)</th>
+            <th >@Html.DisplayNameFor(model => model.DateOfBirth)</th>
+            <th >@Html.DisplayNameFor(model => model.GraduationYear)</th>
+            <th >@Html.DisplayNameFor(model => model.Degree)</th>
+            <th >@Html.DisplayNameFor(model => model.FacultyName)</th>
+            <th >@Html.DisplayNameFor(model => model.MajorName)</th>
+            <th >@Html.DisplayNameFor(model => model.LinkedInProfile)</th>
+            <th >@Html.DisplayNameFor(model => model.ModifiedDate)</th>
         </tr>
     </thead>
-
 </table>
 
 <div id="modalContainer"></div>
@@ -229,7 +207,7 @@
                                 'data-src="' + row.ShowImagePath + '" data-name="' + row.FullName + '"/></div>';
                         }
                     },
-                    { "data": "FullName" },
+                    { "data": "FullName", width: "200px" },
                     { "data": "Gender" },
                     { "data": "Email" },
                     { "data": "MobileNumber" },
@@ -268,9 +246,9 @@
                 "scrollX": true,
                 "scrollCollapse": true,
                 "fixedHeader": true,
-                "fixedColumns": {
-                    "leftColumns": 2
-                },
+                //"fixedColumns": {
+                //    "leftColumns": 2
+                //},
                 "language": {
                     "paginate": {
                         "previous": "Previous",
@@ -470,10 +448,15 @@
 
                     reinitializeValidation();
 
+                    $('#FacultyDropdown').on('change', function () {
+                        $(this).valid(); // Memeriksa kembali validasi
+                    });
+
                     $('#DateOfBirth').datepicker({
                         format: "dd-M-yyyy",
                         autoclose: true,
-                        todayHighlight: true
+                        todayHighlight: true,
+                        endDate: new Date()
                     });
 
 

@@ -109,6 +109,10 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
+
+                            if (row.IsClosed) {
+                                return ''
+                            }
                             return '<input type="checkbox" class="selectCheckbox" data-id="' + row.EventID + '" />'}
                     },
                     {
@@ -410,23 +414,30 @@
                         }
                     });
 
-                    document.getElementById('submitBtn').addEventListener('click', function (event) {
-                        // Ambil elemen input file
-                        var fileInput = document.getElementById('photoUpload');
+                    $(document).on("submit", "#createForm", function (e) {
+                        e.preventDefault();
 
-                        // Cek apakah file dipilih
-                        if (!fileInput.files.length) {
-                            // Jika tidak ada file yang dipilih, tampilkan pesan error
-                            alert('Please upload a photo before submitting.');
-                            event.preventDefault(); // Mencegah form untuk disubmit
-                        } else {
-                            // Cek jika file lebih besar dari 3MB
-                            var file = fileInput.files[0];
-                            if (file.size > 3 * 1024 * 1024) {
-                                alert('File size exceeds the maximum allowed size of 3MB.');
-                                event.preventDefault(); // Mencegah form untuk disubmit
+                        var formData = new FormData(this);
+
+                        $.ajax({
+                            url: $(this).attr("action"),
+                            type: $(this).attr("method"),
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.success) {
+                                    $("#createModal").modal("hide");
+                                    location.reload();
+                                } else {
+                                    $(".text-danger").text(""); // Reset semua error
+
+                                    $.each(response.errors, function (key, message) {
+                                        $("#" + key + "Error").text(message); // Tampilkan error sesuai field
+                                    });
+                                }
                             }
-                        }
+                        });
                     });
 
                     myModal.show();
