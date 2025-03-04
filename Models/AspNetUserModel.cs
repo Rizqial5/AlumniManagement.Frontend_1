@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace AlumniManagement.Frontend.Models
 {
@@ -12,9 +13,11 @@ namespace AlumniManagement.Frontend.Models
     {
         public class RoleModel
         {
+            [Key]
             public string Id { get; set; }
+
+            [Required(ErrorMessage ="Name is Required")]
             public string Name { get; set; }
-            public ICollection<RolePermissionModel> RolePermissions { get; set; }
         }
 
         public class PermissionModel
@@ -58,8 +61,12 @@ namespace AlumniManagement.Frontend.Models
             public string ShowRoles { get; set; }
 
             [Ignore]
-            [DisplayName("Is Superadmin")]
-            public bool IsSuperAdmin { get; set; }
+            public IEnumerable<string> ListRoles { get; set; }
+
+            [Ignore]
+            public IEnumerable<SelectListItem> RolesDDL { get; set; }
+
+
         }
 
         public class UserRoleModel

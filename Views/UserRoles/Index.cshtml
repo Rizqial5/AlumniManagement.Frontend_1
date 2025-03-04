@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AlumniManagement.Frontend.Models.AspNetUserModel.UserRoleModel>
+﻿@model IEnumerable<AlumniManagement.Frontend.Models.AspNetUserModel.RoleModel>
 
 @{
     ViewBag.Title = "Index";
@@ -38,18 +38,18 @@
     </style>
 }
 
-<h2>User List</h2>
+<h2>Roles</h2>
 
+<button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Create Role</button>
+<button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
 
-<table class="table" id="userData" style="width:100%">
+<table class="table" id="rolesData" style="width:100%">
     <thead>
         <tr>
-            <th></th>
-            <th>No. </th>
+            <th><input type="checkbox" id="selectAll" /></th>
             <th>Actions</th>
-            <th>Full Name </th>
-            <th>Email </th>
-            <th>Roles</th>
+            <th>No. </th>
+            <th>Name</th>
         </tr>
     </thead>
 </table>
@@ -68,9 +68,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
         $(document).ready(function () {
-            var table = $('#userData').DataTable({
+            var table = $('#rolesData').DataTable({
                 "ajax": {
-                    "url": "/UserManagement/GetUsers",
+                    "url": "/UserRoles/GetRoles",
                     "type": "GET",
                     "datatype": "json"
                 },
@@ -84,15 +84,6 @@
                         "data": null,
                         "render": function (data, type, row) {
 
-
-                            //return '<div class="btn-group">' +
-                            //    '<a class="btn btn-primary" data-id="' + row.Id + '" id="editButton" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
-                            //    '<i class="fas fa-edit"></i>' +
-                            //    '</a>' +
-                            //    '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.Id + '">' +
-                            //    '<i class="fas fa-trash"></i>'
-                            //    + '</button>' +
-                            //    '</div>'
 
                             var editButton = '<a class="btn btn-primary" id="editButton" data-id="' + row.Id + '" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;"><i class="fas fa-edit"></i></a>';
                             var deleteButton = '<button id="deleteButton" class="btn btn-danger deleteButton" style="margin-right: 5px;"  data-id="' + row.Id + '"><i class="fas fa-trash"></i></button>';
@@ -108,9 +99,7 @@
                             return meta.row + 1;  // Display the row number (meta.row is zero-indexed)
                         }
                     },
-                    { "data": "FullName" },
-                    { "data": "Email" },
-                    { "data": "ShowRoles" }
+                    { "data": "Name" }
                 ],
 /*                "order": [[0, "desc"]],*/
                 "dom": '<"top"f>rt<"bottom"lpi><"clear">', // search on the top right, show entries, paging, showing on the bottom
@@ -133,13 +122,28 @@
                         "first": "<<",
                         "last": ">>"
                     }
-                }
+                },
+                "columnDefs": [
+                    {
+                        "targets": 1,  // Indeks kolom "DateDisplay" (mulai dari 0)
+                        "width": "100px"  // Menambahkan kelas untuk penataan teks di tengah
+                    },
+                    {
+                        "targets": 0,  // Indeks kolom "DateDisplay" (mulai dari 0)
+                        "width": "50px"  // Menambahkan kelas untuk penataan teks di tengah
+                    },
+                    {
+                        "targets": 2,  // Indeks kolom "DateDisplay" (mulai dari 0)
+                        "width": "50px"  // Menambahkan kelas untuk penataan teks di tengah
+                    }
+
+                ]
             });
 
-            $('#userData_filter input').unbind();
+            $('#rolesData_filter input').unbind();
 
             // Bind a new event handler
-            $('#userData_filter input').on('keyup', function (e) {
+            $('#rolesData_filter input').on('keyup', function (e) {
                 var value = $(this).val();
                 if (value.length >= 3 || value.length === 0) {
                     table.search(value).draw();
@@ -172,13 +176,13 @@
                     if (result.isConfirmed) {
                         // Make an AJAX call to delete the item
                         $.ajax({
-                            url: '/UserManagement/Delete', // URL of your Delete method
+                            url: '/UserRoles/Delete', // URL of your Delete method
                             type: 'POST', // Use POST for data modification
                             data: { id: itemId }, // Pass the ID as data
                             success: function (response) {
                                 if (response.success) {
                                     Swal.fire("Deleted!", response.message, "success").then(() => {
-                                        $("#userData").DataTable().ajax.reload(); // Reload the page or update UI
+                                        $("#rolesData").DataTable().ajax.reload(); // Reload the page or update UI
                                     });
                                 } else {
                                     Swal.fire("Error!", response.message, "error");
@@ -220,14 +224,14 @@
                     if (result.isConfirmed) {
                         // Make an AJAX call to delete the selected items
                         $.ajax({
-                            url: '/Event/DeleteSelected/',
+                            url: '/UserRoles/DeleteSelected/',
                             type: 'POST',
                             data: { ids: selectedIds },
                             traditional: true,
                             success: function (response) {
                                 if (response.success) {
                                     Swal.fire("Deleted!", response.message, "success").then(() => {
-                                        $('#userData').DataTable().ajax.reload(); // Reload the DataTable
+                                        $('#rolesData').DataTable().ajax.reload(); // Reload the DataTable
                                     });
                                 } else {
                                     Swal.fire("Error!", response.message, "error");
@@ -249,7 +253,7 @@
          //mengatur partial views yang ada pada create
         $(document).on('click', '#createButton', function () {
             $.ajax({
-                url: '@Url.Action("Create", "Event")',
+                url: '@Url.Action("Create", "UserRoles")',
                 type: 'GET',
                 success: function(data) {
                     $('#modalContainer').html(data);
@@ -268,38 +272,6 @@
                 }
             });
         });
-
-
-        // mengatur partial views yang ada di edit
-        $(document).on('click', '#editButton', function () {
-            var Id = $(this).data('id'); // Ambil ID Event dari atribut data-id
-
-            $.ajax({
-                url: '/UserManagement/Edit/' + Id, // Panggil action Edit untuk mendapatkan data event
-                type: 'GET',
-                success: function (data) {
-                    $('#modalContainer').html(data); // Load HTML ke dalam modal
-
-                    // **Reinisialisasi validasi form**
-                    reinitializeValidation();
-
-                    initializeSelect2('#ddlRoles', 'Select Roles', '#editModal');
-
-                    // **Tampilkan modal setelah semua inisialisasi selesai**
-                    $('#editModal').modal('show');
-
-                },
-                error: function (xhr) {
-                    console.error(xhr.responseText);
-                    alert('An error occurred while fetching data.');
-                }
-            });
-        });
-
-        function updateSwitchLabel(switchId, labelId, trueText, falseText) {
-            var isChecked = $(switchId).is(':checked');
-            $(labelId).text(isChecked ? trueText : falseText);
-        }
 
     </script>
 

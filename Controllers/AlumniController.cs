@@ -371,7 +371,7 @@ namespace AlumniManagement.Frontend.Controllers
             return alumniModel;
         }
 
-        // POST: Alumni/Edit/5
+        // POST: Alumni/Edit/5exi
         [HttpPost]
         public ActionResult Edit(int id, AlumniModel alumniModel)
         {

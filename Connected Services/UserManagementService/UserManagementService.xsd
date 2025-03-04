@@ -104,4 +104,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfAspNetUserDTO.UserDTO" nillable="true" type="tns:ArrayOfAspNetUserDTO.UserDTO" />
+  <xs:complexType name="ArrayOfAspNetUserDTO.RoleDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AspNetUserDTO.RoleDTO" nillable="true" type="tns:AspNetUserDTO.RoleDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAspNetUserDTO.RoleDTO" nillable="true" type="tns:ArrayOfAspNetUserDTO.RoleDTO" />
 </xs:schema>

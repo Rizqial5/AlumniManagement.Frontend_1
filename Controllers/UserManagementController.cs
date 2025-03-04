@@ -20,7 +20,7 @@ namespace AlumniManagement.Frontend.Controllers
             _userManagementRepository = userManagementRepository;
         }
 
-
+        #region User Region
 
         // GET: UserManagement
         public ActionResult Index()
@@ -39,6 +39,7 @@ namespace AlumniManagement.Frontend.Controllers
 
             return Json(new {data = usersData}, JsonRequestBehavior.AllowGet);
         }
+
 
         // GET: UserManagement/Details/5
         public ActionResult Details(int id)
@@ -60,7 +61,19 @@ namespace AlumniManagement.Frontend.Controllers
                 return RedirectToAction("Index");
             }
 
-            existingData.IsSuperAdmin = existingData.UserRoles.Any(ur=> ur.Role.Name == "Superadmin");
+
+
+            existingData.ListRoles = existingData.UserRoles.Select(p => p.RoleId);
+
+            existingData.RolesDDL = _userManagementRepository.GetAllRoles()
+                .Select(r => new SelectListItem
+                {
+                    Value = r.Id,
+                    Text = r.Name,
+                    Selected = existingData.ListRoles != null
+                    && existingData.ListRoles.Contains(r.Id)
+                });
+
 
             return PartialView("_EditPartial", existingData);
         }
@@ -85,12 +98,13 @@ namespace AlumniManagement.Frontend.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    if (userModel.IsSuperAdmin)
+
+                    if (existingData.FullName.ToLower() != userModel.FullName.ToLower())
                     {
-                        _userManagementRepository.AssignSuperadmin(id);
+                        _userManagementRepository.UpdateUserFullName(id, userModel.FullName);
                     }
 
-                    _userManagementRepository.UpdateUserFullName(id, userModel.FullName);
+                    _userManagementRepository.UpdateUserRoles(id, userModel.ListRoles.ToList());
 
                     TempData["SuccessMessage"] = "User updated succesfully";
                 }
@@ -108,26 +122,32 @@ namespace AlumniManagement.Frontend.Controllers
             }
         }
 
-        // GET: UserManagement/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
         // POST: UserManagement/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(string id, FormCollection collection)
         {
             try
             {
                 // TODO: Add delete logic here
 
-                return RedirectToAction("Index");
+                _userManagementRepository.DeleteUser(id);
+
+                return Json(new
+                {
+                    success = true
+                });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return Json(new
+                {
+                    error = true,
+                    message = ex.Message
+                });
             }
         }
+
+        #endregion
     }
 }

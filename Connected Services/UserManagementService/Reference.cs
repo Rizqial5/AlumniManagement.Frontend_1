@@ -909,6 +909,36 @@ namespace AlumniManagement.Frontend.UserManagementService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/UpdateUserFullName", ReplyAction="http://tempuri.org/IUserManagementService/UpdateUserFullNameResponse")]
         System.Threading.Tasks.Task UpdateUserFullNameAsync(string id, string fullName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/UpdateUserRoles", ReplyAction="http://tempuri.org/IUserManagementService/UpdateUserRolesResponse")]
+        void UpdateUserRoles(string id, string newRoles);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/UpdateUserRoles", ReplyAction="http://tempuri.org/IUserManagementService/UpdateUserRolesResponse")]
+        System.Threading.Tasks.Task UpdateUserRolesAsync(string id, string newRoles);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/GetAllRoles", ReplyAction="http://tempuri.org/IUserManagementService/GetAllRolesResponse")]
+        AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO[] GetAllRoles();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/GetAllRoles", ReplyAction="http://tempuri.org/IUserManagementService/GetAllRolesResponse")]
+        System.Threading.Tasks.Task<AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO[]> GetAllRolesAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/InsertRoles", ReplyAction="http://tempuri.org/IUserManagementService/InsertRolesResponse")]
+        void InsertRoles(AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO roleDTO);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/InsertRoles", ReplyAction="http://tempuri.org/IUserManagementService/InsertRolesResponse")]
+        System.Threading.Tasks.Task InsertRolesAsync(AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO roleDTO);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/DeleteRoles", ReplyAction="http://tempuri.org/IUserManagementService/DeleteRolesResponse")]
+        void DeleteRoles(string id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/DeleteRoles", ReplyAction="http://tempuri.org/IUserManagementService/DeleteRolesResponse")]
+        System.Threading.Tasks.Task DeleteRolesAsync(string id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/GetRoleById", ReplyAction="http://tempuri.org/IUserManagementService/GetRoleByIdResponse")]
+        AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO GetRoleById(string id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManagementService/GetRoleById", ReplyAction="http://tempuri.org/IUserManagementService/GetRoleByIdResponse")]
+        System.Threading.Tasks.Task<AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO> GetRoleByIdAsync(string id);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1024,6 +1054,46 @@ namespace AlumniManagement.Frontend.UserManagementService {
         
         public System.Threading.Tasks.Task UpdateUserFullNameAsync(string id, string fullName) {
             return base.Channel.UpdateUserFullNameAsync(id, fullName);
+        }
+        
+        public void UpdateUserRoles(string id, string newRoles) {
+            base.Channel.UpdateUserRoles(id, newRoles);
+        }
+        
+        public System.Threading.Tasks.Task UpdateUserRolesAsync(string id, string newRoles) {
+            return base.Channel.UpdateUserRolesAsync(id, newRoles);
+        }
+        
+        public AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO[] GetAllRoles() {
+            return base.Channel.GetAllRoles();
+        }
+        
+        public System.Threading.Tasks.Task<AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO[]> GetAllRolesAsync() {
+            return base.Channel.GetAllRolesAsync();
+        }
+        
+        public void InsertRoles(AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO roleDTO) {
+            base.Channel.InsertRoles(roleDTO);
+        }
+        
+        public System.Threading.Tasks.Task InsertRolesAsync(AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO roleDTO) {
+            return base.Channel.InsertRolesAsync(roleDTO);
+        }
+        
+        public void DeleteRoles(string id) {
+            base.Channel.DeleteRoles(id);
+        }
+        
+        public System.Threading.Tasks.Task DeleteRolesAsync(string id) {
+            return base.Channel.DeleteRolesAsync(id);
+        }
+        
+        public AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO GetRoleById(string id) {
+            return base.Channel.GetRoleById(id);
+        }
+        
+        public System.Threading.Tasks.Task<AlumniManagement.Frontend.UserManagementService.AspNetUserDTORoleDTO> GetRoleByIdAsync(string id) {
+            return base.Channel.GetRoleByIdAsync(id);
         }
     }
 }

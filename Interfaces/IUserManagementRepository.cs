@@ -28,6 +28,15 @@ namespace AlumniManagement.Frontend.Interfaces
         
         IEnumerable<AspNetUserModel.UserModel> GetUsersByRole(string roleName);
 
+        IEnumerable<AspNetUserModel.RoleModel> GetAllRoles();
+
+        void UpdateUserRoles(string id, List<string> rolesAdded);
+
         void AssignSuperadmin(string id);
+
+        void InsertRoles(AspNetUserModel.RoleModel roleDTO);
+        void DeleteRoles(string id);
+
+        AspNetUserModel.RoleModel GetRoleById(string id);
     }
 }
