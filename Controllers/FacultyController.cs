@@ -30,9 +30,37 @@ namespace AlumniManagement.Web.Controllers
 
         public JsonResult GetRooms()
         {
-            var facultiesData = _facultyRepository.GetAll();
+            try
+            {
+                var facultiesData = _facultyRepository.GetAll();
 
-            return Json(new { data = facultiesData }, JsonRequestBehavior.AllowGet);
+                if (facultiesData == null || !facultiesData.Any())
+                {
+                    return Json(new
+                    {
+                        error = true,
+                        message = "No data available.",
+                        data = new List<FacultyModel>() // Pastikan `data` selalu ada sebagai array
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                return Json(new
+                {
+                    error = false,
+                    message = "Success",
+                    data = facultiesData
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = ex.Message,
+                    data = new List<FacultyModel>() // Hindari null untuk menghindari DataTable error
+                }, JsonRequestBehavior.AllowGet);
+            }
+
         }
 
         // GET: Faculty/Details/5

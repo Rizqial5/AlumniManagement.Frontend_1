@@ -266,10 +266,10 @@ namespace AlumniManagement.Frontend.PhotoAlbumService {
         System.Threading.Tasks.Task InsertPhotoAlbumAsync(AlumniManagement.Frontend.PhotoAlbumService.PhotoAlbumDTO photoAlbum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoAlbumService/InsertPhoto", ReplyAction="http://tempuri.org/IPhotoAlbumService/InsertPhotoResponse")]
-        void InsertPhoto(AlumniManagement.Frontend.PhotoAlbumService.PhotoDTO photo, int albumID);
+        void InsertPhoto(AlumniManagement.Frontend.PhotoAlbumService.PhotoDTO[] photo, int albumID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoAlbumService/InsertPhoto", ReplyAction="http://tempuri.org/IPhotoAlbumService/InsertPhotoResponse")]
-        System.Threading.Tasks.Task InsertPhotoAsync(AlumniManagement.Frontend.PhotoAlbumService.PhotoDTO photo, int albumID);
+        System.Threading.Tasks.Task InsertPhotoAsync(AlumniManagement.Frontend.PhotoAlbumService.PhotoDTO[] photo, int albumID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoAlbumService/UpdatePhotoAlbum", ReplyAction="http://tempuri.org/IPhotoAlbumService/UpdatePhotoAlbumResponse")]
         void UpdatePhotoAlbum(AlumniManagement.Frontend.PhotoAlbumService.PhotoAlbumDTO photoAlbum);
@@ -363,11 +363,11 @@ namespace AlumniManagement.Frontend.PhotoAlbumService {
             return base.Channel.InsertPhotoAlbumAsync(photoAlbum);
         }
         
-        public void InsertPhoto(AlumniManagement.Frontend.PhotoAlbumService.PhotoDTO photo, int albumID) {
+        public void InsertPhoto(AlumniManagement.Frontend.PhotoAlbumService.PhotoDTO[] photo, int albumID) {
             base.Channel.InsertPhoto(photo, albumID);
         }
         
-        public System.Threading.Tasks.Task InsertPhotoAsync(AlumniManagement.Frontend.PhotoAlbumService.PhotoDTO photo, int albumID) {
+        public System.Threading.Tasks.Task InsertPhotoAsync(AlumniManagement.Frontend.PhotoAlbumService.PhotoDTO[] photo, int albumID) {
             return base.Channel.InsertPhotoAsync(photo, albumID);
         }
         

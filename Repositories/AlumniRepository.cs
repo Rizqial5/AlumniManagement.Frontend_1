@@ -112,10 +112,7 @@ namespace AlumniManagement.Frontend.Repositories
             return data;
         }
 
-        public void ImportFromExcel(AlumniModel alumniDTO)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public void InsertAlumniWitHobbies(AlumniModel alumni)
         {

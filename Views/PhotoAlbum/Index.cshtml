@@ -344,21 +344,21 @@
                      $(document).on('change', '#photoUpload', function (event) {
                          var file = event.target.files[0];
                          if (file) {
-                             var fileSize = file.size / 1024 / 1024; // Convert to MB
-                             var fileType = file.type;
-                             var validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+                             //var fileSize = file.size / 1024 / 1024; // Convert to MB
+                             //var fileType = file.type;
+                             //var validExtensions = ["image/jpeg", "image/jpg", "image/png"];
 
-                             if (!validExtensions.includes(fileType)) {
-                                 alert("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
-                                 $(this).val(""); // Reset file input
-                                 return;
-                             }
+                             //if (!validExtensions.includes(fileType)) {
+                             //    alert("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                             //    $(this).val(""); // Reset file input
+                             //    return;
+                             //}
 
-                             if (fileSize > 3) {
-                                 alert("File size exceeds 3MB. Please select a smaller file.");
-                                 $(this).val(""); // Reset file input
-                                 return;
-                             }
+                             //if (fileSize > 3) {
+                             //    alert("File size exceeds 3MB. Please select a smaller file.");
+                             //    $(this).val(""); // Reset file input
+                             //    return;
+                             //}
 
                              // Preview Image
                              var reader = new FileReader();
@@ -367,6 +367,34 @@
                              };
                              reader.readAsDataURL(file);
                          }
+                     });
+
+                     $(document).on("submit", "#createForm", function (e) {
+                         e.preventDefault();
+
+                         var formData = new FormData(this);
+
+                         $.ajax({
+                             url: $(this).attr("action"),
+                             type: $(this).attr("method"),
+                             data: formData,
+                             processData: false,
+                             contentType: false,
+                             success: function (response) {
+                                 console.log(response);
+
+                                 if (response.success) {
+                                     $("#createModal").modal("hide");
+                                     location.reload();
+                                 } else {
+                                     $(".text-danger").text(""); // Reset semua error
+
+                                     $.each(response.errors, function (key, message) {
+                                         $("#" + key + "Error").text(message); // Tampilkan error sesuai field
+                                     });
+                                 }
+                             }
+                         });
                      });
 
                      myModal.show();

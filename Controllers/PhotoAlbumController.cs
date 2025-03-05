@@ -258,6 +258,20 @@ namespace AlumniManagement.Frontend.Controllers
         {
             try
             {
+                var errors = new Dictionary<string, string>();
+
+                if (photoUpload == null || photoUpload.ContentLength == 0)
+                {
+                    
+
+                    errors["photoUpload"] = "Photo is required.";
+                }
+
+                if (errors.Any())
+                {
+                    return Json(new { success = false, errors });
+                }
+
                 if (ModelState.IsValid)
                 {
 
@@ -273,7 +287,7 @@ namespace AlumniManagement.Frontend.Controllers
                     return RedirectToAction("ListPhoto", new {albumId = model.AlbumID});
                 }
 
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "Photo Added Successfully" });
 
             }
             catch (Exception ex)
@@ -286,7 +300,7 @@ namespace AlumniManagement.Frontend.Controllers
                     return RedirectToAction("ListPhoto", new { albumId = model.AlbumID });
                 }
 
-                return RedirectToAction("Index");
+                return Json(new { success = false, errors = new Dictionary<string, string> { { "photoUpload", "Photo upload failed: " + ex.Message } } });
             }
         }
 

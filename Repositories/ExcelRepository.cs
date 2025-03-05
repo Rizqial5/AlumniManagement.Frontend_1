@@ -355,9 +355,9 @@ namespace AlumniManagement.Frontend.Repositories
             var worksheet = workbook.Worksheets[0];
 
             var listAlumnis = new List<AlumniModel>();
-            var listStringError = new List<string>();
+            var listStringError = new List<string>(); // tujuannya untuk menampung error yang terjadi pada saat import
 
-            for(int i = 1; i <= worksheet.Cells.MaxDataRow; i++)
+            for (int i = 1; i <= worksheet.Cells.MaxDataRow; i++)
             {
                 int AlumniID = ConvertJob(worksheet,i);
                 string FirstName = worksheet.Cells[i, 1].StringValue;
@@ -403,7 +403,7 @@ namespace AlumniManagement.Frontend.Repositories
                     LinkedInProfile = LinkedInProfile,
                     ModifiedDate= DateTime.Now,
                     Gender = Gender,
-                    ErrorDetails = String.Join(" ,", listStringError),
+                    ErrorDetails = String.Join(" ,", listStringError),//untuk menampung error yang terjadi pada saat import
                     FullName = FirstName + " " + (MiddleName ?? "") + " " + LastName,
                     StateName = stateName,
                     DistrictName = districtName,

@@ -77,34 +77,55 @@
                 "ajax": {
                     "url": "/Faculty/GetRooms",
                     "type": "GET",
-                    "datatype": "json"
+                    "datatype": "json",
+                    "dataSrc": function (response) {
+                        if (response.error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: response.message
+                            });
+                            return []; // Return array kosong agar DataTable tidak error
+                        }
+
+                        return response.data; // Pastikan hanya `data` yang dikembalikan
+                    },
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        let errorMessage = "Failed to load data. Please try again later.";
+                        if (jqXHR.responseJSON.message) {
+                            errorMessage = jqXHR.responseJSON.message;
+                        }
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: errorMessage
+                        });
+                    }
                 },
                 "columns": [
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.FacultyID + '" />'}
+                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.FacultyID + '" />';
+                        }
                     },
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                           
-
                             return '<div class="btn-group">' +
                                 '<a class="btn btn-primary" data-id="' + row.FacultyID + '" id="editButton" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
                                 '<i class="fas fa-edit"></i>' +
                                 '</a>' +
                                 '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.FacultyID + '">' +
-                                '<i class="fas fa-trash"></i>'
-                                + '</button>' +
-                                '</div>'
-
+                                '<i class="fas fa-trash"></i>' +
+                                '</button>' +
+                                '</div>';
                         }
                     },
                     {
                         "data": null,
                         "render": function (data, type, row, meta) {
-                            return meta.row + 1;  // Display the row number (meta.row is zero-indexed)
+                            return meta.row + 1;
                         }
                     },
                     { "data": "FacultyName" },
@@ -114,22 +135,16 @@
                         "render": function (data, type, row) {
                             return moment(data).format('DD-MMM-YYYY HH:mm:ss');
                         }
-                    },
+                    }
                 ],
-/*                "order": [[0, "desc"]],*/
-                "dom": '<"top"f>rt<"bottom"lpi><"clear">', // search on the top right, show entries, paging, showing on the bottom
+                "dom": '<"top"f>rt<"bottom"lpi><"clear">',
                 "pagingType": "full_numbers",
                 "scrollY": "400px",
                 "scrollX": true,
                 "scrollCollapse": true,
                 "fixedHeader": true,
-                //"pagingType": "simple_numbers",
                 "pageLength": 10,
                 "lengthMenu": [10, 25, 50, 100],
-                "scrollY": "400px",
-                "scrollX": true,
-                "scrollCollapse": true,
-                "fixedHeader": true,
                 "language": {
                     "paginate": {
                         "previous": "Previous",
@@ -141,8 +156,6 @@
             });
 
             $('#facultyData_filter input').unbind();
-
-            // Bind a new event handler
             $('#facultyData_filter input').on('keyup', function (e) {
                 var value = $(this).val();
                 if (value.length >= 3 || value.length === 0) {
@@ -152,13 +165,9 @@
 
             $('#selectAll').on('click', function () {
                 var rows = table.rows({ 'search': 'applied' }).nodes();
-                $('input[type="checkbox"]', rows).prop('checked', this.checked)
-            })
-
-
-
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
         });
-
 
 
         ////Use this for datatables, becase the buttons are created dynamically

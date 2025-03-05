@@ -1,10 +1,12 @@
 ﻿using AlumniManagement.Frontend;
+using AlumniManagement.Frontend.AlumniService;
 using AlumniManagement.Frontend.FacultyService;
 using AlumniManagement.Frontend.Interfaces;
 using AlumniManagement.Frontend.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 
 namespace AlumniManagement.Web.Repositories
@@ -20,10 +22,27 @@ namespace AlumniManagement.Web.Repositories
 
         public IEnumerable<FacultyModel> GetAll()
         {
-            var data = _facultyServiceClient.GetAll();
-            var result = data.Select(f => Mapping.Mapper.Map<FacultyModel>(f));
+            try
+            {
 
-            return result;
+
+
+                var data = _facultyServiceClient.GetAll();
+
+
+                var result = data.Select(f => Mapping.Mapper.Map<FacultyModel>(f));
+
+                return result;
+            }
+            catch
+            {
+
+                throw new Exception("Faculty Service is not available.");
+                // Bisa return list kosong atau lempar exception tergantung kebutuhan
+
+            }
+
+
         }
 
         public FacultyModel GetFaculty(int FacultyId)

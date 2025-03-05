@@ -71,7 +71,7 @@
   <xs:element name="InsertPhoto">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="photo" nillable="true" type="q6:PhotoDTO" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" minOccurs="0" name="photo" nillable="true" type="q6:ArrayOfPhotoDTO" />
         <xs:element minOccurs="0" name="albumID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
