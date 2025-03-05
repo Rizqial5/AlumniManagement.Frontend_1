@@ -64,7 +64,7 @@
                             <div class="col-md-10">
                                 <input type="file" id="photoUpload" name="photoUpload" class="form-control" accept=".jpeg,.jpg,.png" />
                                 <small class="text-muted">Only .jpeg, .jpg, .png files allowed. Max size: 3MB.</small>
-                                @Html.ValidationMessageFor(model => model.EventImagePath, "", new { @class = "text-danger" })
+                                <span class="text-danger" id="photoUploadError"></span><!-- Tempat error manual -->
 
                                 @if (ViewBag.SourceImage != null && !string.IsNullOrEmpty(ViewBag.SourceImage.ToString()))
                                 {

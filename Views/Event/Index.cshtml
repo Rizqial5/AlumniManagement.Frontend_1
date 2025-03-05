@@ -526,6 +526,32 @@
                         }
                     });
 
+                    $(document).on("submit", "#editForm", function (e) {
+                        e.preventDefault();
+
+                        var formData = new FormData(this);
+
+                        $.ajax({
+                            url: $(this).attr("action"),
+                            type: $(this).attr("method"),
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.success) {
+                                    $("#editModal").modal("hide");
+                                    location.reload();
+                                } else {
+                                    $(".text-danger").text(""); // Reset semua error
+
+                                    $.each(response.errors, function (key, message) {
+                                        $("#" + key + "Error").text(message); // Tampilkan error sesuai field
+                                    });
+                                }
+                            }
+                        });
+                    });
+
                     // **Event listener untuk tombol hapus foto**
                     $('#removePhotoBtn').on('click', function () {
                         $('#photoPreview').attr('src', '#').addClass('d-none');

@@ -299,7 +299,6 @@ namespace AlumniManagement.Frontend.Controllers
 
                 }
 
-                TempData["SuccessMessage"] = "Photo Added Succesfully";
 
                 if(isFromPhoto)
                 {

@@ -36,7 +36,6 @@ namespace AlumniManagement.Frontend.Controllers
         public JsonResult GetEvents()
         {
             var eventsData = _eventRepository.GetAllEvents();
-
             foreach (var item in eventsData)
             {
                 if (item.EventImagePath != null)
@@ -104,6 +103,11 @@ namespace AlumniManagement.Frontend.Controllers
                     errors["photoUpload"] = "Photo is required.";
                 }
 
+                if (errors.Any())
+                {
+                    return Json(new { success = false, errors });
+                }
+
 
                 if (ModelState.IsValid)
                 {
@@ -113,16 +117,13 @@ namespace AlumniManagement.Frontend.Controllers
 
                     _eventRepository.UpsertEvent(model);
 
-                }else if(!ModelState.IsValid)
-                {
-                    return PartialView("_CreatePartial", model);
                 }
 
 
 
-                TempData["SuccesMessage"] = "Event succesfully created";
+                
 
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "Event Added Successfully" });
 
             }
             catch (Exception ex)

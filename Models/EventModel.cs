@@ -57,7 +57,5 @@ namespace AlumniManagement.Frontend.Models
         public string ShowImage { get;set; }
 
 
-        [Required(ErrorMessage = "Image is Required")]
-        public HttpPostedFileBase File {  get; set; }
     }
 }

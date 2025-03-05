@@ -341,50 +341,50 @@
                      // Inisialisasi validasi
                      reinitializeValidation();
 
-                     $(document).on('change', '#photoUpload', function (event) {
-                         let files = event.target.files;
-                         let errorContainer = document.getElementById('photoUploadError');
-                         let previewContainer = document.getElementById('photoPreview');
+                         $(document).on('change', '#photoUpload', function (event) {
+                             let files = event.target.files;
+                             let errorContainer = document.getElementById('photoUploadError');
+                             let previewContainer = document.getElementById('photoPreview');
 
-                         errorContainer.innerText = ''; // Clear previous errors
-                         previewContainer.innerHTML = ''; // Clear previous previews
+                             errorContainer.innerText = ''; // Clear previous errors
+                             previewContainer.innerHTML = ''; // Clear previous previews
 
-                         if (files.length === 0) return;
+                             if (files.length === 0) return;
 
-                         let allowedExtensions = ['jpeg', 'jpg', 'png'];
-                         let maxSize = 3 * 1024 * 1024; // 3MB
-                         let errorMessages = [];
+                             let allowedExtensions = ['jpeg', 'jpg', 'png'];
+                             let maxSize = 3 * 1024 * 1024; // 3MB
+                             let errorMessages = [];
 
-                         Array.from(files).forEach(file => {
-                             let fileExtension = file.name.split('.').pop().toLowerCase();
+                             Array.from(files).forEach(file => {
+                                 let fileExtension = file.name.split('.').pop().toLowerCase();
 
-                             if (!allowedExtensions.includes(fileExtension)) {
-                                 errorMessages.push(`File ${file.name} has an invalid format.`);
-                             }
+                                 if (!allowedExtensions.includes(fileExtension)) {
+                                     errorMessages.push(`File ${file.name} has an invalid format.`);
+                                 }
 
-                             if (file.size > maxSize) {
-                                 errorMessages.push(`File ${file.name} exceeds the 3MB size limit.`);
-                             }
+                                 if (file.size > maxSize) {
+                                     errorMessages.push(`File ${file.name} exceeds the 3MB size limit.`);
+                                 }
 
-                             if (errorMessages.length === 0) {
-                                 let reader = new FileReader();
-                                 reader.onload = function (e) {
-                                     let img = document.createElement('img');
-                                     img.src = e.target.result;
-                                     img.style.maxWidth = "100px";
-                                     img.style.marginRight = "5px";
-                                     img.classList.add("img-thumbnail");
-                                     previewContainer.appendChild(img);
-                                 };
-                                 reader.readAsDataURL(file);
+                                 if (errorMessages.length === 0) {
+                                     let reader = new FileReader();
+                                     reader.onload = function (e) {
+                                         let img = document.createElement('img');
+                                         img.src = e.target.result;
+                                         img.style.maxWidth = "100px";
+                                         img.style.marginRight = "5px";
+                                         img.classList.add("img-thumbnail");
+                                         previewContainer.appendChild(img);
+                                     };
+                                     reader.readAsDataURL(file);
+                                 }
+                             });
+
+                             if (errorMessages.length > 0) {
+                                 errorContainer.innerText = errorMessages.join("\n");
+                                 event.target.value = ''; // Reset input if error occurs
                              }
                          });
-
-                         if (errorMessages.length > 0) {
-                             errorContainer.innerText = errorMessages.join("\n");
-                             event.target.value = ''; // Reset input if error occurs
-                         }
-                     });
 
                      $(document).on("submit", "#createForm", function (e) {
                          e.preventDefault();

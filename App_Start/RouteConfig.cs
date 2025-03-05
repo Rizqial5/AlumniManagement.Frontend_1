@@ -16,7 +16,7 @@ namespace AlumniManagement.Frontend
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Faculty", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Event", action = "Index", id = UrlParameter.Optional }
             );
 
 
