@@ -212,19 +212,19 @@ namespace AlumniManagement.Frontend.Repositories
             masterSheet.VisibilityType = VisibilityType.VeryHidden;
 
             //dropdown
-            int stateDisIndex = 7;
+            int stateDisIndex = 8;
             CellArea stateDisArea = CellArea.CreateCellArea(1, stateDisIndex, 1000, stateDisIndex);
             Validation stateDisVal = workSheet.Validations[workSheet.Validations.Add(stateDisArea)];
             stateDisVal.Type = ValidationType.List;
             stateDisVal.Formula1 = "=Master!$A$1:$A$" + stateDistricts.Count();
 
-            int majFacIndex = 11;
+            int majFacIndex = 12;
             CellArea majfacArea = CellArea.CreateCellArea(1, majFacIndex, 1000, majFacIndex);
             Validation majFacVal = workSheet.Validations[workSheet.Validations.Add(majfacArea)];
             majFacVal.Type = ValidationType.List;
             majFacVal.Formula1 = "=Master!$B$1:$B$" + majorFaculties.Count();
 
-            int degreeIndex = 10;
+            int degreeIndex = 11;
             CellArea degreeArea = CellArea.CreateCellArea(1, degreeIndex, 1000, degreeIndex);
             Validation degreeVal = workSheet.Validations[workSheet.Validations.Add(degreeArea)];
             degreeVal.Type = ValidationType.List;
