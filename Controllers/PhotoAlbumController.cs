@@ -175,7 +175,18 @@ namespace AlumniManagement.Frontend.Controllers
                     });
                 }
 
+                var existingPhoto = _photoAlbumRepository.GetAllPhotoByAlbumId(id);
+
+                foreach (var item in existingPhoto)
+                {
+                    DeleteLocalPhoto(item.PhotoID, id, item);
+                }
+
                 _photoAlbumRepository.DeletePhotoAlbum(id);
+
+
+
+                //DeleteLocalPhoto()
 
                 return Json(new
                 {
@@ -341,9 +352,7 @@ namespace AlumniManagement.Frontend.Controllers
                     });
                 }
 
-                DeleteLocalImage(existingData);
-
-                _photoAlbumRepository.DeletePhoto(albumId,photoId);
+                DeleteLocalPhoto(photoId, albumId, existingData);
 
                 return Json(new
                 {
@@ -358,6 +367,13 @@ namespace AlumniManagement.Frontend.Controllers
                     message = ex.Message
                 });
             }
+        }
+
+        private void DeleteLocalPhoto(int photoId, int albumId, PhotoModel existingData)
+        {
+            DeleteLocalImage(existingData);
+
+            _photoAlbumRepository.DeletePhoto(albumId, photoId);
         }
 
         [HttpPost]
