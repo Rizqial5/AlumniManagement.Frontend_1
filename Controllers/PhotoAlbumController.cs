@@ -254,13 +254,13 @@ namespace AlumniManagement.Frontend.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddPhoto(PhotoModel model, HttpPostedFileBase photoUpload, bool isFromPhoto, int checkRedirect)
+        public ActionResult AddPhoto(PhotoModel model, HttpPostedFileBase[] photoUpload, bool isFromPhoto, int checkRedirect)
         {
             try
             {
                 var errors = new Dictionary<string, string>();
 
-                if (photoUpload == null || photoUpload.ContentLength == 0)
+                if (photoUpload == null || photoUpload.Length == 0 || photoUpload[0] == null)
                 {
                     
 
@@ -274,17 +274,36 @@ namespace AlumniManagement.Frontend.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    List<PhotoModel> newPhoto = new List<PhotoModel>();
 
-                    UploadBehaviour(model, photoUpload);
+                    foreach (var item in photoUpload)
+                    {
 
-                    _photoAlbumRepository.InsertPhoto(model, model.AlbumID);
+                        if (photoUpload == null || photoUpload.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        var photoModel = new PhotoModel
+                        {
+                            AlbumID = model.AlbumID
+
+                        };
+
+                        var newModel = UploadBehaviour(photoModel, item);
+
+                        newPhoto.Add(newModel);
+                    }
+
+                    _photoAlbumRepository.InsertPhoto(newPhoto, model.AlbumID);
+
                 }
 
                 TempData["SuccessMessage"] = "Photo Added Succesfully";
 
                 if(isFromPhoto)
                 {
-                    return RedirectToAction("ListPhoto", new {albumId = model.AlbumID});
+                    return Json(new { success = true, message = "Photo Added Successfully" });
                 }
 
                 return Json(new { success = true, message = "Photo Added Successfully" });
@@ -304,12 +323,10 @@ namespace AlumniManagement.Frontend.Controllers
             }
         }
 
-        private void UploadBehaviour(PhotoModel model, HttpPostedFileBase photoUpload)
+        private PhotoModel UploadBehaviour(PhotoModel model, HttpPostedFileBase photoUpload)
         {
-            if (photoUpload == null)
-            {
-                return;
-            }
+
+
 
             if (model.PhotoPath != null)
             {
@@ -344,6 +361,8 @@ namespace AlumniManagement.Frontend.Controllers
             // Simpan path ke model
             model.PhotoPath = photoPath;
             model.PhotoFilleName = fileName;
+
+            return model;
         }
 
         [HttpPost]

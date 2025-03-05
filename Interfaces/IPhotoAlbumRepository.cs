@@ -28,7 +28,7 @@ namespace AlumniManagement.Frontend.Interfaces
         void InsertPhotoAlbum(PhotoAlbumModel photoAlbum);
 
         
-        void InsertPhoto(PhotoModel photo, int albumID);
+        void InsertPhoto(List<PhotoModel> photo, int albumID);
 
         
         void UpdatePhotoAlbum(PhotoAlbumModel photoAlbum);

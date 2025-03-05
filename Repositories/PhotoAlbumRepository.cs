@@ -58,11 +58,11 @@ namespace AlumniManagement.Frontend.Repositories
             return Mapping.Mapper.Map<PhotoModel>(selectedData);
         }
 
-        public void InsertPhoto(PhotoModel photo, int albumID)
+        public void InsertPhoto(List<PhotoModel> photo, int albumID)
         {
-            var result = Mapping.Mapper.Map<PhotoDTO>(photo);
+            var result = Mapping.Mapper.Map<List<PhotoDTO>>(photo);
 
-            //_photoAlbumClient.InsertPhoto(result, albumID);
+            _photoAlbumClient.InsertPhoto(result.ToArray(), albumID);
         }
 
         public void InsertPhotoAlbum(PhotoAlbumModel photoAlbum)

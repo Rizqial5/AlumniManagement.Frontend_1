@@ -43,7 +43,7 @@
                         <div class="form-group row align-items-center mt-2">
                             <label class="col-md-2 control-label">@Html.LabelFor(model => model.PhotoPath)</label>
                             <div class="col-md-10">
-                                <input type="file" id="photoUpload" name="photoUpload" class="form-control" accept=".jpeg,.jpg,.png" />
+                                <input type="file" id="photoUpload" name="photoUpload" class="form-control" accept=".jpeg,.jpg,.png" multiple/>
                                 <small class="text-muted">Only .jpeg, .jpg, .png files allowed. Max size: 3MB.</small>
                                 <span class="text-danger" id="photoUploadError"></span>
                             </div>
