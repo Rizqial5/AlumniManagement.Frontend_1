@@ -112,10 +112,7 @@ namespace AlumniManagement.Frontend.Repositories
             return data;
         }
 
-        public void ImportFromExcel(AlumniModel alumniDTO)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public void InsertAlumniWitHobbies(AlumniModel alumni)
         {
@@ -136,6 +133,13 @@ namespace AlumniManagement.Frontend.Repositories
             var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
 
             _alumniServiceClient.UpsertAlumni(result);
+        }
+
+        public void UpsertMultipleAlumni(List<AlumniModel> alumni)
+        {
+            var result = Mapping.Mapper.Map<List<AlumniDTO>>(alumni);
+
+            _alumniServiceClient.UpsertMultipleAlumni(result.ToArray());
         }
     }
 }

@@ -35,9 +35,6 @@ namespace AlumniManagement.Frontend.AlumniService {
         private string DegreeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Web.Mvc.SelectListItem[] DistrictDDLField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> DistrictIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -62,13 +59,13 @@ namespace AlumniManagement.Frontend.AlumniService {
         private string FullNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string GenderField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> GraduationYearField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int[] HobbiesField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Web.Mvc.SelectListItem[] HobbiesDDlField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string HobbiesListNameField;
@@ -78,9 +75,6 @@ namespace AlumniManagement.Frontend.AlumniService {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LinkedInProfileField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Web.Mvc.SelectListItem[] MajorDDlField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> MajorIDField;
@@ -167,19 +161,6 @@ namespace AlumniManagement.Frontend.AlumniService {
                 if ((object.ReferenceEquals(this.DegreeField, value) != true)) {
                     this.DegreeField = value;
                     this.RaisePropertyChanged("Degree");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Web.Mvc.SelectListItem[] DistrictDDL {
-            get {
-                return this.DistrictDDLField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DistrictDDLField, value) != true)) {
-                    this.DistrictDDLField = value;
-                    this.RaisePropertyChanged("DistrictDDL");
                 }
             }
         }
@@ -289,6 +270,19 @@ namespace AlumniManagement.Frontend.AlumniService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Gender {
+            get {
+                return this.GenderField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.GenderField, value) != true)) {
+                    this.GenderField = value;
+                    this.RaisePropertyChanged("Gender");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<int> GraduationYear {
             get {
                 return this.GraduationYearField;
@@ -310,19 +304,6 @@ namespace AlumniManagement.Frontend.AlumniService {
                 if ((object.ReferenceEquals(this.HobbiesField, value) != true)) {
                     this.HobbiesField = value;
                     this.RaisePropertyChanged("Hobbies");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Web.Mvc.SelectListItem[] HobbiesDDl {
-            get {
-                return this.HobbiesDDlField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.HobbiesDDlField, value) != true)) {
-                    this.HobbiesDDlField = value;
-                    this.RaisePropertyChanged("HobbiesDDl");
                 }
             }
         }
@@ -362,19 +343,6 @@ namespace AlumniManagement.Frontend.AlumniService {
                 if ((object.ReferenceEquals(this.LinkedInProfileField, value) != true)) {
                     this.LinkedInProfileField = value;
                     this.RaisePropertyChanged("LinkedInProfile");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Web.Mvc.SelectListItem[] MajorDDl {
-            get {
-                return this.MajorDDlField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MajorDDlField, value) != true)) {
-                    this.MajorDDlField = value;
-                    this.RaisePropertyChanged("MajorDDl");
                 }
             }
         }

@@ -13,7 +13,7 @@ using System.Web.Mvc;
 
 namespace AlumniManagement.Frontend.Controllers
 {
-
+    [Authorize]
     public class AlumniImageController : Controller
     {
         private IAlumniImageRepository _imageRepository;

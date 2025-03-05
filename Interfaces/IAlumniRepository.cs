@@ -45,9 +45,8 @@ namespace AlumniManagement.Frontend.Interfaces
 
         IEnumerable<string> GetMajorFacultiesName();
         IEnumerable<DistrictDTO> GetDistrictByStateId(int stateId);
-
-        void ImportFromExcel(AlumniModel alumniDTO);
-
         void UpsertAlumni(AlumniModel alumni);
+
+        void UpsertMultipleAlumni(List<AlumniModel> alumni);
     }
 }

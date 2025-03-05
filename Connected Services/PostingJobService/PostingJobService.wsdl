@@ -80,6 +80,12 @@
   <wsdl:message name="IPostingJobService_UpsertJobPosting_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpsertJobPostingResponse" />
   </wsdl:message>
+  <wsdl:message name="IPostingJobService_UpsertJobPostingList_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpsertJobPostingList" />
+  </wsdl:message>
+  <wsdl:message name="IPostingJobService_UpsertJobPostingList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpsertJobPostingListResponse" />
+  </wsdl:message>
   <wsdl:portType name="IPostingJobService">
     <wsdl:operation name="GetJobPostings">
       <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/GetJobPostings" message="tns:IPostingJobService_GetJobPostings_InputMessage" />
@@ -128,6 +134,10 @@
     <wsdl:operation name="UpsertJobPosting">
       <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/UpsertJobPosting" message="tns:IPostingJobService_UpsertJobPosting_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/UpsertJobPostingResponse" message="tns:IPostingJobService_UpsertJobPosting_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpsertJobPostingList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPostingJobService/UpsertJobPostingList" message="tns:IPostingJobService_UpsertJobPostingList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPostingJobService/UpsertJobPostingListResponse" message="tns:IPostingJobService_UpsertJobPostingList_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IPostingJobService" type="tns:IPostingJobService">
@@ -233,6 +243,15 @@
     </wsdl:operation>
     <wsdl:operation name="UpsertJobPosting">
       <soap:operation soapAction="http://tempuri.org/IPostingJobService/UpsertJobPosting" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpsertJobPostingList">
+      <soap:operation soapAction="http://tempuri.org/IPostingJobService/UpsertJobPostingList" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

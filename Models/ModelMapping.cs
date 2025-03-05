@@ -14,6 +14,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AlumniDTO = AlumniManagement.Frontend.AlumniService.AlumniDTO;
+using AlumniManagement.Frontend.EventService;
+using AlumniManagement.Frontend.PhotoAlbumService;
+using AlumniManagement.Frontend.UserManagementService;
 
 namespace AlumniManagement.Frontend
 {
@@ -48,6 +51,20 @@ namespace AlumniManagement.Frontend
             CreateMap<EmploymentTypeModel, EmploymentTypeDTO>().ReverseMap();
             CreateMap<JobAttachmentModel, JobAttachmentDTO>().ReverseMap();
             CreateMap<ShowCandidateModel, JobCandidateDTO>().ReverseMap();
+            CreateMap<EventModel, EventDTO>().ReverseMap();
+            CreateMap<PhotoAlbumModel, PhotoAlbumDTO>().ReverseMap();
+            CreateMap<PhotoModel, PhotoDTO>().ReverseMap();
+
+            //Login Mapping
+            CreateMap<AspNetUserDTOUserDTO, AspNetUserModel.UserModel>().ReverseMap();
+            CreateMap<AspNetUserDTOPermissionDTO, AspNetUserModel.PermissionModel>().ReverseMap();
+            CreateMap<AspNetUserDTORoleDTO, AspNetUserModel.RoleModel>().ReverseMap();
+            CreateMap<AspNetUserDTORolePermissionDTO, AspNetUserModel.RolePermissionModel>().ReverseMap();
+            CreateMap<AspNetUserDTOUserClaimDTO, AspNetUserModel.UserClaimModel>().ReverseMap();
+            CreateMap<AspNetUserDTOUserLoginDTO, AspNetUserModel.UserLoginModel>().ReverseMap();
+            CreateMap<AspNetUserDTOUserRoleDTO, AspNetUserModel.UserRoleModel>().ReverseMap();
+
+
 
         }
     }

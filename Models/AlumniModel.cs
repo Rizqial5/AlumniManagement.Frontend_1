@@ -77,6 +77,9 @@ namespace AlumniManagement.Frontend.Models
 
         public string PhotoName { get; set; }
 
+        [Required(ErrorMessage = "Gender is required")]
+        public string Gender { get; set; }
+
         // tambahan
         [DisplayName("Address")]
         public string FullAddress { get; set; }
@@ -114,6 +117,9 @@ namespace AlumniManagement.Frontend.Models
 
 
         public string ShowDateOfBirth { get; set; }
+
+        [Ignore]
+        public string ErrorDetails { get; set; }
 
         //[Ignore]
         //public MultiSelectList HobbiesDDl { get; set; }

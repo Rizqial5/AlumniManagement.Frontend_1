@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace AlumniManagement.Frontend.Controllers
 {
+    [Authorize]
     public class CandidateController : Controller
     {
         private IJobPostingRepository _jobPostingRepository;

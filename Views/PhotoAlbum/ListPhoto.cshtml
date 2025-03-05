@@ -1,0 +1,386 @@
+﻿@model PagedList.IPagedList<AlumniManagement.Frontend.Models.PhotoModel>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Photo Gallery";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
+    <style>
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination {
+            display: flex;
+            padding-left: 0;
+            list-style: none;
+            border-radius: 5px;
+        }
+
+            .pagination .page-item {
+                margin: 0 5px;
+            }
+
+                .pagination .page-item a {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0.5rem 0.75rem;
+                    text-align: center;
+                    color: #495057;
+                    background-color: #f8f9fa;
+                    border: 1px solid #ddd;
+                    transition: all 0.3s ease;
+                    text-decoration: none;
+                }
+
+                    .pagination .page-item a:hover {
+                        background-color: #007bff;
+                        color: white;
+                    }
+
+                .pagination .page-item.active a {
+                    background-color: #6c757d;
+                    color: white;
+                    border-color: #6c757d;
+                    font-weight: bold;
+                }
+
+                .pagination .page-item.disabled a {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+    </style>
+}
+
+<h2>@ViewBag.AlbumName</h2>
+
+<div class="d-flex mb-3">
+    <a id="addButton" class="btn btn-primary">Add Photos</a>
+    <button id="deleteSelected" class="btn btn-danger mx-2">Delete Selected</button>
+    <a class="btn btn-primary" href="@Url.Action("Index","PhotoALbum")">Back to Gallery</a>
+</div>
+
+<div class="row">
+    @{ int itemIndex = 0; }
+    @foreach (var item in Model)
+    {
+        <div class="col-md-2 mb-4 d-flex align-items-stretch">
+            <div class="card w-100" style="height: 300px;">
+                <!-- Gambar lebih dominan dengan memaksimalkan ruang kartu -->
+                <img src="@item.ShowPhoto"
+                     class="card-img-top img-fluid"
+                     alt="Album Thumbnail"
+                     data-id="@item.PhotoID"
+                     data-albumid="@item.AlbumID"
+                     data-index="@itemIndex"
+                     style="cursor: pointer; height: 70%; width: 100%; object-fit: cover;"> <!-- Gambar lebih besar -->
+
+                <div class="card-body d-flex flex-column text-center" style="height: 30%;">
+                    <!-- Membuat card-body lebih kecil -->
+                    <div class="d-flex justify-content-center align-items-center">
+                        <!-- Checkbox -->
+                        <input type="checkbox" class="form-check-input mx-1 selectCheckbox"
+                               data-id="@item.PhotoID" data-albumId="@item.AlbumID">
+
+                        <!-- Radio button untuk memilih thumbnail album -->
+                        <input type="radio" class="form-check-input mx-1 albumThumbnailRadio"
+                               name="albumThumbnail_@item.AlbumID"
+                               data-id="@item.PhotoID"
+                               data-albumid="@item.AlbumID"
+                               @(item.IsPhotoAlbumThumbnail == true ? "checked" : "")>
+                        <span class="ms-2">Album Thumbnail</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        itemIndex++;
+    }
+</div>
+
+
+<div class="d-flex  align-items-center mt-4">
+    <!-- Dropdown untuk memilih jumlah item per halaman -->
+    <div>
+        <select class="form-select w-auto" id="pageSizeSelect" onchange="changePageSize()">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+        </select>
+    </div>
+
+    <!-- Pagination -->
+    <div class="ms-3">
+        @Html.PagedListPager(Model, page => Url.Action("ListPhoto", new { albumId = ViewBag.AlbumId, page, pageSize = ViewBag.PageSize }),
+        new PagedListRenderOptions
+        {
+            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = PagedListDisplayMode.Always,
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+            MaximumPageNumbersToDisplay = ViewBag.PageSize,
+            ContainerDivClasses = new[] { "pagination-container" },
+            UlElementClasses = new[] { "pagination", "justify-content-center" },
+            LiElementClasses = new[] { "page-item" },
+            LinkToPreviousPageFormat = "Previous",
+            LinkToNextPageFormat = "Next"
+        })
+    </div>
+</div>
+
+<div id="modalContainer"></div>
+
+<div class="modal fade" id="photoPreviewModal" tabindex="-1" aria-labelledby="photoPreviewLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="photoPreviewLabel">Preview</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="previewImage" src="" class="img-fluid" alt="Preview Image">
+            </div>
+            <div class="modal-footer">
+                <button id="prevPhoto" class="btn btn-secondary">Previous</button>
+                <button id="nextPhoto" class="btn btn-primary">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script>
+        //$(document).on("click", ".photo-thumbnail", function () {
+        //    var photoId = $(this).data("id");
+        //    window.location.href = "/Photo/Details/" + photoId;
+        //});
+        function changePageSize() {
+            // Ambil nilai page size yang dipilih
+            var pageSize = document.getElementById("pageSizeSelect").value;
+
+            // Redirect ke URL yang sama dengan parameter pageSize yang baru
+            var url = new URL(window.location.href);
+            url.searchParams.set('pageSize', pageSize);
+            url.searchParams.set('page', 1); // Reset ke halaman pertama saat pageSize berubah
+
+            window.location.href = url.toString(); // Pindah ke URL baru
+        }
+
+        $(document).ready(function () {
+            var currentIndex = 0;
+            var photos = [];
+
+            // Event delegation untuk menangkap klik pada gambar
+            $(document).on("click", ".card-img-top", function () {
+                photos = $(".card-img-top").map(function (index, element) {
+                    return {
+                        src: $(element).attr("src"),
+                        index: index
+                    };
+                }).get();
+
+                currentIndex = $(this).data("index");
+                updateModalImage();
+                $("#photoPreviewModal").modal("show");
+            });
+
+            // Fungsi untuk memperbarui gambar dalam modal
+            function updateModalImage() {
+                if (photos.length > 0) {
+                    $("#previewImage").attr("src", photos[currentIndex].src);
+                }
+            }
+
+            // Navigasi ke foto sebelumnya
+            $("#prevPhoto").on("click", function () {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateModalImage();
+                }
+            });
+
+            // Navigasi ke foto berikutnya
+            $("#nextPhoto").on("click", function () {
+                if (currentIndex < photos.length - 1) {
+                    currentIndex++;
+                    updateModalImage();
+                }
+            });
+        });
+
+        $("#deleteSelected").on("click", function () {
+            var selectedIds = [];
+            var albumId = @ViewBag.AlbumId;
+            $(".selectCheckbox:checked").each(function () {
+                selectedIds.push($(this).data("id"));
+            });
+
+            if (selectedIds.length > 0 && albumId) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover these photos!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete them!",
+                    cancelButtonText: "No, keep them"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/PhotoAlbum/DeletePhotoSelected",
+                            type: "POST",
+                            data: { ids: selectedIds, albumId: albumId },
+                            traditional: true,
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                            },
+                            error: function () {
+                                Swal.fire("Error!", "Failed to delete photos.", "error");
+                            }
+                        });
+                    }
+                });
+            } else {
+                Swal.fire("No photos selected", "Please select photos to delete.", "info");
+            }
+        });
+
+        $(document).on("change", ".albumThumbnailRadio", function () {
+            var selectedPhotoId = $(this).data("id");
+            var albumId = $(this).data("albumid");
+
+            $.ajax({
+                url: "/PhotoAlbum/SetThumbnail",
+                type: "POST",
+                data: { photoId: selectedPhotoId, albumId: albumId },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire("Success!", response.message, "success");
+                    } else {
+                        Swal.fire("Error!", response.message, "error");
+                    }
+                },
+                error: function () {
+                    Swal.fire("Error!", "Failed to update album thumbnail.", "error");
+                }
+            });
+        });
+
+        $(document).on('click', '#addButton', function () {
+        $.ajax({
+            url: '@Url.Action("AddPhotoFromPhoto", "PhotoAlbum", new {albumID = ViewBag.AlbumId })',
+            type: 'GET',
+            success: function(data) {
+                $('#modalContainer').html(data);
+                var myModal = new bootstrap.Modal(document.getElementById('addModal'));
+
+                // Inisialisasi validasi
+                reinitializeValidation();
+
+                $(document).on('change', '#photoUpload', function (event) {
+                    let files = event.target.files;
+                    let errorContainer = document.getElementById('photoUploadError');
+                    let previewContainer = document.getElementById('photoPreview');
+
+                    errorContainer.innerText = ''; // Clear previous errors
+                    previewContainer.innerHTML = ''; // Clear previous previews
+
+                    if (files.length === 0) return;
+
+                    let allowedExtensions = ['jpeg', 'jpg', 'png'];
+                    let maxSize = 3 * 1024 * 1024; // 3MB
+                    let errorMessages = [];
+
+                    Array.from(files).forEach(file => {
+                        let fileExtension = file.name.split('.').pop().toLowerCase();
+
+                        if (!allowedExtensions.includes(fileExtension)) {
+                            errorMessages.push(`File ${file.name} has an invalid format.`);
+                        }
+
+                        if (file.size > maxSize) {
+                            errorMessages.push(`File ${file.name} exceeds the 3MB size limit.`);
+                        }
+
+                        if (errorMessages.length === 0) {
+                            let reader = new FileReader();
+                            reader.onload = function (e) {
+                                let img = document.createElement('img');
+                                img.src = e.target.result;
+                                img.style.maxWidth = "100px";
+                                img.style.marginRight = "5px";
+                                img.classList.add("img-thumbnail");
+                                previewContainer.appendChild(img);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+
+                    if (errorMessages.length > 0) {
+                        errorContainer.innerText = errorMessages.join("\n");
+                        event.target.value = ''; // Reset input if error occurs
+                    }
+                });
+
+                $(document).on("submit", "#createForm", function (e) {
+                    e.preventDefault();
+
+                    var formData = new FormData(this);
+
+                    $.ajax({
+                        url: $(this).attr("action"),
+                        type: $(this).attr("method"),
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            console.log(response);
+
+                            if (response.success) {
+                                $("#createModal").modal("hide");
+                                location.reload();
+                            } else {
+                                $(".text-danger").text(""); // Reset semua error
+
+                                $.each(response.errors, function (key, message) {
+                                    $("#" + key + "Error").text(message); // Tampilkan error sesuai field
+                                });
+                            }
+                        }
+                    });
+                });
+
+                myModal.show();
+            },
+            error: function() {
+                alert("An error occurred while loading the modal.");
+            }
+        });
+    });
+    </script>
+}

@@ -14,99 +14,98 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
     <style>
         .dataTables_wrapper {
-            width: 100%; /* Lebarkan tabel */
+            width: 100%;  
+            /*height: 100px;*/
         }
 
-            .dataTables_wrapper .dataTables_paginate {
-                float: none;
-                text-align: center;
-            }
+        .dataTables_wrapper .dataTables_paginate {
+            float: none;
+            text-align: center;
+        }
 
-            .dataTables_wrapper .dataTables_info {
-                float: left;
-                padding-top: 0.755em;
-            }
+        .dataTables_wrapper .dataTables_info {
+            float: left;
+            padding-top: 0.755em;
+        }
 
-            .dataTables_wrapper .bottom {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+        .dataTables_wrapper .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
         th {
             white-space: nowrap;
         }
+
+         
     </style>
 }
 
 <h2>Alumni</h2>
 
 
-
-<div>
-    <button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Create Alumni</button>
-    <a class="btn btn-primary" style="display:inline-block" href="@Url.Action("ExportExcel","Alumni")"> Export to Excel </a>
-    <button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
-</div>
-
-@using (Html.BeginForm("ImportExcel", "Alumni", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@if (User.IsInRole("Superadmin"))
 {
-    <div class="border border-secondary p-3 shadow-sm mt-2" style="width: 100%; max-width: 400px;">
 
-        <div class="d-flex align-items-center">
-            <input type="file" class="form-control me-2" name="file" accept=".xlsx, .xls" required style="width: 300px;" />
-            <button type="submit" class="btn btn-primary">Upload</button>
+    <div>
+        <button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Create Alumni</button>
+        <a class="btn btn-primary" style="display:inline-block" href="@Url.Action("ExportExcel","Alumni")"> Export to Excel </a>
+        <button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+        <!-- Form Upload (Kiri) -->
+        @using (Html.BeginForm("ShowTableView", "Alumni", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="border border-secondary p-3 shadow-sm" style="width: 100%; max-width: 400px;">
+                <div class="d-flex align-items-center">
+                    <input type="file" class="form-control me-2" name="file" accept=".xlsx, .xls" required style="width: 300px;" />
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+        }
+
+        <!-- Dropdown Filters (Kanan) -->
+        <div class="d-flex gap-3">
+            <div>
+                <label for="facultyFilter">Faculty</label>
+                @Html.DropDownList("FacultyFilter", ViewBag.FacultyDdl as SelectList, "All Faculties", new { @class = "form-control", id = "facultyFilter" })
+            </div>
+            <div>
+                <label for="majorFilter">Major</label>
+                @Html.DropDownList("MajorFilter", ViewBag.MajorDDL as SelectList, "All Majors", new { @class = "form-control", id = "majorFilter" })
+            </div>
         </div>
     </div>
 }
 
 
-<table class="table" id="alumniData" style="width:100%">
+
+
+
+
+<table class="table"  id="alumniData" >
     <thead>
         <tr>
-            <th><input type="checkbox" id="selectAll" /></th>
-            <th>Actions</th>
-            <th>No</th>
-            <th>Photo </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MobileNumber)
-            </th>
-            <th>
-                Hobbies
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FullAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GraduationYear)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Degree)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FacultyName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MajorName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LinkedInProfile)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedDate)
-            </th>
+            <th ><input type="checkbox" id="selectAll" /></th>
+            <th >Actions</th>
+            <th >No</th>
+            <th >Photo</th>
+            <th >@Html.DisplayNameFor(model => model.FullName)</th>
+            <th >Gender</th>
+            <th >@Html.DisplayNameFor(model => model.Email)</th>
+            <th >@Html.DisplayNameFor(model => model.MobileNumber)</th>
+            <th >Hobbies</th>
+            <th >@Html.DisplayNameFor(model => model.FullAddress)</th>
+            <th >@Html.DisplayNameFor(model => model.DateOfBirth)</th>
+            <th >@Html.DisplayNameFor(model => model.GraduationYear)</th>
+            <th >@Html.DisplayNameFor(model => model.Degree)</th>
+            <th >@Html.DisplayNameFor(model => model.FacultyName)</th>
+            <th >@Html.DisplayNameFor(model => model.MajorName)</th>
+            <th >@Html.DisplayNameFor(model => model.LinkedInProfile)</th>
+            <th >@Html.DisplayNameFor(model => model.ModifiedDate)</th>
         </tr>
     </thead>
-
 </table>
 
 <div id="modalContainer"></div>
@@ -144,7 +143,9 @@
     <script src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-
+    <script>
+        var isInSuperAdmin =  @Html.Raw(Json.Encode(ViewBag.SuperAdmin))
+    </script>
     <script>
         $(document).ready(function () {
             var table = $('#alumniData').DataTable({
@@ -163,24 +164,28 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            var editLink = '@Url.Action("Edit", "Alumni", new { id = "PLACEHOLDER"})'.replace("PLACEHOLDER", row.AlumniID);
-                            var jobLink = '@Url.Action("Index", "Job", new { id = "PLACEHOLDER"})'.replace("PLACEHOLDER", row.AlumniID);
-                            return '<div class="btn-group">' +
-                                '<a class="btn btn-primary" id="editButton" data-id="' + row.AlumniID + '" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;">' +
-                                '<i class="fas fa-edit"></i>' +
+                            var editButton = '<a class="btn btn-primary" id="editButton" data-id="' + row.AlumniID + '" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;"><i class="fas fa-edit"></i></a>';
+                            var deleteButton = '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.AlumniID + '">' +
+                                '<i class="fas fa-trash"></i></button>'
+
+                            var groupButton = '<div class="btn-group mt-3">' +
+                                '<a href="/Job/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
+                                '<i class="fas fa-briefcase"></i>' +
+                                '</a > ' +
+                                '<a href="/AlumniImage/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">'
+                                + '<i class="fas fa-image"></i>' +
                                 '</a>' +
-                                '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.AlumniID + '">' +
-                                '<i class="fas fa-trash"></i>'
-                                + '</button>' +
-                                '</div>' +
-                                '<div class="btn-group mt-3">' +
-                                    '<a href="/Job/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
-                                    '<i class="fas fa-briefcase"></i>' +
-                                    '</a > ' +
-                                    '<a href="/AlumniImage/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
-                                     '<i class="fas fa-image"></i>' +
-                                    '</a>' +
                                 '</div>'
+
+                            if (isInSuperAdmin) {
+                                return '<div class="btn-group">' + editButton + deleteButton + '</div>' + groupButton
+                            }
+                            else {
+                                return ''
+                            }
+
+
+                                
 
                         }
                     },
@@ -202,7 +207,8 @@
                                 'data-src="' + row.ShowImagePath + '" data-name="' + row.FullName + '"/></div>';
                         }
                     },
-                    { "data": "FullName" },
+                    { "data": "FullName", width: "200px" },
+                    { "data": "Gender" },
                     { "data": "Email" },
                     { "data": "MobileNumber" },
                     { "data": "HobbiesListName" },
@@ -235,13 +241,13 @@
                 "fixedHeader": true,
                 //"pagingType": "simple_numbers",
                 "pageLength": 10,
-                "lengthMenu": [5, 10, 25, 50, 100],
+                "lengthMenu": [5, 10, 20, 30, 100],
                 "scrollY": "400px",
                 "scrollX": true,
                 "scrollCollapse": true,
                 "fixedHeader": true,
                 //"fixedColumns": {
-                //    "leftColumns": 4
+                //    "leftColumns": 2
                 //},
                 "language": {
                     "paginate": {
@@ -258,6 +264,53 @@
                 $('input[type="checkbox"]', rows).prop('checked', this.checked)
             })
 
+        });
+
+        function reloadTable() {
+            var facultyId = $('#facultyFilter').val();
+            var majorId = $('#majorFilter').val();
+
+            $('#alumniData').DataTable().ajax.url('/Alumni/GetAlumnis?facultyId=' + facultyId + '&majorId=' + majorId).load();
+        }
+
+        function loadMajors(facultyId) {
+            $.ajax({
+                url: '/Alumni/GetMajorsByFaculty',
+                type: 'GET',
+                data: { facultyId: facultyId },
+                success: function (data) {
+                    var $majorDropdown = $('#majorFilter');
+                    $majorDropdown.empty(); // Kosongkan dropdown major
+
+                    // Tambahkan opsi default
+                    $majorDropdown.append('<option value="">All Majors</option>');
+
+                    // Loop dan tambahkan opsi major dari hasil AJAX
+                    $.each(data, function (index, item) {
+                        $majorDropdown.append('<option value="' + item.MajorID + '">' + item.MajorName + '</option>');
+                    });
+
+                    // Trigger reload DataTable setelah major diperbarui
+                    reloadTable();
+                }
+            });
+        }
+
+        // Event saat Faculty dipilih
+        $('#facultyFilter').on('change', function () {
+            var facultyId = $(this).val();
+            if (facultyId) {
+                loadMajors(facultyId);
+            } else {
+                $('#majorFilter').html('<option value="">All Majors</option>');
+            }
+
+            reloadTable(); // Reload tabel alumni setelah faculty dipilih
+        });
+
+        // Trigger reload when dropdown changes
+        $('#facultyFilter, #majorFilter').on('change', function () {
+            reloadTable();
         });
 
         ////Use this for datatables, becase the buttons are created dynamically
@@ -395,10 +448,15 @@
 
                     reinitializeValidation();
 
+                    $('#FacultyDropdown').on('change', function () {
+                        $(this).valid(); // Memeriksa kembali validasi
+                    });
+
                     $('#DateOfBirth').datepicker({
                         format: "dd-M-yyyy",
                         autoclose: true,
-                        todayHighlight: true
+                        todayHighlight: true,
+                        endDate: new Date()
                     });
 
 

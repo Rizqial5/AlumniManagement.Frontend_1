@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="UserManagementService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:56362/Services/UserManagementService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/UserManagementService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/UserManagementService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IUserManagementService_IsSuperAdminExists_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsSuperAdminExists" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_IsSuperAdminExists_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsSuperAdminExistsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_RegisterUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:RegisterUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_RegisterUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RegisterUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_UpdatePassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePassword" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_UpdatePassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_UpdateUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_UpdateUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_AssignSuperadmin_InputMessage">
+    <wsdl:part name="parameters" element="tns:AssignSuperadmin" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_AssignSuperadmin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AssignSuperadminResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_DeleteUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_DeleteUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetAllUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllUsers" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetAllUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetUsersByRole_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUsersByRole" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetUsersByRole_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUsersByRoleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetUserByEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserByEmail" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetUserByEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserByEmailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_UpdateUserFullName_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserFullName" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_UpdateUserFullName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserFullNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_UpdateUserRoles_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserRoles" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_UpdateUserRoles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserRolesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetAllRoles_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllRoles" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetAllRoles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllRolesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_InsertRoles_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertRoles" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_InsertRoles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertRolesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_DeleteRoles_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteRoles" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_DeleteRoles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteRolesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetRoleById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoleById" />
+  </wsdl:message>
+  <wsdl:message name="IUserManagementService_GetRoleById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoleByIdResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IUserManagementService">
+    <wsdl:operation name="IsSuperAdminExists">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/IsSuperAdminExists" message="tns:IUserManagementService_IsSuperAdminExists_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/IsSuperAdminExistsResponse" message="tns:IUserManagementService_IsSuperAdminExists_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RegisterUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/RegisterUser" message="tns:IUserManagementService_RegisterUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/RegisterUserResponse" message="tns:IUserManagementService_RegisterUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/UpdatePassword" message="tns:IUserManagementService_UpdatePassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/UpdatePasswordResponse" message="tns:IUserManagementService_UpdatePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/UpdateUser" message="tns:IUserManagementService_UpdateUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/UpdateUserResponse" message="tns:IUserManagementService_UpdateUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AssignSuperadmin">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/AssignSuperadmin" message="tns:IUserManagementService_AssignSuperadmin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/AssignSuperadminResponse" message="tns:IUserManagementService_AssignSuperadmin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/DeleteUser" message="tns:IUserManagementService_DeleteUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/DeleteUserResponse" message="tns:IUserManagementService_DeleteUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/GetUser" message="tns:IUserManagementService_GetUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/GetUserResponse" message="tns:IUserManagementService_GetUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllUsers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/GetAllUsers" message="tns:IUserManagementService_GetAllUsers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/GetAllUsersResponse" message="tns:IUserManagementService_GetAllUsers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUsersByRole">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/GetUsersByRole" message="tns:IUserManagementService_GetUsersByRole_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/GetUsersByRoleResponse" message="tns:IUserManagementService_GetUsersByRole_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserByEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/GetUserByEmail" message="tns:IUserManagementService_GetUserByEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/GetUserByEmailResponse" message="tns:IUserManagementService_GetUserByEmail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserFullName">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/UpdateUserFullName" message="tns:IUserManagementService_UpdateUserFullName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/UpdateUserFullNameResponse" message="tns:IUserManagementService_UpdateUserFullName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserRoles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/UpdateUserRoles" message="tns:IUserManagementService_UpdateUserRoles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/UpdateUserRolesResponse" message="tns:IUserManagementService_UpdateUserRoles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllRoles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/GetAllRoles" message="tns:IUserManagementService_GetAllRoles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/GetAllRolesResponse" message="tns:IUserManagementService_GetAllRoles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertRoles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/InsertRoles" message="tns:IUserManagementService_InsertRoles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/InsertRolesResponse" message="tns:IUserManagementService_InsertRoles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRoles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/DeleteRoles" message="tns:IUserManagementService_DeleteRoles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/DeleteRolesResponse" message="tns:IUserManagementService_DeleteRoles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRoleById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManagementService/GetRoleById" message="tns:IUserManagementService_GetRoleById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManagementService/GetRoleByIdResponse" message="tns:IUserManagementService_GetRoleById_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IUserManagementService" type="tns:IUserManagementService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="IsSuperAdminExists">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/IsSuperAdminExists" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RegisterUser">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/RegisterUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePassword">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/UpdatePassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/UpdateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AssignSuperadmin">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/AssignSuperadmin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/DeleteUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUser">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/GetUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllUsers">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/GetAllUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUsersByRole">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/GetUsersByRole" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserByEmail">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/GetUserByEmail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserFullName">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/UpdateUserFullName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserRoles">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/UpdateUserRoles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllRoles">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/GetAllRoles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertRoles">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/InsertRoles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRoles">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/DeleteRoles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRoleById">
+      <soap:operation soapAction="http://tempuri.org/IUserManagementService/GetRoleById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UserManagementService">
+    <wsdl:port name="BasicHttpBinding_IUserManagementService" binding="tns:BasicHttpBinding_IUserManagementService">
+      <soap:address location="http://localhost:56362/Services/UserManagementService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -4,16 +4,19 @@ using AlumniManagement.Frontend.Models;
 using AlumniManagement.Frontend.Repositories;
 using AlumniManagement.Web.Repositories;
 using Aspose.Cells;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
 namespace AlumniManagement.Frontend.Controllers
 {
+    [Authorize]
     public class AlumniController : Controller
     {
 
@@ -22,6 +25,7 @@ namespace AlumniManagement.Frontend.Controllers
         private IMajorRepository _majorRepository;
         private IExcelRepository _excelRepository;
         private IJobRepository _jobRepository;
+
 
         private string photoPath = ConfigurationManager.AppSettings["PhotoPath"];
         private string fileTypes = ConfigurationManager.AppSettings["FileTypes"];
@@ -45,8 +49,21 @@ namespace AlumniManagement.Frontend.Controllers
 
 
         // GET: Alumni
+        
         public ActionResult Index()
         {
+            var facultyDdl = _facultyRepository.GetAll();
+            var majorDdl = _majorRepository.GetAll();
+
+            ViewBag.FacultyDdl = new SelectList(facultyDdl, "FacultyID", "FacultyName");
+            ViewBag.MajorDDL = new SelectList(majorDdl, "MajorID", "MajorName");
+            ViewBag.SuperAdmin = false;
+
+            if (User.IsInRole("Superadmin"))
+            {
+                ViewBag.SuperAdmin = true;
+            }
+
             return View();
         }
 
@@ -81,9 +98,19 @@ namespace AlumniManagement.Frontend.Controllers
             }
         }
 
-        public JsonResult GetAlumnis()
+        public JsonResult GetAlumnis(int? facultyId, int? majorId)
         {
             var alumniesData = _alumniRepository.GetAll();
+
+            if (facultyId.HasValue && facultyId.Value > 0)
+            {
+                alumniesData = alumniesData.Where(a => a.FacultyID == facultyId.Value).ToList();
+            }
+
+            if (majorId.HasValue && majorId.Value > 0)
+            {
+                alumniesData = alumniesData.Where(a => a.MajorID == majorId.Value).ToList();
+            }
 
             foreach (var item in alumniesData)
             {
@@ -96,6 +123,19 @@ namespace AlumniManagement.Frontend.Controllers
             }
 
             return Json(new { data = alumniesData }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetMajorsByFaculty(int facultyId)
+        {
+            var majors = _majorRepository.GetAll()
+                .Where(m => m.FacultyID == facultyId)
+                .Select(m => new
+                {
+                    m.MajorID,
+                    m.MajorName
+                }).ToList();
+
+            return Json(majors, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -141,6 +181,7 @@ namespace AlumniManagement.Frontend.Controllers
         //    return View(alumniModel);
         //}
 
+        [Authorize(Roles = "Superadmin")]
         public ActionResult Create()
         {
 
@@ -169,6 +210,7 @@ namespace AlumniManagement.Frontend.Controllers
 
         // POST: Alumni/Create
         [HttpPost]
+        [Authorize(Roles = "Superadmin")]
         public ActionResult Create(AlumniModel alumniModel, HttpPostedFileBase photoUpload)
         {
             try
@@ -216,6 +258,17 @@ namespace AlumniManagement.Frontend.Controllers
             if(photoUpload == null)
             {
                 return;
+            }
+
+
+            if (alumniModel.PhotoPath!= null)
+            {
+                var fileExist = Path.Combine(Server.MapPath(alumniModel.PhotoPath), alumniModel.PhotoName);
+
+                if (System.IO.File.Exists(fileExist))
+                {
+                    System.IO.File.Delete(fileExist);
+                }
             }
 
             string[] allowedExtensions = { ".jpeg", ".jpg", ".png" };
@@ -318,7 +371,7 @@ namespace AlumniManagement.Frontend.Controllers
             return alumniModel;
         }
 
-        // POST: Alumni/Edit/5
+        // POST: Alumni/Edit/5exi
         [HttpPost]
         public ActionResult Edit(int id, AlumniModel alumniModel)
         {
@@ -456,6 +509,7 @@ namespace AlumniManagement.Frontend.Controllers
             }
         }
 
+        [Authorize(Roles = "Superadmin")]
         public ActionResult ExportExcel()
         {
 
@@ -469,27 +523,74 @@ namespace AlumniManagement.Frontend.Controllers
             return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "AlumniData.xlsx");
         }
 
+        // Get Show Tabel
         [HttpPost]
-        public ActionResult ImportExcel(HttpPostedFileBase file)
+        [Authorize(Roles = "Superadmin")]
+        public ActionResult ShowTableView(HttpPostedFileBase file)
+        {
+            var resultListImported = ImportExcel(file);
+
+         
+
+
+            ViewBag.ValidData = resultListImported.Where(a => a.ErrorDetails.Count() == 0).Count();
+            ViewBag.ErrorData = resultListImported.Where(a => a.ErrorDetails.Count() > 0).Count();
+            ViewBag.RecordData = resultListImported.Count();
+            ViewBag.CheckIsError = false;
+            var totalError = resultListImported.Where(a => a.ErrorDetails.Count() > 0).Count();
+
+            if (totalError > 0)
+            {
+                ViewBag.CheckIsError = true;
+            }
+
+            ViewBag.AllData = resultListImported;
+
+            return View("TabelSummaryView", resultListImported);
+
+
+        }
+
+        [HttpPost]
+        public JsonResult SubmitImportedTable(FormCollection form)
         {
             try
             {
-                if (file != null && file.ContentLength > 0)
+                string jsonString = form["submittedData"]; // Ambil data sebagai string
+                var submittedData = JsonConvert.DeserializeObject<List<AlumniModel>>(jsonString);
+
+                if (submittedData == null || !submittedData.Any())
                 {
-                    _excelRepository.ImportAlumniFromExcel(file);
+                    return Json(new { success = false, message = "No data received!" }, JsonRequestBehavior.AllowGet);
                 }
 
-                TempData["SuccessMessage"] = "Data imported Succesfully";
-                return RedirectToAction("Index");
+                _alumniRepository.UpsertMultipleAlumni(submittedData);
+
+                return Json(new { success = true, message = "Alumni updated successfully!" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = ex.Message;
-                ModelState.AddModelError("", "Unable to import due to " + ex.Message);
-                return RedirectToAction("Index");
+                return Json(new { success = false, message = "Alumni insert failed: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
+        [Authorize(Roles = "Superadmin")]
+        [HttpPost]
+        public List<AlumniModel> ImportExcel(HttpPostedFileBase file)
+        {
+     
+            var resultList = new List<AlumniModel>();
+
+            if (file != null && file.ContentLength > 0)
+            {
+                resultList = _excelRepository.ImportAlumniFromExcel(file);
+            }
+            return resultList;
+            
+
+        }
+
+        [Authorize(Roles = "Superadmin")]
         [HttpPost]
         public ActionResult UpsertAlumni(AlumniModel alumni, HttpPostedFileBase photoUpload)
         {
@@ -510,7 +611,7 @@ namespace AlumniManagement.Frontend.Controllers
             catch (Exception ex)
             {
 
-                TempData["SuccessMessage"] = "Alumni updated Failed " + ex.Message;
+                TempData["ErrorMessage"] = "Alumni updated Failed " + ex.Message;
 
                 return RedirectToAction("Index");
             }

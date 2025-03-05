@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="PhotoAlbumService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:56362/Services/PhotoAlbumService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/PhotoAlbumService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:56362/Services/PhotoAlbumService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/AlumniManagement.WCF.Entities" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IPhotoAlbumService_GetPhotoAlbums_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPhotoAlbums" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_GetPhotoAlbums_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPhotoAlbumsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_GetAllPhotoByAlbumId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllPhotoByAlbumId" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_GetAllPhotoByAlbumId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllPhotoByAlbumIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_GetPhotoAlbumById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPhotoAlbumById" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_GetPhotoAlbumById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPhotoAlbumByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_GetPhotoByAlbumIdAndPhotoId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPhotoByAlbumIdAndPhotoId" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_GetPhotoByAlbumIdAndPhotoId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPhotoByAlbumIdAndPhotoIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_InsertPhotoAlbum_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertPhotoAlbum" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_InsertPhotoAlbum_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertPhotoAlbumResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_InsertPhoto_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertPhoto" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_InsertPhoto_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertPhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_UpdatePhotoAlbum_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePhotoAlbum" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_UpdatePhotoAlbum_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePhotoAlbumResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_DeletePhotoAlbum_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeletePhotoAlbum" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_DeletePhotoAlbum_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeletePhotoAlbumResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_DeletePhoto_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeletePhoto" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_DeletePhoto_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeletePhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_SetThumbnail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetThumbnail" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoAlbumService_SetThumbnail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetThumbnailResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IPhotoAlbumService">
+    <wsdl:operation name="GetPhotoAlbums">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/GetPhotoAlbums" message="tns:IPhotoAlbumService_GetPhotoAlbums_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/GetPhotoAlbumsResponse" message="tns:IPhotoAlbumService_GetPhotoAlbums_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllPhotoByAlbumId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/GetAllPhotoByAlbumId" message="tns:IPhotoAlbumService_GetAllPhotoByAlbumId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/GetAllPhotoByAlbumIdResponse" message="tns:IPhotoAlbumService_GetAllPhotoByAlbumId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPhotoAlbumById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/GetPhotoAlbumById" message="tns:IPhotoAlbumService_GetPhotoAlbumById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/GetPhotoAlbumByIdResponse" message="tns:IPhotoAlbumService_GetPhotoAlbumById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPhotoByAlbumIdAndPhotoId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/GetPhotoByAlbumIdAndPhotoId" message="tns:IPhotoAlbumService_GetPhotoByAlbumIdAndPhotoId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/GetPhotoByAlbumIdAndPhotoIdResponse" message="tns:IPhotoAlbumService_GetPhotoByAlbumIdAndPhotoId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertPhotoAlbum">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/InsertPhotoAlbum" message="tns:IPhotoAlbumService_InsertPhotoAlbum_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/InsertPhotoAlbumResponse" message="tns:IPhotoAlbumService_InsertPhotoAlbum_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertPhoto">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/InsertPhoto" message="tns:IPhotoAlbumService_InsertPhoto_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/InsertPhotoResponse" message="tns:IPhotoAlbumService_InsertPhoto_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePhotoAlbum">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/UpdatePhotoAlbum" message="tns:IPhotoAlbumService_UpdatePhotoAlbum_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/UpdatePhotoAlbumResponse" message="tns:IPhotoAlbumService_UpdatePhotoAlbum_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhotoAlbum">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/DeletePhotoAlbum" message="tns:IPhotoAlbumService_DeletePhotoAlbum_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/DeletePhotoAlbumResponse" message="tns:IPhotoAlbumService_DeletePhotoAlbum_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhoto">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/DeletePhoto" message="tns:IPhotoAlbumService_DeletePhoto_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/DeletePhotoResponse" message="tns:IPhotoAlbumService_DeletePhoto_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetThumbnail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoAlbumService/SetThumbnail" message="tns:IPhotoAlbumService_SetThumbnail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoAlbumService/SetThumbnailResponse" message="tns:IPhotoAlbumService_SetThumbnail_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IPhotoAlbumService" type="tns:IPhotoAlbumService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPhotoAlbums">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/GetPhotoAlbums" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllPhotoByAlbumId">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/GetAllPhotoByAlbumId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPhotoAlbumById">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/GetPhotoAlbumById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPhotoByAlbumIdAndPhotoId">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/GetPhotoByAlbumIdAndPhotoId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertPhotoAlbum">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/InsertPhotoAlbum" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertPhoto">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/InsertPhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePhotoAlbum">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/UpdatePhotoAlbum" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhotoAlbum">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/DeletePhotoAlbum" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhoto">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/DeletePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetThumbnail">
+      <soap:operation soapAction="http://tempuri.org/IPhotoAlbumService/SetThumbnail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PhotoAlbumService">
+    <wsdl:port name="BasicHttpBinding_IPhotoAlbumService" binding="tns:BasicHttpBinding_IPhotoAlbumService">
+      <soap:address location="http://localhost:56362/Services/PhotoAlbumService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

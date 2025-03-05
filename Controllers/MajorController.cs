@@ -11,6 +11,7 @@ using System.Web.UI.WebControls;
 
 namespace AlumniManagement.Frontend.Controllers
 {
+    [Authorize]
     public class MajorController : Controller
     {
         private IMajorRepository _majorRepository;
