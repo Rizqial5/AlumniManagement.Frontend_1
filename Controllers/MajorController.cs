@@ -32,9 +32,21 @@ namespace AlumniManagement.Frontend.Controllers
 
         public JsonResult GetMajors()
         {
-            var majorsData = _majorRepository.GetAll();
+            try
+            {
+                var majorsData = _majorRepository.GetAll();
 
-            return Json(new { data = majorsData }, JsonRequestBehavior.AllowGet);
+                return Json(new { data = majorsData }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = ex.Message,
+                    data = new List<MajorModel>() // Hindari null untuk menghindari DataTable error
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         // GET: Major/Details/5
@@ -46,12 +58,21 @@ namespace AlumniManagement.Frontend.Controllers
         // GET: Major/Create
         public ActionResult Create()
         {
-            FacultyDDl();
+            try
+            {
+                FacultyDDl();
 
-            return PartialView("_CreatePartial");
+                return PartialView("_CreatePartial");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact Administrator" }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         // POST: Major/Create
+        [Authorize(Roles = "Superadmin")]
         [HttpPost]
         public ActionResult Create(MajorModel majorModel)
         {
@@ -71,27 +92,38 @@ namespace AlumniManagement.Frontend.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
-                ModelState.AddModelError("", "Unable to Add due to " + ex.Message);
-                FacultyDDl();
-                return View();
+
+
+                return RedirectToAction("Index");
             }
         }
 
         // GET: Major/Edit/5
         public ActionResult Edit(int id)
         {
-            var existingData = _majorRepository.GetMajor(id);
-
-            if (existingData == null)
+            try
             {
-                TempData["ErrorMessage"] = "Major Not Found";
 
-                return RedirectToAction("Index");
+
+                var existingData = _majorRepository.GetMajor(id);
+
+                if (existingData == null)
+                {
+                    TempData["ErrorMessage"] = "Major Not Found";
+
+                    return RedirectToAction("Index");
+                }
+
+                FacultyDDl();
+
+                return PartialView("_EditPartial", existingData);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact Administrator" }, JsonRequestBehavior.AllowGet);
             }
 
-            FacultyDDl();
-
-            return PartialView("_EditPartial",existingData);
         }
 
         // POST: Major/Edit/5
@@ -123,9 +155,9 @@ namespace AlumniManagement.Frontend.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
-                ModelState.AddModelError("", "Unable to Update due to " + ex.Message);
-                FacultyDDl();
-                return View(majorModel);
+
+
+                return RedirectToAction("Index");
             }
         }
 
@@ -159,7 +191,8 @@ namespace AlumniManagement.Frontend.Controllers
             {
                 return Json(new
                 {
-                    error = true
+                    error = true,
+                    message = ex.Message
                 });
             }
         }
@@ -205,9 +238,20 @@ namespace AlumniManagement.Frontend.Controllers
 
         private void FacultyDDl()
         {
-            var ddl = _facultyRepository.GetAll();
+            try
+            {
+                var ddl = _facultyRepository.GetAll();
 
-            ViewBag.FacultyLists = new SelectList(ddl, "FacultyID", "FacultyName");
+                ViewBag.FacultyLists = new SelectList(ddl, "FacultyID", "FacultyName");
+            }
+            catch (Exception ex)
+            {
+                /// buat message developer, add.errorlog(ex)
+                
+                throw new Exception();
+            }
+
+
 
         }
     }

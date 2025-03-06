@@ -21,55 +21,135 @@ namespace AlumniManagement.Frontend.Repositories
 
         public IEnumerable<MajorModel> GetAll()
         {
-            var data = _majorServiceClient.GetAll();
-            var result = data.Select(f => Mapping.Mapper.Map<MajorModel>(f));
+            try
+            {
+                var data = _majorServiceClient.GetAll();
+                var result = data.Select(f => Mapping.Mapper.Map<MajorModel>(f));
 
 
-            return result;
+                return result;
+            }
+            catch
+            {
+
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Major Service is not available.");
+            }
         }
 
         public MajorModel GetMajor(int majorId)
         {
-            var selectedData = _majorServiceClient.GetMajor(majorId);
+            try
+            {
+                var selectedData = _majorServiceClient.GetMajor(majorId);
 
-            
+                return Mapping.Mapper.Map<MajorModel>(selectedData);
+            }
+            catch
+            {
 
-            return Mapping.Mapper.Map<MajorModel>(selectedData);
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Major Service is not available.");
+            }
         }
 
         public MajorModel GetMajorIdByName(string name)
         {
-            var selectedData = _majorServiceClient.GetMajorIdByName(name);
+            try
+            {
 
-            return Mapping.Mapper.Map<MajorModel>(selectedData);
+                var selectedData = _majorServiceClient.GetMajorIdByName(name);
+
+                return Mapping.Mapper.Map<MajorModel>(selectedData);
+            }
+            catch
+            {
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Major Service is not available.");
+            }
         }
 
         public void InsertMajor(MajorModel major)
         {
-            var result = Mapping.Mapper.Map<MajorDTO>(major);
+            try
+            {
 
-            _majorServiceClient.InsertMajor(result);
+
+                var result = Mapping.Mapper.Map<MajorDTO>(major);
+
+                _majorServiceClient.InsertMajor(result);
+            }
+            catch
+            {
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Major Service is not available.");
+            }
         }
 
         public void UpdateMajor(MajorModel major)
         {
-            var result = Mapping.Mapper.Map<MajorDTO>(major);
+            try
+            {
+                var result = Mapping.Mapper.Map<MajorDTO>(major);
 
-            _majorServiceClient.UpdateMajor(result);
+                _majorServiceClient.UpdateMajor(result);
+            }
+            catch
+            {
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Major Service is not available.");
+            }
         }
 
         public void DeleteMajor(int majorId)
         {
-           _majorServiceClient.DeleteMajor(majorId);
+            try
+            {
+                _majorServiceClient.DeleteMajor(majorId);
+            }
+            catch
+            {
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Major Service is not available.");
+            }
         }
 
         public IEnumerable<MajorModel> GetMajorIdByFacultyId(int facultyId)
         {
-            var data = _majorServiceClient.GetMajorIdByFacultyId(facultyId);
+            try
+            {
+                var data = _majorServiceClient.GetMajorIdByFacultyId(facultyId);
 
-            var result = data.Select(d => Mapping.Mapper.Map<MajorModel>(d));
+                var result = data.Select(d => Mapping.Mapper.Map<MajorModel>(d));
 
-            return result;
+                return result;
+            }
+            catch
+            {
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Major Service is not available.");
+            }
         }
     }
 }

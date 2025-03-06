@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <style>
         .dataTables_wrapper {
-            width: 900px;
+            width: 100%;
         }
 
             .dataTables_wrapper .dataTables_paginate {
@@ -81,10 +81,36 @@
     <script>
         $(document).ready(function () {
             var table = $('#majorData').DataTable({
+                "processing": true,
+                "serverSide": false,
+                "deferRender": true,   // Optimalkan rendering
+                "stateSave": true,     // Simpan state saat refresh
+                "bDestroy": true,      // Hindari error saat re-init
+                "bAutoWidth": false,   // Hindari width yang salah
+                "bSortCellsTop": true,
                 "ajax": {
                     "url": "/Major/GetMajors",
                     "type": "GET",
-                    "datatype": "json"
+                    "datatype": "json",
+                    "dataSrc": function (response) {
+                        if (!response || response.error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: response?.message || "Failed to fetch data."
+                            });
+                            return []; // Kembalikan array kosong agar tidak error
+                        }
+                        return response.data || [];
+                    },
+                    "error": function (jqXHR, textStatus, errorThrown) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Failed to load data. Please try again later."
+                        });
+                        table.clear().draw(); // Bersihkan tabel agar tidak error
+                    }
                 },
                 "columns": [
                     {
@@ -146,6 +172,9 @@
                         "first": "<<",
                         "last": ">>"
                     }
+                },
+                "error": function () {
+                    return false; // Mencegah error bawaan DataTables
                 }
             });
 
@@ -169,12 +198,23 @@
             })
                 .then((result) => {
                     if (result.isConfirmed) {
+                        // Tampilkan loading screen
+                        Swal.fire({
+                            title: "Processing...",
+                            text: "Please wait while we delete the item.",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading(); // Menampilkan animasi loading
+                            }
+                        });
                         // Make an AJAX call to delete the item
                         $.ajax({
                             url: '/Major/Delete', // URL of your Delete method
                             type: 'POST', // Use POST for data modification
                             data: { id: itemId }, // Pass the ID as data
                             success: function (response) {
+                                Swal.close();
                                 if (response.success) {
                                     Swal.fire("Deleted!", response.message, "success").then(() => {
                                         $("#majorData").DataTable().ajax.reload(); // Reload the page or update UI
@@ -190,6 +230,7 @@
                                 });
                             },
                             error: function (error) {
+                                Swal.close();
                                 Swal.fire("Error!", "Unable to delete the item " + response.message + " . Please try again.", "error");
                             }
                         });
@@ -230,8 +271,13 @@
                     myModal.show();
                     myModal.modal('show');
                 },
-                error: function() {
-                    alert("An error occurred while loading the modal.");
+                error: function (xhr) {
+                    // Menampilkan pesan error dari response JSON
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : "An unknown error occurred";
+
+                    Swal.fire("Error Load Modal",  errorMessage, "error");
                 }
             });
         });
@@ -258,8 +304,12 @@
                     $('#editModal').modal('show');
                 },
                 error: function (xhr) {
-                    console.error(xhr.responseText);
-                    alert('An error occurred while fetching data.');
+                    // Menampilkan pesan error dari response JSON
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : "An unknown error occurred";
+
+                    Swal.fire("Error Load Modal", errorMessage, "error");
                 }
             });
         });
@@ -279,6 +329,16 @@
                     cancelButtonText: "No, keep them"
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Processing...",
+                            text: "Please wait while we delete the item.",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading(); // Menampilkan animasi loading
+                            }
+                        });
+
                         // Make an AJAX call to delete the selected items
                         $.ajax({
                             url: '/Major/DeleteSelected/',
@@ -286,6 +346,7 @@
                             data: { ids: selectedIds },
                             traditional: true,
                             success: function (response) {
+                                Swal.close();
                                 if (response.success) {
                                     Swal.fire("Deleted!", response.message, "success").then(() => {
                                         $('#majorData').DataTable().ajax.reload(); // Reload the DataTable
@@ -295,6 +356,7 @@
                                 }
                             },
                             error: function (error) {
+                                Swal.close();
                                 Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
                             }
                         });
