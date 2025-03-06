@@ -9,14 +9,14 @@ namespace AlumniManagement.Frontend
 {
     public class RouteConfig
     {
-        public static void RegisterRoutes(RouteCollection routes)
+        public static void RegisterRoutes(RouteCollection routes    )
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Major", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Faculty", action = "Index", id = UrlParameter.Optional }
             );
 
 

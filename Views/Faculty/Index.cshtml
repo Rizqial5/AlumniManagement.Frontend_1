@@ -73,6 +73,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
         $(document).ready(function () {
+            $.fn.dataTable.ext.errMode = 'none';
+
             var table = $('#facultyData').DataTable({
                 "processing": true,
                 "serverSide": false,
@@ -161,7 +163,16 @@
                 }
             });
 
-            
+            // Menangkap error DataTables agar tidak muncul alert default
+            $('#facultyData').on('error.dt', function (e, settings, techNote, message) {
+                console.log('DataTables error:', message);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "An error occurred while loading data."
+                });
+            });
+
             $('#facultyData_filter input').unbind();
             $('#facultyData_filter input').on('keyup', function (e) {
                 var value = $(this).val();

@@ -10,6 +10,7 @@ namespace AlumniManagement.Frontend.Controllers
     {
         public ActionResult Index()
         {
+            TempData.Keep("ErrorMessage");
             return View();
         }
 

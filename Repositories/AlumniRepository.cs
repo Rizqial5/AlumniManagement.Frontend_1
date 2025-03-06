@@ -9,137 +9,247 @@ using System.Web;
 
 namespace AlumniManagement.Frontend.Repositories
 {
-    public class AlumniRepository : IAlumniRepository
-    {
 
-        private AlumniServiceClient _alumniServiceClient;
 
-        public AlumniRepository()
+        public class AlumniRepository : IAlumniRepository
         {
-            _alumniServiceClient = new AlumniServiceClient();
+            private AlumniServiceClient _alumniServiceClient;
+
+            public AlumniRepository()
+            {
+                _alumniServiceClient = new AlumniServiceClient();
+            }
+
+            public IEnumerable<AlumniModel> GetAll()
+            {
+                try
+                {
+                    var data = _alumniServiceClient.GetAll();
+                    var result = data.Select(f => Mapping.Mapper.Map<AlumniModel>(f)).ToList();
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to retrieve alumni data. Please contact support.");
+                }
+            }
+
+            public AlumniModel GetAlumni(int alumniId)
+            {
+                try
+                {
+                    var selectedData = _alumniServiceClient.GetAlumni(alumniId);
+                    return Mapping.Mapper.Map<AlumniModel>(selectedData);
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception($"Failed to retrieve alumni with ID {alumniId}. Please contact support.");
+                }
+            }
+
+            public int GetDistrictIdByName(string districtName)
+            {
+                try
+                {
+                    return _alumniServiceClient.GetDistrictIdByName(districtName);
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to get district name. Please contact support.");
+                }
+            }
+
+            public int GetStateIdByName(string stateName)
+            {
+                try
+                {
+                    return _alumniServiceClient.GetStateIdByName(stateName);
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to get state name. Please contact support.");
+                }
+            }
+
+            public void InsertAlumni(AlumniModel alumni)
+            {
+                try
+                {
+                    var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
+                    _alumniServiceClient.InsertAlumni(result);
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to add alumni data. Please contact support.");
+                }
+            }
+
+            public void UpdateAlumni(AlumniModel alumni)
+            {
+                try
+                {
+                    var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
+                    _alumniServiceClient.UpdateAlumni(result);
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to update alumni data. Please contact support.");
+                }
+            }
+
+            public void DeleteAlumni(int alumniId)
+            {
+                try
+                {
+                    _alumniServiceClient.DeleteAlumni(alumniId);
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception($"Failed to delete alumni with ID {alumniId}. Please contact support.");
+                }
+            }
+
+            public IEnumerable<StateDTO> GetAllStates()
+            {
+                try
+                {
+                    return _alumniServiceClient.GetAllStates();
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to retrieve states. Please contact support.");
+                }
+            }
+
+            public IEnumerable<DistrictDTO> GetDistrictByStateId(int stateId)
+            {
+                try
+                {
+                    return _alumniServiceClient.GetDistrictByStateId(stateId);
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to retrieve districts. Please contact support.");
+                }
+            }
+
+            public IEnumerable<DistrictDTO> GetAllDistricts()
+            {
+                try
+                {
+                    return _alumniServiceClient.GetAllDistricts().ToList();
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to retrieve districts. Please contact support.");
+                }
+            }
+
+            public IEnumerable<HobbyDTO> GetAllHobbies()
+            {
+                try
+                {
+                    return _alumniServiceClient.GetAllHobbies().ToList();
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to retrieve hobbies. Please contact support.");
+                }
+            }
+
+            public IEnumerable<string> GetStatesDistrictName()
+            {
+                try
+                {
+                    return _alumniServiceClient.GetStatesDistrictName();
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to retrieve state and district names. Please contact support.");
+                }
+            }
+
+            public IEnumerable<string> GetMajorFacultiesName()
+            {
+                try
+                {
+                    return _alumniServiceClient.GetMajorFacultiesName();
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to retrieve faculty names. Please contact support.");
+                }
+            }
+
+            public void InsertAlumniWitHobbies(AlumniModel alumni)
+            {
+                try
+                {
+                    var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
+                    _alumniServiceClient.InsertAlumniWithHobbies(result);
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to insert alumni with hobbies. Please contact support.");
+                }
+            }
+
+            public void UpdateAlumniWithHobbies(AlumniModel alumni)
+            {
+                try
+                {
+                    var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
+                    _alumniServiceClient.UpdateAlumniWithHobbies(result);
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to update alumni with hobbies. Please contact support.");
+                }
+            }
+
+            public void UpsertAlumni(AlumniModel alumni)
+            {
+                try
+                {
+                    var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
+                    _alumniServiceClient.UpsertAlumni(result);
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to upsert alumni data. Please contact support.");
+                }
+            }
+
+            public void UpsertMultipleAlumni(List<AlumniModel> alumni)
+            {
+                try
+                {
+                    var result = Mapping.Mapper.Map<List<AlumniDTO>>(alumni);
+                    _alumniServiceClient.UpsertMultipleAlumni(result.ToArray());
+                }
+                catch (Exception ex)
+                {
+                    // Developer Debug: Log ex.ToString() atau ex.StackTrace
+                    throw new Exception("Failed to upsert multiple alumni records. Please contact support.");
+                }
+            }
         }
 
-
-        public IEnumerable<AlumniModel> GetAll()
-        {
-            var data = _alumniServiceClient.GetAll();
-            var result = data.Select(f => Mapping.Mapper.Map<AlumniModel>(f)).ToList();
-
-            return result;
-        }
-
-        public AlumniModel GetAlumni(int alumniId)
-        {
-            var selectedData = _alumniServiceClient.GetAlumni(alumniId);
-
-            return Mapping.Mapper.Map<AlumniModel>(selectedData);
-        }
-
-        public int GetDistrictIdByName(string districtName)
-        {
-            var selectedData = _alumniServiceClient.GetDistrictIdByName(districtName);
-
-            return selectedData;
-
-        }
-
-        public int GetStateIdByName(string stateName)
-        {
-            var selectedData = _alumniServiceClient.GetStateIdByName(stateName);
-
-            return selectedData;
-        }
-
-        public void InsertAlumni(AlumniModel alumni)
-        {
-            var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
-
-            _alumniServiceClient.InsertAlumni(result);
-        }
-
-        public void UpdateAlumni(AlumniModel alumni)
-        {
-            var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
-
-            _alumniServiceClient.UpdateAlumni(result);
-        }
-
-        public void DeleteAlumni(int alumniId)
-        {
-            _alumniServiceClient.DeleteAlumni(alumniId);
-        }
-
-        public IEnumerable<StateDTO> GetAllStates()
-        {
-            var data = _alumniServiceClient.GetAllStates();
-
-
-            return data;
-        }
-
-        public IEnumerable<DistrictDTO> GetDistrictByStateId(int stateId)
-        {
-            var data = _alumniServiceClient.GetDistrictByStateId(stateId);
-
-
-            return data;
-        }
-
-        public IEnumerable<DistrictDTO> GetAllDistricts()
-        {
-            var data = _alumniServiceClient.GetAllDistricts().ToList();
-
-            return data;
-        }
-        public IEnumerable<HobbyDTO> GetAllHobbies()
-        {
-            var data = _alumniServiceClient.GetAllHobbies().ToList();
-
-            return data;
-        }
-
-        public IEnumerable<string> GetStatesDistrictName()
-        {
-            var data = _alumniServiceClient.GetStatesDistrictName();
-
-            return data;
-        }
-
-        public IEnumerable<string> GetMajorFacultiesName()
-        {
-            var data = _alumniServiceClient.GetMajorFacultiesName();
-
-            return data;
-        }
-
-
-
-        public void InsertAlumniWitHobbies(AlumniModel alumni)
-        {
-            var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
-
-            _alumniServiceClient.InsertAlumniWithHobbies(result);
-        }
-
-        public void UpdateAlumniWithHobbies(AlumniModel alumni)
-        {
-            var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
-
-            _alumniServiceClient.UpdateAlumniWithHobbies(result);
-        }
-
-        public void UpsertAlumni(AlumniModel alumni)
-        {
-            var result = Mapping.Mapper.Map<AlumniDTO>(alumni);
-
-            _alumniServiceClient.UpsertAlumni(result);
-        }
-
-        public void UpsertMultipleAlumni(List<AlumniModel> alumni)
-        {
-            var result = Mapping.Mapper.Map<List<AlumniDTO>>(alumni);
-
-            _alumniServiceClient.UpsertMultipleAlumni(result.ToArray());
-        }
-    }
+    
 }

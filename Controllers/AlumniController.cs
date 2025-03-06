@@ -52,77 +52,74 @@ namespace AlumniManagement.Frontend.Controllers
         
         public ActionResult Index()
         {
-            var facultyDdl = _facultyRepository.GetAll();
-            var majorDdl = _majorRepository.GetAll();
-
-            ViewBag.FacultyDdl = new SelectList(facultyDdl, "FacultyID", "FacultyName");
-            ViewBag.MajorDDL = new SelectList(majorDdl, "MajorID", "MajorName");
-            ViewBag.SuperAdmin = false;
-
-            if (User.IsInRole("Superadmin"))
+            try
             {
-                ViewBag.SuperAdmin = true;
+                var facultyDdl = _facultyRepository.GetAll();
+                var majorDdl = _majorRepository.GetAll();
+
+                ViewBag.FacultyDdl = new SelectList(facultyDdl, "FacultyID", "FacultyName");
+                ViewBag.MajorDDL = new SelectList(majorDdl, "MajorID", "MajorName");
+                ViewBag.SuperAdmin = false;
+
+                if (User.IsInRole("Superadmin"))
+                {
+                    ViewBag.SuperAdmin = true;
+                }
+
+                return View();
             }
-
-            return View();
-        }
-
-        public ActionResult LoadPartialView(string partialViewName, string modalTitle, int id)
-        {
-            ViewBag.ModalTitle = modalTitle;
-
-            switch (partialViewName)
+            catch ( Exception ex)
             {
-                case "_CreatePartial":
+                TempData["ErrorMessage"] = ex.Message;
+                TempData.Keep("ErrorMessage");
 
-                    var alumniModel = new AlumniModel();
 
-                    alumniModel.DistrictDDL = new List<SelectListItem>();
-                    alumniModel.MajorDDl = new List<SelectListItem>();
-
-                    StateAndFacultyDdl();
-
-                    return PartialView(partialViewName, alumniModel);
-                case "_EditPartial":
-                    var editModel = _alumniRepository.GetAlumni(id);
-                    if (editModel == null) return Content("Data not found");
-                    return PartialView(partialViewName, editModel);
-
-                case "_DetailsPartial":
-                    var detailModel = _alumniRepository.GetAlumni(id);
-                    if (detailModel == null) return Content("Data not found");
-                    return PartialView(partialViewName, detailModel);
-
-                default:
-                    return Content("Invalid partial view requested.");
+                return RedirectToAction("Index", "Major");
             }
         }
 
         public JsonResult GetAlumnis(int? facultyId, int? majorId)
         {
-            var alumniesData = _alumniRepository.GetAll();
-
-            if (facultyId.HasValue && facultyId.Value > 0)
+            try
             {
-                alumniesData = alumniesData.Where(a => a.FacultyID == facultyId.Value).ToList();
-            }
 
-            if (majorId.HasValue && majorId.Value > 0)
-            {
-                alumniesData = alumniesData.Where(a => a.MajorID == majorId.Value).ToList();
-            }
+                var alumniesData = _alumniRepository.GetAll();
 
-            foreach (var item in alumniesData)
-            {
-                item.ShowDateOfBirth = DateConverter(item.DateOfBirth);
-                if(item.PhotoPath != null)
+                if (facultyId.HasValue && facultyId.Value > 0)
                 {
-                    item.ShowImagePath = @Url.Content(item.PhotoPath.Replace("~", "") + '/' + item.PhotoName);
+                    alumniesData = alumniesData.Where(a => a.FacultyID == facultyId.Value).ToList();
                 }
-                
-            }
 
-            return Json(new { data = alumniesData }, JsonRequestBehavior.AllowGet);
+                if (majorId.HasValue && majorId.Value > 0)
+                {
+                    alumniesData = alumniesData.Where(a => a.MajorID == majorId.Value).ToList();
+                }
+
+                foreach (var item in alumniesData)
+                {
+                    item.ShowDateOfBirth = DateConverter(item.DateOfBirth);
+                    if (item.PhotoPath != null)
+                    {
+                        item.ShowImagePath = @Url.Content(item.PhotoPath.Replace("~", "") + '/' + item.PhotoName);
+                    }
+
+                }
+
+                return Json(new
+                {
+                    error = false,
+                    message = "Success",
+                    data = alumniesData
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = ex.Message,
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public JsonResult GetMajorsByFaculty(int facultyId)
