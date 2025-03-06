@@ -37,8 +37,12 @@ namespace AlumniManagement.Web.Repositories
             catch
             {
 
-                throw new Exception("Faculty Service is not available.");
-                // Bisa return list kosong atau lempar exception tergantung kebutuhan
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Faculty Service is not available."); 
+
 
             }
 
@@ -47,35 +51,95 @@ namespace AlumniManagement.Web.Repositories
 
         public FacultyModel GetFaculty(int FacultyId)
         {
-            var selectedData = _facultyServiceClient.GetFaculty(FacultyId);
+            try
+            {
+                var selectedData = _facultyServiceClient.GetFaculty(FacultyId);
 
-            return Mapping.Mapper.Map<FacultyModel>(selectedData);
+                return Mapping.Mapper.Map<FacultyModel>(selectedData);
+            }
+            catch
+            {
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Faculty Service is not available.");
+            }
+
         }
 
         public FacultyModel GetFacultyIdByName(string name)
         {
-            var selectedData = _facultyServiceClient.GetFacultyIdByName(name);
+            try
+            {
+                var selectedData = _facultyServiceClient.GetFacultyIdByName(name);
 
-            return Mapping.Mapper.Map<FacultyModel>(selectedData);
+                return Mapping.Mapper.Map<FacultyModel>(selectedData);
+            }
+            catch
+            {
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Faculty Service is not available.");
+            }
+
         }
 
         public void InsertFaculty(FacultyModel Faculty)
         {
-            var result = Mapping.Mapper.Map<FacultyDTO>(Faculty);
+            try
+            {
+                var result = Mapping.Mapper.Map<FacultyDTO>(Faculty);
 
-            _facultyServiceClient.InsertFaculty(result);
+                _facultyServiceClient.InsertFaculty(result);
+            }
+            catch
+            {
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Faculty Service is not available.");
+            }
+
         }
 
         public void UpdateFaculty(FacultyModel Faculty)
         {
-            var result = Mapping.Mapper.Map<FacultyDTO>(Faculty);
+            try
+            {
+                var result = Mapping.Mapper.Map<FacultyDTO>(Faculty);
 
-            _facultyServiceClient.UpdateFaculty(result);
+                _facultyServiceClient.UpdateFaculty(result);
+            }
+            catch 
+            {
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Faculty Service is not available.");
+            }
+
         }
 
         public void DeleteFaculty(int FacultyId)
         {
-            _facultyServiceClient.DeleteFaculty(FacultyId);
+            try
+            {
+                _facultyServiceClient.DeleteFaculty(FacultyId);
+            }
+            catch
+            {
+                //Error Log for developer
+
+
+                //Error for Client Side
+                throw new Exception("Faculty Service is not available.");
+            }
+
         }
 
 

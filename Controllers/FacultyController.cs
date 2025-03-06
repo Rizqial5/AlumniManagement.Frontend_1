@@ -63,23 +63,19 @@ namespace AlumniManagement.Web.Controllers
 
         }
 
-        // GET: Faculty/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+
 
 
 
         // GET: Faculty/Create
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Superadmin")]
         public ActionResult Create()
         {
             return PartialView("_CreatePartial");
         }
 
         // POST: Faculty/Create
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Superadmin")]
         [HttpPost]
         public ActionResult Create(FacultyModel facultyModel)
         {
@@ -97,17 +93,18 @@ namespace AlumniManagement.Web.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
-                ModelState.AddModelError("", "Unable to Add due to " + ex.Message);
+                
 
-                return View();
+                return RedirectToAction("Index");
             }
         }
 
         // GET: Faculty/Edit/5
         public ActionResult Edit(int id)
         {
-
-            var existingData = _facultyRepository.GetFaculty(id);
+            try
+            {
+                 var existingData = _facultyRepository.GetFaculty(id);
 
             if (existingData == null)
             {
@@ -116,7 +113,14 @@ namespace AlumniManagement.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            return PartialView("_EditPartial",existingData);
+                return PartialView("_EditPartial",existingData);
+            }
+            catch (Exception ex)
+            {
+                
+                return PartialView("_EditPartial");
+            }
+           
         }
 
         // POST: Faculty/Edit/5
@@ -149,9 +153,9 @@ namespace AlumniManagement.Web.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
-                ModelState.AddModelError("", "Unable to Update due to " + ex.Message);
+                
 
-                return View();
+                return RedirectToAction("Index");
             }
         }
 
@@ -200,7 +204,8 @@ namespace AlumniManagement.Web.Controllers
 
                 return Json(new
                 {
-                    error = true
+                    error = true,
+                    message = ex.Message
                 });
             }
         }
