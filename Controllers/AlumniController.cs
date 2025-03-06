@@ -505,14 +505,22 @@ namespace AlumniManagement.Frontend.Controllers
         public ActionResult ExportExcel()
         {
 
+            try
+            {
+                var workBook = _excelRepository.AlumniExportExcel();
 
-            var workBook = _excelRepository.AlumniExportExcel();
+                var stream = new System.IO.MemoryStream();
 
-            var stream = new System.IO.MemoryStream();
+                workBook.Save(stream, SaveFormat.Xlsx);
 
-            workBook.Save(stream, SaveFormat.Xlsx);
-
-            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "AlumniData.xlsx");
+                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "AlumniData.xlsx");
+            }
+            catch(Exception ex)
+            {
+                TempData["ErrorMessage"] = "Failed to export data. Please contact support.";
+                return RedirectToAction("Index");
+            }
+   
         }
 
         // Get Show Tabel
