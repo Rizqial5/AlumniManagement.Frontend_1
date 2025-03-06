@@ -117,8 +117,9 @@ namespace AlumniManagement.Web.Controllers
             }
             catch (Exception ex)
             {
-                
-                return PartialView("_EditPartial");
+
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact Administrator" }, JsonRequestBehavior.AllowGet);
             }
            
         }

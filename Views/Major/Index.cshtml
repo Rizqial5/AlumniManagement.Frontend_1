@@ -80,6 +80,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
         $(document).ready(function () {
+            $.fn.dataTable.ext.errMode = 'none';
             var table = $('#majorData').DataTable({
                 "processing": true,
                 "serverSide": false,
@@ -182,6 +183,16 @@
                 var rows = table.rows({ 'search': 'applied' }).nodes();
                 $('input[type="checkbox"]', rows).prop('checked', this.checked)
             })
+        });
+
+        // Menangkap error DataTables agar tidak muncul alert default
+        $('#majorData').on('error.dt', function (e, settings, techNote, message) {
+            console.log('DataTables error:', message);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "An error occurred while loading data."
+            });
         });
 
         ////Use this for datatables, becase the buttons are created dynamically

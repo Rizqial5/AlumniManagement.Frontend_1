@@ -341,8 +341,12 @@
                     $('#editModal').modal('show');
                 },
                 error: function (xhr) {
-                    console.error(xhr.responseText);
-                    alert('An error occurred while fetching data.');
+                    // Menampilkan pesan error dari response JSON
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : "An unknown error occurred";
+
+                    Swal.fire("Error Load Modal", errorMessage, "error");
                 }
             });
         });

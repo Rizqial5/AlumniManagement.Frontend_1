@@ -25,8 +25,6 @@ namespace AlumniManagement.Web.Repositories
             try
             {
 
-
-
                 var data = _facultyServiceClient.GetAll();
 
 
