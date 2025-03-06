@@ -18,44 +18,69 @@ namespace AlumniManagement.Frontend.Repositories
             _jobServiceClient = new JobHistorySericeClient();
         }
 
-
         public IEnumerable<JobModel> GetAll(int alumniId)
         {
-            var data = _jobServiceClient.GetAll(alumniId);
-            var result = data.Select(f => Mapping.Mapper.Map<JobModel>(f));
-
-
-
-
-            return result.ToList();
+            try
+            {
+                var data = _jobServiceClient.GetAll(alumniId);
+                return data.Select(f => Mapping.Mapper.Map<JobModel>(f)).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving data", ex);
+            }
         }
-
-
 
         public JobModel GetJob(int jobId, int alumniId)
         {
-            var selectedData = _jobServiceClient.GetJob(jobId, alumniId);
-
-            return Mapping.Mapper.Map<JobModel>(selectedData);
+            try
+            {
+                var selectedData = _jobServiceClient.GetJob(jobId, alumniId);
+                return Mapping.Mapper.Map<JobModel>(selectedData);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving data", ex);
+            }
         }
 
-        public void InsertJob(JobModel JobModel, int alumniId)
+        public void InsertJob(JobModel jobModel, int alumniId)
         {
-            var result = Mapping.Mapper.Map<JobDTO>(JobModel);
-
-            _jobServiceClient.InsertJob(result, alumniId);
+            try
+            {
+                var result = Mapping.Mapper.Map<JobDTO>(jobModel);
+                _jobServiceClient.InsertJob(result, alumniId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error inserting data", ex);
+            }
         }
 
-        public void UpdateJob(JobModel JobModel, int alumniId)
+        public void UpdateJob(JobModel jobModel, int alumniId)
         {
-            var result = Mapping.Mapper.Map<JobDTO>(JobModel);
-
-            _jobServiceClient.UpdateJob(result, alumniId);
+            try
+            {
+                var result = Mapping.Mapper.Map<JobDTO>(jobModel);
+                _jobServiceClient.UpdateJob(result, alumniId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating data", ex);
+            }
         }
 
         public void DeleteJob(int jobId, int alumniId)
         {
-            _jobServiceClient.DeleteJob(jobId, alumniId);
+            try
+            {
+                _jobServiceClient.DeleteJob(jobId, alumniId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error deleting data", ex);
+            }
         }
     }
+
 }

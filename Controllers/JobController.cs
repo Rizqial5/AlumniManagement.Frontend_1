@@ -27,38 +27,61 @@ namespace AlumniManagement.Frontend.Controllers
         public ActionResult Index(int alumniId)
         {
 
-           
-
-            if (_alumniRepository.GetAlumni(alumniId) == null)
+            try
             {
-                TempData["ErrorMessage"] = "Alumni Not Found";
+
+                if (_alumniRepository.GetAlumni(alumniId) == null)
+                {
+                    TempData["ErrorMessage"] = "Alumni Not Found";
+                    return RedirectToAction("Index", "Alumni");
+                }
+
+                ViewBag.AlumniId = alumniId;
+
+                ViewBag.FullName = _alumniRepository.GetAlumni(alumniId).FullName;
+
+
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error load job history menu";
                 return RedirectToAction("Index", "Alumni");
             }
-
-            ViewBag.AlumniId = alumniId;
-
-            ViewBag.FullName = _alumniRepository.GetAlumni(alumniId).FullName;
-
-
-
-            return View();
         }
 
         public JsonResult GetJobs(int alumniId)
         {
-            var jobData = _jobRepository.GetAll(alumniId);
-
-            foreach (var item in jobData)
+            try
             {
-                item.ShowStartDate = DateConverter(item.StartDate);
-                item.ShowEndDate = DateConverter(item.EndDate);
+                var jobData = _jobRepository.GetAll(alumniId);
+
+                foreach (var item in jobData)
+                {
+                    item.ShowStartDate = DateConverter(item.StartDate);
+                    item.ShowEndDate = DateConverter(item.EndDate);
+                }
+
+                var json = Json(new
+                {
+                    error = false,
+                    message = "Success",
+                    data = jobData
+                }, JsonRequestBehavior.AllowGet);
+
+                json.MaxJsonLength = int.MaxValue;
+
+                return json;
             }
-
-            var json = Json(new { data = jobData }, JsonRequestBehavior.AllowGet);
-
-            json.MaxJsonLength = int.MaxValue;
-
-            return json;
+            catch
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = "Error load job history data",
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public string DateConverter(DateTime? dateTime)
@@ -74,15 +97,22 @@ namespace AlumniManagement.Frontend.Controllers
         // GET: Job/Create
         public ActionResult Create(int alumniId)
         {
-
-            if (_alumniRepository.GetAlumni(alumniId) == null)
+            try
             {
-                TempData["ErrorMessage"] = "Alumni Not Found";
-                return RedirectToAction("Index", "Alumni");
-            }
-            ViewBag.AlumniId = alumniId;
+                if (_alumniRepository.GetAlumni(alumniId) == null)
+                {
+                    TempData["ErrorMessage"] = "Alumni Not Found";
+                    return RedirectToAction("Index", "Alumni");
+                }
+                ViewBag.AlumniId = alumniId;
 
-            return PartialView("_CreatePartial");
+                return PartialView("_CreatePartial");
+            }
+            catch
+            {
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         // POST: Job/Create
@@ -115,45 +145,55 @@ namespace AlumniManagement.Frontend.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = ex.Message;
-                ModelState.AddModelError("", "Error creating Job: " + ex.Message);
-                return View();
+                TempData["ErrorMessage"] = "Error cannot add data";
+
+                return RedirectToAction("Index", new { alumniId = alumniId });
+
             }
         }
 
         // GET: Job/Edit/5
         public ActionResult Edit(int id, int alumniId)
         {
-
-            if (_alumniRepository.GetAlumni(alumniId) == null)
+            try
             {
-                TempData["ErrorMessage"] = "Alumni Not Found";
-                return RedirectToAction("Index", "Alumni");
+
+
+                if (_alumniRepository.GetAlumni(alumniId) == null)
+                {
+                    TempData["ErrorMessage"] = "Alumni Not Found";
+                    return RedirectToAction("Index", "Alumni");
+                }
+
+                var existingData = _jobRepository.GetJob(id, alumniId);
+
+                ViewBag.AlumniId = alumniId;
+                if (existingData == null)
+                {
+                    TempData["ErrorMessage"] = "Job Not Found";
+
+                    return RedirectToAction("Index", new { alumniId = alumniId });
+                }
+
+                return PartialView("_EditPartial", existingData);
             }
-
-            var existingData = _jobRepository.GetJob(id,alumniId);
-
-            ViewBag.AlumniId = alumniId;
-            if (existingData == null)
+            catch
             {
-                TempData["ErrorMessage"] = "Job Not Found";
-
-                return RedirectToAction("Index", new { alumniId = alumniId });
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
             }
-
-            return PartialView("_EditPartial", existingData);
         }
 
         // POST: Job/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, JobModel jobModel, int alumniId)
         {
-            var existingData = _jobRepository.GetJob(id, alumniId);
+
             try
             {
                 // TODO: Add update logic here
-                
 
+                var existingData = _jobRepository.GetJob(id, alumniId);
                 if (existingData == null)
                 {
                     TempData["ErrorMessage"] = "Job Not Found";
@@ -177,10 +217,10 @@ namespace AlumniManagement.Frontend.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = ex.Message;
-                ModelState.AddModelError("", "Unable to Update due to " + ex.Message);
+                TempData["ErrorMessage"] = "Error updating data";
 
-                return View(existingData);
+
+                return RedirectToAction("Index", new { alumniId = alumniId });
             }
         }
 
@@ -211,11 +251,48 @@ namespace AlumniManagement.Frontend.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Unable to delete due to " + ex.Message);
+
 
                 return Json(new
                 {
-                    error = true
+                    error = true,
+                    message = "Failed to delete job history"
+                });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteSelected(int[] ids, int alumniId)
+        {
+            try
+            {
+                if (ids != null && ids.Length > 0)
+                {
+                    foreach (var item in ids)
+                    {
+                        _jobRepository.DeleteJob(item,alumniId); // template yang dirubah
+                    }
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Selected job histories have been deleted succesfully" // message dirubah sesuai objek
+                    });
+
+                }
+
+                return Json(new
+                {
+                    error = true,
+                    message = "No job history selected "  // message dirubah sesuai objek
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = "Failed delete job histories" // message dirubah sesuai objek
                 });
             }
         }

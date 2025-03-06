@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css">
     <style>
         .dataTables_wrapper {
-            width: 900px;
+            width: 100%;
         }
 
             .dataTables_wrapper .dataTables_paginate {
@@ -38,15 +38,16 @@
 
 <h2>Job History Of @ViewBag.FullName</h2>
 
-<a class="btn btn-danger" href="@Url.Action("Index","Alumni")">Back to Alumni</a>
-
-<button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Add New</button>
-
-
+<div>
+    <a class="btn btn-danger" href="@Url.Action("Index","Alumni")">Back to Alumni</a>
+    <button class="btn btn-primary" id="createButton" data-toggle="modal" data-target="#createModal">Add New</button>
+    <button id="deleteSelected" class="btn btn-danger">Delete Selected</button>
+</div>
 
 <table class="table" id="jobData" style="width:100%">
     <thead>
         <tr>
+            <th><input type="checkbox" id="selectAll" /></th>
             <th>Actions</th>
             <th>NO. </th>
             <th>
@@ -85,13 +86,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
         $(document).ready(function () {
+            $.fn.dataTable.ext.errMode = 'none';
             var table = $('#jobData').DataTable({
+                "processing": true,
+                "serverSide": false,
+                "deferRender": true,   // Optimalkan rendering
+                "stateSave": true,     // Simpan state saat refresh
+                "bDestroy": true,      // Hindari error saat re-init
+                "bAutoWidth": false,   // Hindari width yang salah
+                "bSortCellsTop": true,
                 "ajax": {
                     "url": "@Url.Action("GetJobs","Job", new {alumniId = ViewBag.AlumniId })",
                     "type": "GET",
                     "datatype": "json"
                 },
                 "columns": [
+                    { "data": null, "width": "50px", "render": function (data, type, row) { return '<input type="checkbox" class="selectCheckbox" data-id="' + row.JobHistoryID + '" />'; } },
                     {
                         "data": null,
                         "render": function (data, type, row) {
@@ -156,6 +166,20 @@
                     }
                 }
             });
+
+            $('#selectAll').on('click', function () {
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked)
+            })
+        });
+
+        $('#jobData').on('error.dt', function (e, settings, techNote, message) {
+            console.log('DataTables error:', message);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "An error occurred while loading data."
+            });
         });
 
         ////Use this for datatables, becase the buttons are created dynamically
@@ -172,12 +196,21 @@
             })
                 .then((result) => {
                     if (result.isConfirmed) {
-                        // Make an AJAX call to delete the item
+                        Swal.fire({
+                            title: "Processing...",
+                            text: "Please wait while we delete the item.",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading(); // Menampilkan animasi loading
+                            }
+                        });
                         $.ajax({
                             url: '/Job/Delete', // URL of your Delete method
                             type: 'POST', // Use POST for data modification
                             data: { id: itemId, alumniId : @ViewBag.AlumniId }, // Pass the ID as data
                             success: function (response) {
+                                Swal.close();
                                 if (response.success) {
                                     Swal.fire("Deleted!", response.message, "success").then(() => {
                                         $("#jobData").DataTable().ajax.reload(); // Reload the page or update UI
@@ -193,6 +226,7 @@
                                 //});
                             },
                             error: function (error) {
+                                Swal.close();
                                 Swal.fire("Error!", "Unable to delete the item " + response.message + " . Please try again.", "error");
                             }
                         });
@@ -256,8 +290,13 @@
                      myModal.show();
                      myModal.modal('show');
                  },
-                 error: function() {
-                     alert("An error occurred while loading the modal.");
+                 error: function (xhr) {
+                     // Menampilkan pesan error dari response JSON
+                     let errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                         ? xhr.responseJSON.message
+                         : "An unknown error occurred";
+
+                     Swal.fire("Error Load Form", errorMessage, "error");
                  }
              });
          });
@@ -284,10 +323,71 @@
                     $('#editModal').modal('show');
                 },
                 error: function (xhr) {
-                    console.error(xhr.responseText);
-                    alert('An error occurred while fetching data.');
+                    // Menampilkan pesan error dari response JSON
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : "An unknown error occurred";
+
+                    Swal.fire("Error Load Form", errorMessage, "error");
                 }
             });
+        });
+
+        $('#deleteSelected').on('click', function () {
+            var selectedIds = [];
+            var alumniId = @ViewBag.AlumniId;
+
+            $('.selectCheckbox:checked').each(function () {
+                selectedIds.push($(this).data('id'));
+            });
+
+            if (selectedIds.length > 0) {
+                Swal.fire({
+                    title: "Are you sure? you will not be able to recover these items!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete them!",
+                    cancelButtonText: "No, keep them"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Processing...",
+                            text: "Please wait while we delete the item.",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading(); // Menampilkan animasi loading
+                            }
+                        });
+
+                        // Make an AJAX call to delete the selected items
+                        $.ajax({
+                            url: '/Job/DeleteSelected/',
+                            type: 'POST',
+                            data: { ids: selectedIds, alumniId: alumniId },
+                            traditional: true,
+                            success: function (response) {
+                                Swal.close();
+                                if (response.success) {
+                                    Swal.fire("Deleted!", response.message, "success").then(() => {
+                                        $('#jobData').DataTable().ajax.reload(); // Reload the DataTable
+                                    });
+                                } else {
+                                    Swal.fire("Error!", response.message, "error");
+                                }
+                            },
+                            error: function (error) {
+                                Swal.close();
+                                Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire("Cancelled", "Your items are safe :)", "error");
+                    }
+                });
+            } else {
+                Swal.fire("No items selected", "Please select items to delete.", "info");
+            }
         });
     </script>
 
