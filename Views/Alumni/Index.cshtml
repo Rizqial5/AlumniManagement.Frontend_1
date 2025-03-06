@@ -38,6 +38,37 @@
             white-space: nowrap;
         }
 
+        #alumniData td:nth-child(4),
+        #alumniData th:nth-child(4) {
+            min-width: 50px !important;
+            max-width: 50px !important;
+            text-align: center;
+        }
+
+        #alumniData img.preview-image {
+            max-width: 50px !important;
+            height: auto;
+        }
+
+        #alumniData td:nth-child(5),
+        #alumniData th:nth-child(5) {
+            min-width: 200px !important;
+            max-width: 200px !important;
+            white-space: nowrap;
+
+        }
+
+        #alumniData td:nth-child(10),
+        #alumniData th:nth-child(10) {
+            min-width: 300px !important;
+            max-width: 300px !important;
+        }
+
+        #alumniData td:nth-child(17),
+        #alumniData th:nth-child(17) {
+            min-width: 200px !important;
+            max-width: 200px !important;
+        }
          
     </style>
 }
@@ -155,100 +186,52 @@
                     "datatype": "json"
                 },
                 "columns": [
+                    { "data": null, "width": "50px", "render": function (data, type, row) { return '<input type="checkbox" class="selectCheckbox" data-id="' + row.AlumniID + '" />'; } },
                     {
-                        "data": null,
-                        "render": function (data, type, row) {
-                            return '<input type="checkbox" class="selectCheckbox" data-id="' + row.AlumniID + '" />'
-                        }
-                    },
-                    {
-                        "data": null,
-                        "render": function (data, type, row) {
+                        "data": null, "width": "150px", "render": function (data, type, row) {
                             var editButton = '<a class="btn btn-primary" id="editButton" data-id="' + row.AlumniID + '" data-toggle="modal" data-target="#editModal" style="margin-right: 5px;"><i class="fas fa-edit"></i></a>';
                             var deleteButton = '<button id="deleteButton" class="btn btn-danger deleteButton" data-id="' + row.AlumniID + '">' +
-                                '<i class="fas fa-trash"></i></button>'
-
+                                '<i class="fas fa-trash"></i></button>';
                             var groupButton = '<div class="btn-group mt-3">' +
-                                '<a href="/Job/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">' +
-                                '<i class="fas fa-briefcase"></i>' +
-                                '</a > ' +
-                                '<a href="/AlumniImage/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" "  style="margin-right: 5px;">'
-                                + '<i class="fas fa-image"></i>' +
-                                '</a>' +
-                                '</div>'
-
-                            if (isInSuperAdmin) {
-                                return '<div class="btn-group">' + editButton + deleteButton + '</div>' + groupButton
-                            }
-                            else {
-                                return ''
-                            }
-
-
-                                
-
+                                '<a href="/Job/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" style="margin-right: 5px;">' +
+                                '<i class="fas fa-briefcase"></i></a>' +
+                                '<a href="/AlumniImage/Index?alumniId=' + row.AlumniID + '" class="btn btn-primary" style="margin-right: 5px;">' +
+                                '<i class="fas fa-image"></i></a>' +
+                                '</div>';
+                            return isInSuperAdmin ? '<div class="btn-group">' + editButton + deleteButton + '</div>' + groupButton : '';
                         }
                     },
+                    { "data": null, "width": "50px", "render": function (data, type, row, meta) { return meta.row + 1; } },
                     {
-                        "data": null,
-                        "render": function (data, type, row, meta) {
-                            return meta.row + 1;  // Display the row number (meta.row is zero-indexed)
-                        }
-                    },
-                    {
-                        "data": null,
-                        "render": function (data, type, row) {
-
-                            if (!row.ShowImagePath) {
-                                return ""; // Jika ShowImagePath tidak ada, return kosong
-                            }
-                            return '<div><img class="img-thumbnail preview-image" src="' + row.ShowImagePath +
+                        "data": null, "width": "50px", "render": function (data, type, row) {
+                            return row.ShowImagePath ? '<div><img class="img-thumbnail preview-image" src="' + row.ShowImagePath +
                                 '" alt="Alumni Image" style="max-width: 120px; cursor: pointer;" ' +
-                                'data-src="' + row.ShowImagePath + '" data-name="' + row.FullName + '"/></div>';
+                                'data-src="' + row.ShowImagePath + '" data-name="' + row.FullName + '"/></div>' : "";
                         }
                     },
-                    { "data": "FullName", width: "200px" },
-                    { "data": "Gender" },
-                    { "data": "Email" },
-                    { "data": "MobileNumber" },
-                    { "data": "HobbiesListName" },
-                    { "data": "FullAddress" },
-                    {
-                        "data": "ShowDateOfBirth",
-                        "render": function (data, type, row) {
-                            return moment(data).format('DD-MMM-yyyy');
-                        }
-                    },
-                    { "data": "GraduationYear" },
-                    { "data": "Degree" },
-                    { "data": "FacultyName" },
-                    { "data": "MajorName" },
-                    { "data": "LinkedInProfile" },
-                    {
-                        "data": "ModifiedDate",
-                        "render": function (data, type, row) {
-                            return moment(data).format('DD-MMM-YYYY HH:mm:ss');
-                        }
-                    },
+                    { "data": "FullName", "width": "200px" },
+                    { "data": "Gender", "width": "100px" },
+                    { "data": "Email", "width": "200px" },
+                    { "data": "MobileNumber", "width": "150px" },
+                    { "data": "HobbiesListName", "width": "200px" },
+                    { "data": "FullAddress", "width": "250px" },
+                    { "data": "ShowDateOfBirth", "width": "150px", "render": function (data) { return moment(data).format('DD-MMM-yyyy'); } },
+                    { "data": "GraduationYear", "width": "100px" },
+                    { "data": "Degree", "width": "150px" },
+                    { "data": "FacultyName", "width": "200px" },
+                    { "data": "MajorName", "width": "200px" },
+                    { "data": "LinkedInProfile", "width": "200px" },
+                    { "data": "ModifiedDate", "width": "180px", "render": function (data) { return moment(data).format('DD-MMM-YYYY HH:mm:ss'); } }
                 ],
-                /*                "order": [[0, "desc"]],*/
                 "dom": '<"top"f>rt<"bottom"lpi><"clear">',
-                "autoWidth": false,// search on the top right, show entries, paging, showing on the bottom
+                "autoWidth": false,
                 "pagingType": "full_numbers",
                 "scrollY": "400px",
                 "scrollX": true,
                 "scrollCollapse": true,
                 "fixedHeader": true,
-                //"pagingType": "simple_numbers",
                 "pageLength": 10,
                 "lengthMenu": [5, 10, 20, 30, 100],
-                "scrollY": "400px",
-                "scrollX": true,
-                "scrollCollapse": true,
-                "fixedHeader": true,
-                //"fixedColumns": {
-                //    "leftColumns": 2
-                //},
                 "language": {
                     "paginate": {
                         "previous": "Previous",
@@ -256,8 +239,12 @@
                         "first": "<<",
                         "last": ">>"
                     }
+                },
+                "fixedColumns": {
+                    "leftColumns": 3     // Number of columns to freeze on the left
                 }
             });
+
 
             $('#selectAll').on('click', function () {
                 var rows = table.rows({ 'search': 'applied' }).nodes();
