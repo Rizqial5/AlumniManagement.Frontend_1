@@ -45,7 +45,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception($"Failed to retrieve alumni with ID {alumniId}. Please contact support.");
+                    throw new Exception($"Failed to retrieve data. Please contact support.");
                 }
             }
 
@@ -58,7 +58,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to get district name. Please contact support.");
+                    throw new Exception("Failed to get data. Please contact support.");
                 }
             }
 
@@ -71,7 +71,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to get state name. Please contact support.");
+                    throw new Exception("Failed to get data. Please contact support.");
                 }
             }
 
@@ -112,7 +112,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception($"Failed to delete alumni with ID {alumniId}. Please contact support.");
+                    throw new Exception($"Failed to delete alumni . Please contact support.");
                 }
             }
 
@@ -125,7 +125,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to retrieve states. Please contact support.");
+                    throw new Exception("Failed to retrieve data. Please contact support.");
                 }
             }
 
@@ -138,7 +138,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to retrieve districts. Please contact support.");
+                    throw new Exception("Failed to retrieve data. Please contact support.");
                 }
             }
 
@@ -151,7 +151,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to retrieve districts. Please contact support.");
+                    throw new Exception("Failed to retrieve data. Please contact support.");
                 }
             }
 
@@ -164,7 +164,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to retrieve hobbies. Please contact support.");
+                    throw new Exception("Failed to retrieve data. Please contact support.");
                 }
             }
 
@@ -177,7 +177,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to retrieve state and district names. Please contact support.");
+                    throw new Exception("Failed to retrieve data. Please contact support.");
                 }
             }
 
@@ -190,7 +190,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to retrieve faculty names. Please contact support.");
+                    throw new Exception("Failed to retrieve data. Please contact support.");
                 }
             }
 
@@ -204,7 +204,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to insert alumni with hobbies. Please contact support.");
+                    throw new Exception("Failed to insert alumni . Please contact support.");
                 }
             }
 
@@ -218,7 +218,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to update alumni with hobbies. Please contact support.");
+                    throw new Exception("Failed to update alumni . Please contact support.");
                 }
             }
 
@@ -232,7 +232,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to upsert alumni data. Please contact support.");
+                    throw new Exception("Failed to add alumni data. Please contact support.");
                 }
             }
 
@@ -246,7 +246,7 @@ namespace AlumniManagement.Frontend.Repositories
                 catch (Exception ex)
                 {
                     // Developer Debug: Log ex.ToString() atau ex.StackTrace
-                    throw new Exception("Failed to upsert multiple alumni records. Please contact support.");
+                    throw new Exception("Failed to import multiple alumni records. Please contact support.");
                 }
             }
         }

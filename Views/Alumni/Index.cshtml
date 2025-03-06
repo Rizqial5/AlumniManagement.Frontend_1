@@ -179,7 +179,15 @@
     </script>
     <script>
         $(document).ready(function () {
+            $.fn.dataTable.ext.errMode = 'none';
             var table = $('#alumniData').DataTable({
+                "processing": true,
+                "serverSide": false,
+                "deferRender": true,   // Optimalkan rendering
+                "stateSave": true,     // Simpan state saat refresh
+                "bDestroy": true,      // Hindari error saat re-init
+                "bAutoWidth": false,   // Hindari width yang salah
+                "bSortCellsTop": true,
                 "ajax": {
                     "url": "/Alumni/GetAlumnis",
                     "type": "GET",
@@ -253,6 +261,16 @@
 
         });
 
+        // Menangkap error DataTables agar tidak muncul alert default
+        $('#alumniData').on('error.dt', function (e, settings, techNote, message) {
+            console.log('DataTables error:', message);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "An error occurred while loading data."
+            });
+        });
+
         function reloadTable() {
             var facultyId = $('#facultyFilter').val();
             var majorId = $('#majorFilter').val();
@@ -315,11 +333,21 @@
                 .then((result) => {
                     if (result.isConfirmed) {
                         // Make an AJAX call to delete the item
+                        Swal.fire({
+                            title: "Processing...",
+                            text: "Please wait while we delete the item.",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading(); // Menampilkan animasi loading
+                            }
+                        });
                         $.ajax({
                             url: '/Alumni/Delete', // URL of your Delete method
                             type: 'POST', // Use POST for data modification
                             data: { id: itemId }, // Pass the ID as data
                             success: function (response) {
+                                Swal.close();
                                 if (response.success) {
                                     Swal.fire("Deleted!", response.message, "success").then(() => {
                                         $("#alumniData").DataTable().ajax.reload(); // Reload the page or update UI
@@ -333,6 +361,7 @@
                                 //});
                             },
                             error: function (error) {
+                                Swal.close();
                                 Swal.fire("Error!", "Unable to delete the item " + response.message + " . Please try again.", "error");
                             }
                         });
@@ -358,6 +387,16 @@
                     cancelButtonText: "No, keep them"
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Processing...",
+                            text: "Please wait while we delete the item.",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading(); // Menampilkan animasi loading
+                            }
+                        });
+
                         // Make an AJAX call to delete the selected items
                         $.ajax({
                             url: '/Alumni/DeleteSelected/',
@@ -365,6 +404,7 @@
                             data: { ids: selectedIds },
                             traditional: true,
                             success: function (response) {
+                                Swal.close();
                                 if (response.success) {
                                     Swal.fire("Deleted!", response.message, "success").then(() => {
                                         $('#alumniData').DataTable().ajax.reload(); // Reload the DataTable
@@ -374,6 +414,7 @@
                                 }
                             },
                             error: function (error) {
+                                Swal.close();
                                 Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
                             }
                         });
@@ -477,8 +518,13 @@
 
                     myModal.show();
                 },
-                error: function() {
-                    alert("An error occurred while loading the modal.");
+                error: function (xhr) {
+                    // Menampilkan pesan error dari response JSON
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : "An unknown error occurred";
+
+                    Swal.fire("Error Load Form", errorMessage, "error");
                 }
             });
         });
@@ -555,8 +601,12 @@
 
                 },
                 error: function (xhr) {
-                    console.error(xhr.responseText);
-                    alert('An error occurred while fetching data.');
+                    // Menampilkan pesan error dari response JSON
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : "An unknown error occurred";
+
+                    Swal.fire("Error Load Form", errorMessage, "error");
                 }
             });
 

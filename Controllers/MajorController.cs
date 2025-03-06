@@ -67,7 +67,7 @@ namespace AlumniManagement.Frontend.Controllers
             catch (Exception ex)
             {
                 Response.StatusCode = 500; // Set status code agar masuk error AJAX
-                return Json(new { message = "Please contact Administrator" }, JsonRequestBehavior.AllowGet);
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -121,7 +121,7 @@ namespace AlumniManagement.Frontend.Controllers
             catch (Exception ex)
             {
                 Response.StatusCode = 500; // Set status code agar masuk error AJAX
-                return Json(new { message = "Please contact Administrator" }, JsonRequestBehavior.AllowGet);
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
             }
 
         }

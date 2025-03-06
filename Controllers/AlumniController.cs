@@ -73,7 +73,7 @@ namespace AlumniManagement.Frontend.Controllers
                 TempData["ErrorMessage"] = ex.Message;
                 TempData.Keep("ErrorMessage");
 
-
+                // Masih bingung redirect ke mana
                 return RedirectToAction("Index", "Major");
             }
         }
@@ -181,28 +181,22 @@ namespace AlumniManagement.Frontend.Controllers
         [Authorize(Roles = "Superadmin")]
         public ActionResult Create()
         {
+            try
+            {
+                var alumniModel = new AlumniModel();
 
-            var alumniModel = new AlumniModel();
+                alumniModel.DistrictDDL = new List<SelectListItem>();
+                alumniModel.MajorDDl = new List<SelectListItem>();
 
-            alumniModel.DistrictDDL = new List<SelectListItem>();
-            alumniModel.MajorDDl = new List<SelectListItem>();
+                StateAndFacultyDdl();
+                return PartialView("_CreatePartial", alumniModel);
+            }
+            catch
+            {
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
+            }
 
-            StateAndFacultyDdl();
-            return PartialView("_CreatePartial", alumniModel);
-        }
-
-        public ActionResult CreateLast()
-        {
-
-            var alumniModel = new AlumniModel();
-
-            alumniModel.DistrictDDL = new List<SelectListItem>();
-            alumniModel.MajorDDl = new List<SelectListItem>();
-            //alumniModel.HobbiesDDl = new MultiSelectList()
-
-            StateAndFacultyDdl();
-
-            return View(alumniModel);
         }
 
         // POST: Alumni/Create
@@ -241,11 +235,9 @@ namespace AlumniManagement.Frontend.Controllers
             catch(Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
-                ModelState.AddModelError("", "Unable to Add due to " + ex.Message);
-                StateAndFacultyDdl();
-                RepopulateCascadeDdl(alumniModel);
 
-                return View();
+
+                return RedirectToAction("Index");
             }
         }
 
@@ -306,33 +298,40 @@ namespace AlumniManagement.Frontend.Controllers
         // GET: Alumni/Edit/5
         public ActionResult Edit(int id)
         {
-
-            var existingData = _alumniRepository.GetAlumni(id);
-
-            if (existingData == null)
+            try
             {
-                TempData["ErrorMessage"] = "Alumni Not Found";
+                var existingData = _alumniRepository.GetAlumni(id);
 
-                return RedirectToAction("Index");
+                if (existingData == null)
+                {
+                    TempData["ErrorMessage"] = "Alumni Not Found";
+
+                    return RedirectToAction("Index");
+                }
+
+                StateAndFacultyDdl();
+
+                var populateForm = RepopulateEditForm(existingData);
+
+                ViewBag.SourceImage = "";
+                ViewBag.NameFile = "";
+
+                if (existingData.PhotoPath != null)
+                {
+                    ViewBag.SourceImage = @Url.Content(populateForm.PhotoPath.Replace("~", "") + '/' + populateForm.PhotoName);
+                    ViewBag.NameFile = populateForm.PhotoName;
+                }
+
+
+
+
+                return PartialView("_EditPartial", populateForm);
             }
-
-            StateAndFacultyDdl();
-
-            var populateForm = RepopulateEditForm(existingData);
-
-            ViewBag.SourceImage = "";
-            ViewBag.NameFile = "";
-
-            if (existingData.PhotoPath!= null)
+            catch (Exception ex)
             {
-                ViewBag.SourceImage = @Url.Content(populateForm.PhotoPath.Replace("~", "") + '/' + populateForm.PhotoName);
-                ViewBag.NameFile = populateForm.PhotoName;
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
             }
-
-           
-
-
-            return PartialView("_EditPartial",populateForm);
         }
 
         private AlumniModel RepopulateEditForm(AlumniModel alumniModel)
@@ -407,14 +406,10 @@ namespace AlumniManagement.Frontend.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Unable to Update due to " + ex.Message);
-
                 TempData["ErrorMessage"] = ex.Message;
 
-                StateAndFacultyDdl();
-                RepopulateCascadeDdl(existingData);
 
-                return View(existingData);
+                return RedirectToAction("Index");
             }
         }
 
@@ -465,7 +460,7 @@ namespace AlumniManagement.Frontend.Controllers
                 return Json(new
                 {
                     error = true,
-                    message = ex.Message
+                    message = "Failed delete alumni"
                 });
             }
         }
@@ -501,7 +496,7 @@ namespace AlumniManagement.Frontend.Controllers
                 return Json(new
                 {
                     error = true,
-                    message = "Error deleting alumni:  " + ex.Message  // message dirubah sesuai objek
+                    message = "Failed delete alumni" // message dirubah sesuai objek
                 });
             }
         }
@@ -525,26 +520,34 @@ namespace AlumniManagement.Frontend.Controllers
         [Authorize(Roles = "Superadmin")]
         public ActionResult ShowTableView(HttpPostedFileBase file)
         {
-            var resultListImported = ImportExcel(file);
-
-         
-
-
-            ViewBag.ValidData = resultListImported.Where(a => a.ErrorDetails.Count() == 0).Count();
-            ViewBag.ErrorData = resultListImported.Where(a => a.ErrorDetails.Count() > 0).Count();
-            ViewBag.RecordData = resultListImported.Count();
-            ViewBag.CheckIsError = false;
-            var totalError = resultListImported.Where(a => a.ErrorDetails.Count() > 0).Count();
-
-            if (totalError > 0)
+            try
             {
-                ViewBag.CheckIsError = true;
+                var resultListImported = ImportExcel(file);
+
+
+
+
+                ViewBag.ValidData = resultListImported.Where(a => a.ErrorDetails.Count() == 0).Count();
+                ViewBag.ErrorData = resultListImported.Where(a => a.ErrorDetails.Count() > 0).Count();
+                ViewBag.RecordData = resultListImported.Count();
+                ViewBag.CheckIsError = false;
+                var totalError = resultListImported.Where(a => a.ErrorDetails.Count() > 0).Count();
+
+                if (totalError > 0)
+                {
+                    ViewBag.CheckIsError = true;
+                }
+
+                ViewBag.AllData = resultListImported;
+
+                return View("TabelSummaryView", resultListImported);
             }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
 
-            ViewBag.AllData = resultListImported;
-
-            return View("TabelSummaryView", resultListImported);
-
+                return RedirectToAction("Index");
+            }
 
         }
 
@@ -567,7 +570,7 @@ namespace AlumniManagement.Frontend.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Alumni insert failed: " + ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Alumni import failed: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -575,14 +578,20 @@ namespace AlumniManagement.Frontend.Controllers
         [HttpPost]
         public List<AlumniModel> ImportExcel(HttpPostedFileBase file)
         {
-     
-            var resultList = new List<AlumniModel>();
-
-            if (file != null && file.ContentLength > 0)
+            try
             {
-                resultList = _excelRepository.ImportAlumniFromExcel(file);
+                var resultList = new List<AlumniModel>();
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    resultList = _excelRepository.ImportAlumniFromExcel(file);
+                }
+                return resultList;
             }
-            return resultList;
+            catch
+            {
+                throw new Exception("Failed to import data. Please contact support.");
+            }
             
 
         }
@@ -616,13 +625,21 @@ namespace AlumniManagement.Frontend.Controllers
 
         private void StateAndFacultyDdl()
         {
-            var facultyDdl = _facultyRepository.GetAll();
-            var statesDdl = _alumniRepository.GetAllStates();
-            var hobbiesDdl = _alumniRepository.GetAllHobbies();
+            try
+            {
+                var facultyDdl = _facultyRepository.GetAll();
+                var statesDdl = _alumniRepository.GetAllStates();
+                var hobbiesDdl = _alumniRepository.GetAllHobbies();
 
-            ViewBag.FacultyDdl = new SelectList(facultyDdl, "FacultyID", "FacultyName");
-            ViewBag.StatesDdl = new SelectList(statesDdl, "StateID", "StateName");
-            ViewBag.HobbiesDdl = new MultiSelectList(hobbiesDdl, "HobbyID", "Name");
+                ViewBag.FacultyDdl = new SelectList(facultyDdl, "FacultyID", "FacultyName");
+                ViewBag.StatesDdl = new SelectList(statesDdl, "StateID", "StateName");
+                ViewBag.HobbiesDdl = new MultiSelectList(hobbiesDdl, "HobbyID", "Name");
+            }
+            catch
+            {
+                throw new Exception("Failed to get Faculty and State data. Please contact support.");
+            }
+
         }
 
         public JsonResult ShowMajorList(int facultyId)

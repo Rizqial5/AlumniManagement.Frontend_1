@@ -119,7 +119,7 @@ namespace AlumniManagement.Web.Controllers
             {
 
                 Response.StatusCode = 500; // Set status code agar masuk error AJAX
-                return Json(new { message = "Please contact Administrator" }, JsonRequestBehavior.AllowGet);
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
             }
            
         }

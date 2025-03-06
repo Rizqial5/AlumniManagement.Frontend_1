@@ -208,8 +208,16 @@
 
         $("#submitImportedData").click(function () {
             var formData = new FormData();
-            formData.append("submittedData", JSON.stringify(importedData)); // Simpan data sebagai string
-
+            formData.append("submittedData", JSON.stringify(importedData));// Simpan data sebagai string
+            Swal.fire({
+                title: "Processing...",
+                text: "Please wait while we delete the item.",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading(); // Menampilkan animasi loading
+                }
+            });
             $.ajax({
                 url: "/Alumni/SubmitImportedTable",
                 type: "POST",
@@ -217,18 +225,34 @@
                 contentType: false,  // Biarkan browser menentukan content type
                 data: formData,
                 success: function (response) {
-                    Swal.fire({
-                        title: "Success",
-                        text: "Alumni data submitted successfully!",
-                        icon: "success"
-                    }).then(() => {
-                        window.location.href = "/Alumni/Index";
-                    });
+                    Swal.close();
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Success",
+                            text: response.message,
+                            icon: "success"
+                        }).then(() => {
+                            window.location.href = "/Alumni/Index";
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error",
+                            text: response.message,
+                            icon: "error"
+                        });
+                    }
                 },
-                error: function (xhr) {
+                error: function (xhr, status, error) {
+                    Swal.close();
+                    let errorMessage = "Unknown error occurred!";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    } else if (xhr.responseText) {
+                        errorMessage = xhr.responseText;
+                    }
                     Swal.fire({
                         title: "Error",
-                        text: "Failed to submit alumni data: " + xhr.responseText,
+                        text: "Failed to submit alumni data: " + errorMessage,
                         icon: "error"
                     });
                 }
