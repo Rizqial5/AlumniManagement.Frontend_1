@@ -36,11 +36,29 @@ namespace AlumniManagement.Frontend.Controllers
 
         public JsonResult GetJobPostings()
         {
-            var jobPostingData = _jobPostingRepository.GetJobPostings();
+            try
+            {
+
+                var jobPostingData = _jobPostingRepository.GetJobPostings();
 
 
-            return Json(new { data = jobPostingData }, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    error = false,
+                    message = "Success",
+                    data = jobPostingData
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = ex.Message,
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
+
 
 
 
@@ -53,24 +71,42 @@ namespace AlumniManagement.Frontend.Controllers
         // GET: JobPosting/Create
         public ActionResult Create()
         {
-            InitiateDDL();
+            try
+            {
+                InitiateDDL();
 
-            var jobPostingModel = new JobPostingModel();
+                var jobPostingModel = new JobPostingModel();
 
-            jobPostingModel.IsClosed = false;
+                jobPostingModel.IsClosed = false;
 
-            return PartialView("_CreatePartial", jobPostingModel);
+                return PartialView("_CreatePartial", jobPostingModel);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         private void InitiateDDL()
         {
-            var skillsDDL = _jobPostingRepository.GetSkills();
-            var employeeTypesDDl = _jobPostingRepository.GetEmploymentTypes();
+            try
+            {
 
 
-            ViewBag.EmploymentTypeDDL = new SelectList(employeeTypesDDl, "EmploymentTypeID", "Name");
-            ViewBag.SkillDDL = new MultiSelectList(skillsDDL, "SkillID", "Name");
-            ViewBag.AttachmentDDL = _jobPostingRepository.GetAttachmentTypes();
+                var skillsDDL = _jobPostingRepository.GetSkills();
+                var employeeTypesDDl = _jobPostingRepository.GetEmploymentTypes();
+
+
+                ViewBag.EmploymentTypeDDL = new SelectList(employeeTypesDDl, "EmploymentTypeID", "Name");
+                ViewBag.SkillDDL = new MultiSelectList(skillsDDL, "SkillID", "Name");
+                ViewBag.AttachmentDDL = _jobPostingRepository.GetAttachmentTypes();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve data. Please try again later.");
+            }
         }
 
         // POST: JobPosting/Create
@@ -94,7 +130,7 @@ namespace AlumniManagement.Frontend.Controllers
             catch (Exception ex) 
             {
                 TempData["ErrorMessage"] = ex.Message;
-                ModelState.AddModelError("", "Unable to Add due to " + ex.Message);
+
 
                 return RedirectToAction("Index");
             }
@@ -102,55 +138,63 @@ namespace AlumniManagement.Frontend.Controllers
 
         public ActionResult ApplyJob(Guid id)
         {
-            var job = _jobPostingRepository.GetJobPosting(id);
-
-            if(job.IsClosed)
+            try
             {
-                TempData["ErrorMessage"] = "Job is Already Closed";
-                return RedirectToAction("Index");
+                var job = _jobPostingRepository.GetJobPosting(id);
+
+                if (job.IsClosed)
+                {
+                    TempData["ErrorMessage"] = "Job is Already Closed";
+                    return RedirectToAction("Index");
+                }
+
+
+                var listAlumnisId = _jobPostingRepository.GetAllCandidateBYJObId(id).Select(c => c.AlumniID).ToList();
+
+                var alumnisDdl = _alumniRepository.GetAll()
+                          .Where(a => !listAlumnisId.Contains(a.AlumniID))
+                          .ToList();
+
+
+                var selectedCheckbox = new List<AttachmentTypeModel>();
+
+                var existingAttachmenct = _jobPostingRepository.GetJobPosting(id);
+
+                foreach (var item in existingAttachmenct.SelectedAttachmentTypes)
+                {
+                    var selectBox = _jobPostingRepository.GetAttachmentTypes()
+                        .FirstOrDefault(at => at.AttachmentTypeID == item);
+
+                    selectedCheckbox.Add(selectBox);
+                }
+
+                var availableTypes = selectedCheckbox;
+
+                ViewBag.AlumniDDL = new SelectList(alumnisDdl, "AlumniID", "FullName");
+                ViewBag.AvailableTypes = availableTypes;
+                ViewBag.JobId = id;
+
+                var listSkills = _jobPostingRepository.GetSkillsbyId(id);
+
+
+
+                ViewBag.JobTitle = _jobPostingRepository.GetJobPosting(id).Title;
+                ViewBag.JobDesc = _jobPostingRepository.GetJobPosting(id).JobDescription;
+                ViewBag.Exp = _jobPostingRepository.GetJobPosting(id).MinimumExperience;
+                ViewBag.Skills = String.Join(",", listSkills.Select(s => s.Name));
+
+                var newAttahcmentModel = new JobAttachmentModel();
+
+                newAttahcmentModel.JobID = id;
+
+
+                return PartialView("_ApplyPartial", newAttahcmentModel);
             }
-
-
-            var listAlumnisId  = _jobPostingRepository.GetAllCandidateBYJObId(id).Select(c=> c.AlumniID).ToList();
-
-            var alumnisDdl = _alumniRepository.GetAll()
-                      .Where(a => !listAlumnisId.Contains(a.AlumniID))
-                      .ToList();
-
-
-            var selectedCheckbox = new List<AttachmentTypeModel>();
-
-            var existingAttachmenct = _jobPostingRepository.GetJobPosting(id);
-
-            foreach (var item in existingAttachmenct.SelectedAttachmentTypes)
+            catch (Exception ex)
             {
-                var selectBox = _jobPostingRepository.GetAttachmentTypes()
-                    .FirstOrDefault(at => at.AttachmentTypeID == item);
-
-                selectedCheckbox.Add(selectBox);
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
             }
-
-            var availableTypes = selectedCheckbox;
-
-            ViewBag.AlumniDDL = new SelectList(alumnisDdl, "AlumniID", "FullName");
-            ViewBag.AvailableTypes = availableTypes;
-            ViewBag.JobId = id;
-
-            var listSkills = _jobPostingRepository.GetSkillsbyId(id);
-
-
-
-            ViewBag.JobTitle = _jobPostingRepository.GetJobPosting(id).Title;
-            ViewBag.JobDesc = _jobPostingRepository.GetJobPosting(id).JobDescription;
-            ViewBag.Exp = _jobPostingRepository.GetJobPosting(id).MinimumExperience;
-            ViewBag.Skills = String.Join(",", listSkills.Select(s => s.Name));
-
-            var newAttahcmentModel = new JobAttachmentModel();
-
-            newAttahcmentModel.JobID = id;
-        
-
-            return PartialView("_ApplyPartial", newAttahcmentModel);
         }
 
         [HttpPost]
@@ -218,7 +262,7 @@ namespace AlumniManagement.Frontend.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Failed to upload files: " + ex.Message;
+                TempData["ErrorMessage"] =  ex.Message;
                 return RedirectToAction("Index");
             }
         }
@@ -226,48 +270,58 @@ namespace AlumniManagement.Frontend.Controllers
         // GET: JobPosting/Edit/5
         public ActionResult Edit(Guid id)
         {
-            var existingData = _jobPostingRepository.GetJobPosting(id);
-
-            if (existingData == null)
+            try
             {
-                TempData["ErrorMessage"] = "Alumni Not Found";
 
-                return RedirectToAction("Index");
+
+                var existingData = _jobPostingRepository.GetJobPosting(id);
+
+                if (existingData == null)
+                {
+                    TempData["ErrorMessage"] = "Alumni Not Found";
+
+                    return RedirectToAction("Index");
+                }
+
+                InitiateDDL();
+
+                existingData.EmployemenTypeDDL = _jobPostingRepository.GetEmploymentTypes()
+                    .Select(et => new SelectListItem
+                    {
+                        Value = et.EmploymentTypeID.ToString(),
+                        Text = et.Name,
+                        Selected = et.EmploymentTypeID == existingData.EmploymentTypeID
+                    });
+
+                existingData.SkillDDL = _jobPostingRepository.GetSkills()
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.SkillID.ToString(),
+                        Text = s.Name,
+                        Selected = existingData.SelectedSkills != null && existingData.SelectedSkills.Contains(s.SkillID)
+                    });
+
+                var selectedCheckbox = new List<AttachmentTypeModel>();
+
+                foreach (var item in existingData.SelectedAttachmentTypes)
+                {
+                    var selectBox = _jobPostingRepository.GetAttachmentTypes()
+                        .FirstOrDefault(at => at.AttachmentTypeID == item);
+
+                    selectedCheckbox.Add(selectBox);
+                }
+
+                existingData.AttachMentCheckBox = selectedCheckbox;
+
+
+
+                return PartialView("_EditPartial", existingData);
             }
-
-            InitiateDDL();
-
-            existingData.EmployemenTypeDDL = _jobPostingRepository.GetEmploymentTypes()
-                .Select(et => new SelectListItem
-                {
-                    Value = et.EmploymentTypeID.ToString(),
-                    Text = et.Name,
-                    Selected = et.EmploymentTypeID == existingData.EmploymentTypeID 
-                });
-
-            existingData.SkillDDL = _jobPostingRepository.GetSkills()
-                .Select(s => new SelectListItem
-                {
-                    Value = s.SkillID.ToString(),
-                    Text = s.Name,
-                    Selected = existingData.SelectedSkills != null && existingData.SelectedSkills.Contains(s.SkillID)
-                });
-
-            var selectedCheckbox = new List<AttachmentTypeModel>();
-
-            foreach (var item in existingData.SelectedAttachmentTypes)
+            catch (Exception ex)
             {
-                var selectBox = _jobPostingRepository.GetAttachmentTypes()
-                    .FirstOrDefault(at => at.AttachmentTypeID == item);
-
-                selectedCheckbox.Add(selectBox);
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
             }
-
-            existingData.AttachMentCheckBox = selectedCheckbox;
-
-            
-
-            return PartialView("_EditPartial", existingData);
         }
 
         // POST: JobPosting/Edit/5
@@ -275,11 +329,10 @@ namespace AlumniManagement.Frontend.Controllers
         public ActionResult Edit(Guid id, JobPostingModel jobPostingModel)
         {
 
-
-            var existingData = _jobPostingRepository.GetJobPosting(id);
             try
             {
                 // TODO: Add update logic here
+                var existingData = _jobPostingRepository.GetJobPosting(id);
 
                 if (existingData == null)
                 {
@@ -301,7 +354,7 @@ namespace AlumniManagement.Frontend.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Unable to Update due to " + ex.Message);
+
 
                 TempData["ErrorMessage"] = ex.Message;
                 return RedirectToAction("Index"); 
@@ -339,7 +392,7 @@ namespace AlumniManagement.Frontend.Controllers
                 return Json(new
                 {
                     error = true,
-                    message = ex.Message
+                    message = "Failed delete job posting"
                 });
             }
         }
@@ -398,7 +451,7 @@ namespace AlumniManagement.Frontend.Controllers
                 return Json(new
                 {
                     error = true,
-                    message = "Error deleting job posting " + ex.Message
+                    message = "Error deleting job posting "
                 });
             }
         }

@@ -91,7 +91,15 @@
 
     <script>
         $(document).ready(function () {
+            $.fn.dataTable.ext.errMode = 'none';
             var table = $('#postingData').DataTable({
+                "processing": true,
+                "serverSide": false,
+                "deferRender": true,   // Optimalkan rendering
+                "stateSave": true,     // Simpan state saat refresh
+                "bDestroy": true,      // Hindari error saat re-init
+                "bAutoWidth": false,   // Hindari width yang salah
+                "bSortCellsTop": true,
                 "ajax": {
                     "url": "/JobPosting/GetJobPostings",
                     "type": "GET",
@@ -101,6 +109,11 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
+                            if (row.IsClosed)
+                            {
+                                return '';
+                            }
+
                             return '<input type="checkbox" class="selectCheckbox" data-id="' + row.JobID + '" />'
                         }
                     },
@@ -191,6 +204,15 @@
 
         });
 
+        $('#postingData').on('error.dt', function (e, settings, techNote, message) {
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "An error occurred while loading data."
+            });
+        });
+
         ////Use this for datatables, becase the buttons are created dynamically
         $(document).on('click', '#deleteButton', function () {
             const itemId = $(this).data('id'); // Retrieve the ID of the item to delete
@@ -205,12 +227,22 @@
             })
                 .then((result) => {
                     if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Processing...",
+                            text: "Please wait while we delete the item.",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading(); // Menampilkan animasi loading
+                            }
+                        });
                         // Make an AJAX call to delete the item
                         $.ajax({
                             url: '/JobPosting/Delete', // URL of your Delete method
                             type: 'POST', // Use POST for data modification
                             data: { id: itemId }, // Pass the ID as data
                             success: function (response) {
+                                Swal.close();
                                 if (response.success) {
                                     Swal.fire("Deleted!", response.message, "success").then(() => {
                                         $("#postingData").DataTable().ajax.reload(); // Reload the page or update UI
@@ -224,6 +256,7 @@
                                 //});
                             },
                             error: function (error) {
+                                Swal.close();
                                 Swal.fire("Error!", "Unable to delete the item " + response.message + " . Please try again.", "error");
                             }
                         });
@@ -263,6 +296,15 @@
                     cancelButtonText: "No, keep them"
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Processing...",
+                            text: "Please wait while we delete the item.",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading(); // Menampilkan animasi loading
+                            }
+                        });
                         // Make an AJAX call to delete the selected items
                         $.ajax({
                             url: '/JobPosting/DeleteSelected/',
@@ -270,6 +312,7 @@
                             data: { ids: selectedIds },
                             traditional: true,
                             success: function (response) {
+                                Swal.close();
                                 if (response.success) {
                                     Swal.fire("Deleted!", response.message, "success").then(() => {
                                         $('#postingData').DataTable().ajax.reload(); // Reload the DataTable
@@ -279,6 +322,7 @@
                                 }
                             },
                             error: function (error) {
+                                Swal.close();
                                 Swal.fire("Error!", "Unable to delete the items. Please try again.", "error");
                             }
                         });
@@ -324,8 +368,13 @@
 
                     myModal.show();
                 },
-                error: function() {
-                    alert("An error occurred while loading the modal.");
+                error: function (xhr) {
+                    // Menampilkan pesan error dari response JSON
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : "An unknown error occurred";
+
+                    Swal.fire("Error Load Form", errorMessage, "error");
                 }
             });
         });
@@ -370,8 +419,13 @@
 
                     myModal.show();
                 },
-                error: function() {
-                    alert("An error occurred while loading the modal.");
+                error: function (xhr) {
+                    // Menampilkan pesan error dari response JSON
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : "An unknown error occurred";
+
+                    Swal.fire("Error Load Form", errorMessage, "error");
                 }
             });
         });
@@ -427,8 +481,12 @@
 
                 },
                 error: function (xhr) {
-                    console.error(xhr.responseText);
-                    alert('An error occurred while fetching data.');
+                    // Menampilkan pesan error dari response JSON
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : "An unknown error occurred";
+
+                    Swal.fire("Error Load Form", errorMessage, "error");
                 }
             });
 

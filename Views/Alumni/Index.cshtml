@@ -263,7 +263,7 @@
 
         // Menangkap error DataTables agar tidak muncul alert default
         $('#alumniData').on('error.dt', function (e, settings, techNote, message) {
-            console.log('DataTables error:', message);
+            
             Swal.fire({
                 icon: "error",
                 title: "Error",
