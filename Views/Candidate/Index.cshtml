@@ -80,6 +80,7 @@
 
     <script>
         $(document).ready(function () {
+            $.fn.dataTable.ext.errMode = 'none';
             var table = $('#candidateData').DataTable({
                 "ajax": {
                     "url": "@Url.Action("GetCandidates","Candidate", new {jobId = ViewBag.JobId })",
@@ -136,10 +137,20 @@
             });
         });
 
+        $('#candidateData').on('error.dt', function (e, settings, techNote, message) {
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "An error occurred while loading data."
+            });
+        });
+
         ////Use this for datatables, becase the buttons are created dynamically
 
 
         $(document).ready(function () {
+
             var table = $('#candidateData').DataTable();
 
             // Unbind the default search event

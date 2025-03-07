@@ -26,50 +26,78 @@ namespace AlumniManagement.Frontend.Controllers
         // GET: Candidate
         public ActionResult Index(Guid jobId)
         {
-            var listSkills = _jobPostingRepository.GetSkillsbyId(jobId);
+            try
+            {
 
 
-            ViewBag.JobId = jobId;
-            ViewBag.JobTitle = _jobPostingRepository.GetJobPosting(jobId).Title;
-            ViewBag.JobDesc = _jobPostingRepository.GetJobPosting(jobId).JobDescription;
-            ViewBag.Exp = _jobPostingRepository.GetJobPosting(jobId).MinimumExperience;
-            ViewBag.Skills = String.Join(",", listSkills.Select(s => s.Name));
+                var listSkills = _jobPostingRepository.GetSkillsbyId(jobId);
 
-            return View();
+
+                ViewBag.JobId = jobId;
+                ViewBag.JobTitle = _jobPostingRepository.GetJobPosting(jobId).Title;
+                ViewBag.JobDesc = _jobPostingRepository.GetJobPosting(jobId).JobDescription;
+                ViewBag.Exp = _jobPostingRepository.GetJobPosting(jobId).MinimumExperience;
+                ViewBag.Skills = String.Join(",", listSkills.Select(s => s.Name));
+
+                return View();
+            }
+            catch
+            {
+                TempData["ErrorMessage"] = "Error load candidates page";
+                return RedirectToAction("Index", "JobPosting");
+            }
         }
 
         public JsonResult GetCandidates(Guid jobId)
         {
-            var candidatesData = _jobPostingRepository.GetAllCandidateBYJObId(jobId);
-
-            foreach (var candidate in candidatesData)
+            try
             {
-                var listUrls = new List<ShowUrlModel>();
 
-                if (candidate.JobAttachments != null && candidate.JobAttachments.Any())
+
+                var candidatesData = _jobPostingRepository.GetAllCandidateBYJObId(jobId);
+
+                foreach (var candidate in candidatesData)
                 {
-                    foreach (var item in candidate.JobAttachments)
+                    var listUrls = new List<ShowUrlModel>();
+
+                    if (candidate.JobAttachments != null && candidate.JobAttachments.Any())
                     {
-                        var showUrlModel = new ShowUrlModel
+                        foreach (var item in candidate.JobAttachments)
                         {
-                            Urls = Url.Content(item.FilePath.Replace("~", "") + "/" + item.FileName),
-                            NameType = GetTypeName(item.AttachmentTypeID)
+                            var showUrlModel = new ShowUrlModel
+                            {
+                                Urls = Url.Content(item.FilePath.Replace("~", "") + "/" + item.FileName),
+                                NameType = GetTypeName(item.AttachmentTypeID)
 
-                        };
+                            };
 
-                        listUrls.Add(showUrlModel);
+                            listUrls.Add(showUrlModel);
+                        }
+
                     }
 
+                    candidate.ListUrls = listUrls;
                 }
 
-                candidate.ListUrls = listUrls;
+                var json = Json(new
+                {
+                    error = false,
+                    message = "Success",
+                    data = candidatesData
+                }, JsonRequestBehavior.AllowGet);
+
+                json.MaxJsonLength = int.MaxValue;
+
+                return json;
             }
-
-            var json = Json(new { data = candidatesData }, JsonRequestBehavior.AllowGet);
-
-            json.MaxJsonLength = int.MaxValue;
-
-            return json;
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = "Error load candidates data",
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public string GetTypeName(int attahcmentTypeId)
