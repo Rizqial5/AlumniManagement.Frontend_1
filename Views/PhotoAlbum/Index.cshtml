@@ -172,16 +172,25 @@
             });
         });
 
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var pageSize = "@ViewBag.PageSize"; // Ambil nilai dari ViewBag.PageSize
+
+            if (pageSize) {
+                var selectElement = document.getElementById("pageSizeSelect");
+
+                // Pastikan nilai pageSize ada dalam opsi select
+                if ([...selectElement.options].some(option => option.value === pageSize)) {
+                    selectElement.value = pageSize;
+                }
+            }
+        });
+
         function changePageSize() {
-            // Ambil nilai page size yang dipilih
             var pageSize = document.getElementById("pageSizeSelect").value;
-
-            // Redirect ke URL yang sama dengan parameter pageSize yang baru
-            var url = new URL(window.location.href);
-            url.searchParams.set('pageSize', pageSize);
-            url.searchParams.set('page', 1); // Reset ke halaman pertama saat pageSize berubah
-
-            window.location.href = url.toString(); // Pindah ke URL baru
+            window.location.href = window.location.pathname + "?page=1&pageSize=" + pageSize;
         }
 
         $(document).ready(function () {
