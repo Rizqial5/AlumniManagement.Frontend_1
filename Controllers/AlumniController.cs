@@ -243,49 +243,59 @@ namespace AlumniManagement.Frontend.Controllers
 
         private void UploadBehaviour(AlumniModel alumniModel, HttpPostedFileBase photoUpload)
         {
-            // Validasi tipe file
-            if(photoUpload == null)
+            try
             {
-                return;
-            }
 
 
-            if (alumniModel.PhotoPath!= null)
-            {
-                var fileExist = Path.Combine(Server.MapPath(alumniModel.PhotoPath), alumniModel.PhotoName);
-
-                if (System.IO.File.Exists(fileExist))
+                // Validasi tipe file
+                if (photoUpload == null)
                 {
-                    System.IO.File.Delete(fileExist);
+                    return;
                 }
+
+
+                if (alumniModel.PhotoPath != null)
+                {
+                    var fileExist = Path.Combine(Server.MapPath(alumniModel.PhotoPath), alumniModel.PhotoName);
+
+                    if (System.IO.File.Exists(fileExist))
+                    {
+                        System.IO.File.Delete(fileExist);
+                    }
+                }
+
+                string[] allowedExtensions = { ".jpeg", ".jpg", ".png" };
+                string fileExtension = Path.GetExtension(photoUpload.FileName).ToLower();
+
+                if (!allowedExtensions.Contains(fileExtension))
+                {
+                    ModelState.AddModelError("", "Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                    PopulateData(alumniModel);
+                }
+
+                // Validasi ukuran file (3MB)
+                if (photoUpload.ContentLength > fileSizeLimit)
+                {
+                    ModelState.AddModelError("", "File size exceeds 3MB. Please select a smaller file.");
+                    StateAndFacultyDdl();
+                    RepopulateCascadeDdl(alumniModel);
+                    PopulateData(alumniModel);
+                }
+
+                // Simpan file ke server
+                string fileName = Guid.NewGuid().ToString() + fileExtension;
+                string filePath = Path.Combine(Server.MapPath(photoPath), fileName);
+                photoUpload.SaveAs(filePath);
+
+                // Simpan path ke model
+                alumniModel.PhotoPath = photoPath;
+                alumniModel.PhotoName = fileName;
             }
-
-            string[] allowedExtensions = { ".jpeg", ".jpg", ".png" };
-            string fileExtension = Path.GetExtension(photoUpload.FileName).ToLower();
-
-            if (!allowedExtensions.Contains(fileExtension))
+            catch (Exception ex)
             {
-                ModelState.AddModelError("", "Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                ModelState.AddModelError("", "Failed to upload photo. Please try again later.");
                 PopulateData(alumniModel);
             }
-
-            // Validasi ukuran file (3MB)
-            if (photoUpload.ContentLength > fileSizeLimit)
-            {
-                ModelState.AddModelError("", "File size exceeds 3MB. Please select a smaller file.");
-                StateAndFacultyDdl();
-                RepopulateCascadeDdl(alumniModel);
-                PopulateData(alumniModel);
-            }
-
-            // Simpan file ke server
-            string fileName = Guid.NewGuid().ToString() + fileExtension;
-            string filePath = Path.Combine(Server.MapPath(photoPath), fileName);
-            photoUpload.SaveAs(filePath);
-
-            // Simpan path ke model
-            alumniModel.PhotoPath = photoPath;
-            alumniModel.PhotoName = fileName;
         }
 
         private ActionResult PopulateData(AlumniModel alumniModel)

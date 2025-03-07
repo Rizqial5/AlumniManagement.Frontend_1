@@ -1,5 +1,6 @@
 ﻿using AlumniManagement.Frontend.Interfaces;
 using AlumniManagement.Frontend.Models;
+using AlumniManagement.Frontend.PostingJobService;
 using AlumniManagement.Frontend.Repositories;
 using System;
 using System.Collections.Generic;
@@ -35,23 +36,35 @@ namespace AlumniManagement.Frontend.Controllers
 
         public JsonResult GetEvents()
         {
-            var eventsData = _eventRepository.GetAllEvents();
-            foreach (var item in eventsData)
+            try
             {
-                if (item.EventImagePath != null)
+
+
+                var eventsData = _eventRepository.GetAllEvents();
+                foreach (var item in eventsData)
                 {
-                    item.ShowImage = @Url.Content(item.EventImagePath.Replace("~", "") + '/' + item.EventImageName);
+                    if (item.EventImagePath != null)
+                    {
+                        item.ShowImage = @Url.Content(item.EventImagePath.Replace("~", "") + '/' + item.EventImageName);
+                    }
+
                 }
 
+                return Json(new
+                {
+                    error = false,
+                    message = "Success",
+                    data = eventsData
+                }, JsonRequestBehavior.AllowGet);
             }
-
-            return Json(new {data = eventsData}, JsonRequestBehavior.AllowGet);
-        }
-
-        // GET: Event/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
+            catch(Exception ex)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = ex.Message,
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         // GET: Event/Create
@@ -67,28 +80,39 @@ namespace AlumniManagement.Frontend.Controllers
         // GET: Event/Edit/5
         public ActionResult Edit(int id)
         {
-            var existingData = _eventRepository.GetEventById(id);
-
-            if (existingData == null)
+            try
             {
-                TempData["ErrorMessage"] = "Event Not Found";
 
-                return RedirectToAction("Index");
+
+                var existingData = _eventRepository.GetEventById(id);
+
+                if (existingData == null)
+                {
+                    TempData["ErrorMessage"] = "Event Not Found";
+
+                    return RedirectToAction("Index");
+                }
+
+
+
+
+                ViewBag.SourceImage = "";
+                ViewBag.NameFile = "";
+
+                if (existingData.EventImagePath != null)
+                {
+                    ViewBag.SourceImage = @Url.Content(existingData.EventImagePath.Replace("~", "") + '/' + existingData.EventImageName);
+                    ViewBag.NameFile = existingData.EventImageName;
+                }
+
+                return PartialView("_EditPartial", existingData);
+
             }
-
-
-
-
-            ViewBag.SourceImage = "";
-            ViewBag.NameFile = "";
-
-            if (existingData.EventImagePath != null)
+            catch (Exception ex)
             {
-                ViewBag.SourceImage = @Url.Content(existingData.EventImagePath.Replace("~", "") + '/' + existingData.EventImageName);
-                ViewBag.NameFile = existingData.EventImageName;
+                Response.StatusCode = 500; // Set status code agar masuk error AJAX
+                return Json(new { message = "Please contact support" }, JsonRequestBehavior.AllowGet);
             }
-
-            return PartialView("_EditPartial", existingData);
         }
 
         [HttpPost]
@@ -129,49 +153,55 @@ namespace AlumniManagement.Frontend.Controllers
             catch (Exception ex)
             {
 
-                TempData["ErrorMessage"] = "Event updated Failed " + ex.Message;
-
-                return RedirectToAction("Index");
+                return Json(new { success = false, message = "Event update failed. Please try again later." });
             }
         }
+        
 
         private void UploadBehaviour(EventModel model, HttpPostedFileBase photoUpload)
         {
- 
 
-            if (model.EventImagePath != null)
+            try
             {
-                var fileExist = Path.Combine(Server.MapPath(model.EventImagePath), model.EventImageName);
 
-                if (System.IO.File.Exists(fileExist))
+                if (model.EventImagePath != null)
                 {
-                    System.IO.File.Delete(fileExist);
+                    var fileExist = Path.Combine(Server.MapPath(model.EventImagePath), model.EventImageName);
+
+                    if (System.IO.File.Exists(fileExist))
+                    {
+                        System.IO.File.Delete(fileExist);
+                    }
                 }
+
+                string[] allowedExtensions = { ".jpeg", ".jpg", ".png" };
+                string fileExtension = Path.GetExtension(photoUpload.FileName).ToLower();
+
+                if (!allowedExtensions.Contains(fileExtension))
+                {
+                    ModelState.AddModelError("", "Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                }
+
+                // Validasi ukuran file (3MB)
+                if (photoUpload.ContentLength > fileSizeLimit)
+                {
+                    ModelState.AddModelError("", "File size exceeds 3MB. Please select a smaller file.");
+
+                }
+
+                // Simpan file ke server
+                string fileName = Guid.NewGuid().ToString() + fileExtension;
+                string filePath = Path.Combine(Server.MapPath(photoPath), fileName);
+                photoUpload.SaveAs(filePath);
+
+                // Simpan path ke model
+                model.EventImagePath = photoPath;
+                model.EventImageName = fileName;
             }
-
-            string[] allowedExtensions = { ".jpeg", ".jpg", ".png" };
-            string fileExtension = Path.GetExtension(photoUpload.FileName).ToLower();
-
-            if (!allowedExtensions.Contains(fileExtension))
+            catch (Exception ex)
             {
-                ModelState.AddModelError("", "Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+                ModelState.AddModelError("", "Failed to upload photo. Please try again later.");
             }
-
-            // Validasi ukuran file (3MB)
-            if (photoUpload.ContentLength > fileSizeLimit)
-            {
-                ModelState.AddModelError("", "File size exceeds 3MB. Please select a smaller file.");
-
-            }
-
-            // Simpan file ke server
-            string fileName = Guid.NewGuid().ToString() + fileExtension;
-            string filePath = Path.Combine(Server.MapPath(photoPath), fileName);
-            photoUpload.SaveAs(filePath);
-
-            // Simpan path ke model
-            model.EventImagePath = photoPath;
-            model.EventImageName = fileName;
         }
 
 
@@ -217,7 +247,7 @@ namespace AlumniManagement.Frontend.Controllers
                 return Json(new
                 {
                     error = true,
-                    message = ex.Message
+                    message = "Failed delete event"
                 });
             }
         }
@@ -273,7 +303,7 @@ namespace AlumniManagement.Frontend.Controllers
                 return Json(new
                 {
                     error = true,
-                    message = "Error deleting EVent:  " + ex.Message  // message dirubah sesuai objek
+                    message = "Failed deleting event"  // message dirubah sesuai objek
                 });
             }
         }
